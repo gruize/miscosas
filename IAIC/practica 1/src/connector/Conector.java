@@ -29,6 +29,7 @@ public class Conector {
 	public Conector(String archivo){
 		this.setArchivo(archivo);
 		Universo.planetas = new	Hashtable<Integer, Nodo>();
+		this.nodosH = Universo.planetas;
 		origen = null;
 		destinos = new Hashtable<Integer, Nodo>();
 		//nodosH = new Hashtable<Integer, Nodo>();
