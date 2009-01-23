@@ -12,7 +12,7 @@ public class Token extends Object{
 	public static final int END=1; 
 	public static final int PROGRAM= 2;
 	public static final int VAR=3;
-	public static final int CONS=4;
+	public static final int CONST=4;
 	public static final int READ=5;
 	public static final int WRITE=6;
 	public static final int INTEGER=7;
@@ -37,6 +37,7 @@ public class Token extends Object{
 	public static final int OP_ASIGNACION=21;
 	public static final int OP_COMPARACION=22;
 	public static final int OP_SUMA=23;
+	public static final int OP_RESTA=35;
 	public static final int OP_MUL=24;
 	//public static final int BARRA_NORMAL/ ::= “/”
 	public static final int OP_MENOR_QUE=25;
