@@ -1,12 +1,12 @@
 package excepciones;
 
-public class EExcepcionLexica extends Exception {
+public class ExcepcionLexica extends Exception {
 
 	/**
 	 * UN serial por defecto
 	 */
 	private static final long serialVersionUID = 1L;
-	public EExcepcionLexica(String msg){
+	public ExcepcionLexica(String msg){
 		super(msg);
 	}
 }
