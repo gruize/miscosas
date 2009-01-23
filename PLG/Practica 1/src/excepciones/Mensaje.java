@@ -1,16 +1,24 @@
 package excepciones;
 
-public class Mensaje {
-	public String texto;
-	public int linea;
-	public Mensaje(String texto, int linea) {
+import analizadorLex.Token;
+
+public class Mensaje{
+	public int error;
+	public Token tokenErr;
+	public int tokenOk;
+	public static int ERROR_TOKEN_INCORRECTO = 0;
+	public static String errores[] = {
+		"Palabra no esperada"//ERROR_TOKEN_INCORRECTO 
+	};
+	public Mensaje(int error, int tokenOk, Token tokenErr) {
 		super();
-		this.texto = texto;
-		this.linea = linea;
+		this.error = error;
+		this.tokenOk = tokenOk;
+		this.tokenErr = tokenErr;
 	}
 	public String toString(){
 		
-		return texto;
+		return tokenErr.linea +": " +errores[error];
 		
 	}
 }
