@@ -2,8 +2,10 @@ package excepciones;
 
 import java.util.Vector;
 
+import analizadorLex.Token;
+
 public class ExcepcionSintactica extends Exception{
-	public static boolean CortaAnalisisSintactico;
+	public static boolean CortaAnalisisSintactico = false;
 	/**
 	 * UN serial por defecto
 	 */
@@ -14,6 +16,9 @@ public class ExcepcionSintactica extends Exception{
 	}
 	public void addMensaje(Mensaje msg){
 		errores.add(msg);
+	}
+	public void addMensaje(int error, int tokenOk, Token tokenErr){
+		errores.add(new Mensaje(error, tokenOk, tokenErr));
 	}
 	public void printAll(){
 		for (Mensaje msg:errores){
