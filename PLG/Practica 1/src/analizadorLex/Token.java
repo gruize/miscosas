@@ -8,7 +8,7 @@ import excepciones.ExcepcionLexica;
 public class Token {
 	
 	/*PALABRAS RESERVADAS*/
-	public static final int BEGIN= 1; 
+	public static final int BEGIN= 0; 
 	public static final int END=1; 
 	public static final int PROGRAM= 2;
 	public static final int VAR=3;
