@@ -1,7 +1,7 @@
 package analizadorLex;
 import java.util.Hashtable;
 
-import excepciones.ExcepcionLexica;
+import excepciones.ExcepcionToken;
 
 
 
@@ -51,53 +51,53 @@ public class Token {
 	public static final int C_PARENTESIS=33;
 	public static final int DOSPUNTOS=34;
 
-	public static final Hashtable <Integer,String>TOKENS= new Hashtable<Integer, String>(); 
+	public static final Hashtable <Integer,String>LEXICOS= new Hashtable<Integer, String>(); 
 	static
 	{
 		/* PALABRAS RESERVADAS */
-		TOKENS.put(BEGIN, "begin");
-		TOKENS.put(END, "end");
-		TOKENS.put(PROGRAM, "program");
-		TOKENS.put(VAR, "var");
-		TOKENS.put(CONS, "cons");
-		TOKENS.put(READ, "read");
-		TOKENS.put(WRITE, "write");
-		TOKENS.put(INTEGER, "integer");
-		TOKENS.put(BOOLEAN, "boolean");
-		TOKENS.put(REAL, "real");
-		TOKENS.put(CHAR, "char");
+		LEXICOS.put(BEGIN, "begin");
+		LEXICOS.put(END, "end");
+		LEXICOS.put(PROGRAM, "program");
+		LEXICOS.put(VAR, "var");
+		LEXICOS.put(CONS, "cons");
+		LEXICOS.put(READ, "read");
+		LEXICOS.put(WRITE, "write");
+		LEXICOS.put(INTEGER, "integer");
+		LEXICOS.put(BOOLEAN, "boolean");
+		LEXICOS.put(REAL, "real");
+		LEXICOS.put(CHAR, "char");
 
 		
 		/* id's y variables*/
-		TOKENS.put(ID, null);
-		TOKENS.put(NUM, null);
-		TOKENS.put(VALORCHAR, null);
-		TOKENS.put(NUMREAL, null);
-		TOKENS.put(VALORBOOLEAN, null);
+		LEXICOS.put(ID, null);
+		LEXICOS.put(NUM, null);
+		LEXICOS.put(VALORCHAR, null);
+		LEXICOS.put(NUMREAL, null);
+		LEXICOS.put(VALORBOOLEAN, null);
 
 		
 		/*PUNTUACION*/
-		TOKENS.put(PUNTO, ".");
-		TOKENS.put(PUNTO_Y_COMA, ";");
-		TOKENS.put(A_PARENTESIS, "(");
-		TOKENS.put(C_PARENTESIS, ")");
-		TOKENS.put(DOSPUNTOS, ":");
+		LEXICOS.put(PUNTO, ".");
+		LEXICOS.put(PUNTO_Y_COMA, ";");
+		LEXICOS.put(A_PARENTESIS, "(");
+		LEXICOS.put(C_PARENTESIS, ")");
+		LEXICOS.put(DOSPUNTOS, ":");
 
 		/* OPERADORES*/
-		TOKENS.put(OP_ASIGNACION, ":=");
-		TOKENS.put(OP_COMPARACION, "=");
-		TOKENS.put(OP_SUMA, "+");
-		TOKENS.put(OP_MUL, "*");
-		TOKENS.put(NOT, "not");
-		TOKENS.put(AND, "and");
-		TOKENS.put(OR, "or");
-		TOKENS.put(DIV, "div");
-		TOKENS.put(MOD, "mod");
-		TOKENS.put(OP_MENOR_QUE, "<");
-		TOKENS.put(OP_MAYOR_QUE, ">");
-		TOKENS.put(OP_DISTINTO, "");
-		TOKENS.put(OP_MENOR_IGUAL, "<=");
-		TOKENS.put(OP_MAYOR_IGUAL, ">=");
+		LEXICOS.put(OP_ASIGNACION, ":=");
+		LEXICOS.put(OP_COMPARACION, "=");
+		LEXICOS.put(OP_SUMA, "+");
+		LEXICOS.put(OP_MUL, "*");
+		LEXICOS.put(NOT, "not");
+		LEXICOS.put(AND, "and");
+		LEXICOS.put(OR, "or");
+		LEXICOS.put(DIV, "div");
+		LEXICOS.put(MOD, "mod");
+		LEXICOS.put(OP_MENOR_QUE, "<");
+		LEXICOS.put(OP_MAYOR_QUE, ">");
+		LEXICOS.put(OP_DISTINTO, "");
+		LEXICOS.put(OP_MENOR_IGUAL, "<=");
+		LEXICOS.put(OP_MAYOR_IGUAL, ">=");
 
 		
 
@@ -111,17 +111,18 @@ public class Token {
 
 	public String lexema;
 	public int codigo;
-	public Token (int codigo) throws ExcepcionLexica{
+	public int linea;
+	public Token (int codigo) throws ExcepcionToken{
 		this.codigo=codigo;
-		this.lexema = TOKENS.get(codigo);
+		this.lexema = LEXICOS.get(codigo);
 		if (this.lexema == null)
-			throw new ExcepcionLexica("El token tiene una expresion no valida o no tiene expresion");
+			throw new ExcepcionToken("El token tiene una expresion no valida o no tiene expresion");
 		
 	}
-	public Token (int codigo,String lexema) throws ExcepcionLexica{
+	public Token (int codigo,String lexema) throws ExcepcionToken{
 		this.codigo = codigo;
-		if (TOKENS.get(codigo) != null)
-			throw new ExcepcionLexica("El token tiene una expresion no valida");
+		if (LEXICOS.get(codigo) != null)
+			throw new ExcepcionToken("El token tiene una expresion no valida");
 		this.lexema = lexema;
 	}
 	
