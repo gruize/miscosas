@@ -125,8 +125,17 @@ public class Token {
 			throw new ExcepcionToken("El token tiene una expresion no valida");
 		this.lexema = lexema;
 	}
+	/*
+	 * Constructora con atributo linea
+	 * */
+	public Token (int codigo,String lexema, int line) throws ExcepcionToken{
+		this.codigo = codigo;
+		if (LEXICOS.get(codigo) != null)
+			throw new ExcepcionToken("El token tiene una expresion no valida");
+		this.lexema = lexema;
+		this.linea=line;
+	}
 	
-
 
 
 }
