@@ -37,6 +37,7 @@ public class Token extends Object{
 	public static final int OP_ASIGNACION=21;
 	public static final int OP_COMPARACION=22;
 	public static final int OP_SUMA=23;
+	public static final int OP_RESTA=35;
 	public static final int OP_MUL=24;
 	//public static final int BARRA_NORMAL/ ::= “/”
 	public static final int OP_MENOR_QUE=25;
@@ -113,8 +114,9 @@ public class Token extends Object{
 	public String lexema;
 	public int codigo;
 	public int linea;
-	public Token (int codigo) throws ExcepcionToken{
+	public Token (int codigo, int line) throws ExcepcionToken{
 		this.codigo=codigo;
+		this.linea=line;
 		this.lexema = LEXICOS.get(codigo);
 		if (this.lexema == null)
 			throw new ExcepcionToken("El token tiene una expresion no valida o no tiene expresion");
