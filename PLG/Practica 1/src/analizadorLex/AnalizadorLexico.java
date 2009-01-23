@@ -1,6 +1,7 @@
 package analizadorLex;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import excepciones.ExcepcionLexica;
@@ -22,6 +23,21 @@ public class AnalizadorLexico {
         for(char d = '0'; d<='9';d++) digitos.add(new Character(d));
     }
     
+    private static final HashMap<String,Integer> palabrasReservadas = new HashMap<String,Integer>(25);
+    static{
+    	palabrasReservadas.put("program",new Integer(Token.PROGRAM));
+    	palabrasReservadas.put("begin",new Integer(Token.BEGIN));
+    	palabrasReservadas.put("end",new Integer(Token.END));
+        palabrasReservadas.put("const",new Integer(Token.CONST));
+        palabrasReservadas.put("var",new Integer(Token.VAR));
+        palabrasReservadas.put(":",new Integer(Token.DOSPUNTOS));
+        palabrasReservadas.put(":=",new Integer(Token.OP_ASIGNACION));      
+        palabrasReservadas.put("not",new Integer(Token.NOT));
+        palabrasReservadas.put("or",new Integer(Token.OR));
+        palabrasReservadas.put("and",new Integer(Token.AND));
+        palabrasReservadas.put("div",new Integer(Token.DIV));
+      
+    }
     
     public static final char[] listLetras={'a','b', 'c', 'd' ,'e', 'f', 'g' ,'h' ,'i', 'j' ,'k', 'l', 'm','n', 'o', 'p', 'q', 'r', 's','t','u','v','w','x','y','z',
     'A','B','C','D','E','F','G','H','I','J','K','L', 'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
@@ -188,7 +204,31 @@ public class AnalizadorLexico {
 
 	private Token getTokenID() {
 			// TODO Auto-generated method stub
-			return null;
+		Character c;
+        StringBuffer buff = new StringBuffer();
+        c=ultimoCharLeido; //asume que es una letra
+        int ultimaLinea = numLinea; //salva la linea actual
+        
+        do{
+            buff.append(c.charValue());
+            try {
+				c = leerCaracter();
+			} catch (IOException e) {}
+			
+        }while(esDigito(c)||esLetra(c));
+        String lex =  buff.toString();
+        String lexema = lex.toLowerCase();
+        
+        Integer cod = palabrasReservadas.get(lexema);
+        try {
+        if(cod!=null){
+           
+			return new Token(cod.intValue(),lex,ultimaLinea);
+			 
+        } else
+            return new Token(Token.ID, lex, ultimaLinea);
+        }catch (ExcepcionToken e) {}
+		return null;
 		}
 
 	private Token getTokenNumero() {
