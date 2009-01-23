@@ -5,7 +5,7 @@ import excepciones.ExcepcionToken;
 
 
 
-public class Token {
+public class Token extends Object{
 	
 	/*PALABRAS RESERVADAS*/
 	public static final int BEGIN= 0; 
@@ -54,6 +54,7 @@ public class Token {
 	public static final Hashtable <Integer,String>LEXICOS= new Hashtable<Integer, String>(); 
 	static
 	{
+		
 		/* PALABRAS RESERVADAS */
 		LEXICOS.put(BEGIN, "begin");
 		LEXICOS.put(END, "end");
@@ -125,17 +126,23 @@ public class Token {
 			throw new ExcepcionToken("El token tiene una expresion no valida");
 		this.lexema = lexema;
 	}
+	public Token clon() throws ExcepcionToken{
+		return new Token(codigo,lexema,linea);
+	}
 	/*
 	 * Constructora con atributo linea
 	 * */
-	public Token (int codigo,String lexema, int line) throws ExcepcionToken{
+	public Token (int codigo,String lexema, int line) throws ExcepcionToken { 
+	
 		this.codigo = codigo;
 		if (LEXICOS.get(codigo) != null)
 			throw new ExcepcionToken("El token tiene una expresion no valida");
 		this.lexema = lexema;
 		this.linea=line;
 	}
-	
+
+}	
 
 
-}
+
+
