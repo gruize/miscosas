@@ -1,6 +1,8 @@
 package analizadorLex;
 import java.util.Hashtable;
 
+import excepciones.excepcionLexica;
+
 
 
 public class Token {
@@ -106,15 +108,22 @@ public class Token {
 
 	};
 
+
 	public String lexema;
 	public int codigo;
-	public Token (int codigo){
+	public Token (int codigo) throws excepcionLexica{
 		this.codigo=codigo;
 		this.lexema = TOKENS.get(codigo);
-		if (lexema == null)
+		if (this.lexema == null)
+			throw new excepcionLexica();
 		
 	}
-	public Token (int codigo,String)
+	public Token (int codigo,String lexema) throws excepcionLexica{
+		this.codigo = codigo;
+		if (TOKENS.get(codigo) != null)
+			throw new excepcionLexica();
+		this.lexema = lexema;
+	}
 	
 
 
