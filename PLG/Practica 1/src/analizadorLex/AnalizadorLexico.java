@@ -233,7 +233,29 @@ public class AnalizadorLexico {
 
 	private Token getTokenNumero() {
 			// TODO Auto-generated method stub
-			return null;
+		Character c;
+        StringBuffer buff = new StringBuffer();
+        c = ultimoCharLeido; //asume que es un digito
+        int lineaUlt = numLinea;//salva la liena actual
+        
+        do {
+            buff.append(c.charValue());
+            try {
+				c = leerCaracter();
+			} catch (IOException e) {return null;}
+        }
+        while (esDigito(c));
+        
+        if (esLetra(c)){
+            try {
+				throw new ExcepcionLexica(0,buff.toString()+c.toString(), lineaUlt);
+			} catch (ExcepcionLexica e) {return null;}
+			
+        }
+        try {
+			return new Token(Token.NUM,buff.toString(),lineaUlt);
+		} catch (ExcepcionToken e) {return null;}
+		
 		}
 
 	private boolean esDigito(Character ch) {
@@ -271,7 +293,7 @@ public class AnalizadorLexico {
 
 	private boolean esSeparador(Character ch) {
 			// TODO Auto-generated method stub
-			return false;
+		return separadores.contains(ch);
 		}
 
 	public Token[] getTokens(){
