@@ -130,7 +130,7 @@ public class Token extends Object{
 			throw new ExcepcionToken("El token tiene una expresion no valida");
 		this.lexema = lexema;
 	}
-	public Token clon() throws ExcepcionToken{
+	public Token clon() {
 		Token t = new Token();
 		t.codigo = this.codigo;
 		t.lexema = this.lexema;
