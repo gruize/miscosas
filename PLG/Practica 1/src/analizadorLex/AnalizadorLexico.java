@@ -49,7 +49,7 @@ public class AnalizadorLexico {
 		        leerCaracter();
 		       
 		        int i=0;
-		        for( t = nextToken(); esfin()t.codigo != Token.EOF; t = nextToken()){
+		        for( t = nextToken(); esFin(); t = nextToken()){
 		        	tokens[i]=t;
 		            
 		        }
@@ -59,7 +59,12 @@ public class AnalizadorLexico {
 		    }
 		    	 
 		  
-		  public Token nextToken() throws IOException, LexicException{
+		  private void cerrarLector() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public Token nextToken() throws IOException, ExcepcionLexica{
 		        
 		        while(true){
 		            //guardo la ultima linea
@@ -108,10 +113,10 @@ public class AnalizadorLexico {
 		                return new Token(Token.OP_RESTA ,"",lastLine);
 		            } else if (ch.charValue()=='*') {
 		                leerCaracter();
-		                return new Token(Token.OP_MULT,"", lastLine);
+		                return new Token(Token.OP_MUL,"", lastLine);
 		            }else if (ch.charValue()=='=') {
 		                leerCaracter();
-		                return new Token(Token.IGUAL,"", lastLine);
+		                return new Token(Token.OP_COMPARACION,"", lastLine);
 		            }
 		            //LEYO UN . PERO PUEDE TAMBIEN SER ..
 		            else if (ch.charValue()=='.') {
@@ -119,18 +124,10 @@ public class AnalizadorLexico {
 		            } else if (ch.charValue()==';') {
 		                leerCaracter();
 		                return new Token(Token.PUNTO_Y_COMA,"", lastLine);
-		            } else if (ch.charValue()==',') {
-		                leerCaracter();
-		                return new Token(Token.COMA,"", lastLine);
 		            } else if (ch.charValue()==')') {
 		                leerCaracter();
-		                return new Token(Token.PAR_CIERRA,"", lastLine);
-		            } else if (ch.charValue()=='[') {
-		                leerCaracter();
-		                return new Token(Token.COR_ABRE,"", lastLine);
-		            } else if (ch.charValue()==']') {
-		                leerCaracter();
-		                return new Token(Token.COR_CIERRA,"", lastLine);
+		                return new Token(Token.C_PARENTESIS,"", lastLine);
+		          
 		            } else if (ch.charValue()=='>') {
 		                return leerMayorIgual();
 		            } else if (ch.charValue()=='<') {
@@ -138,7 +135,7 @@ public class AnalizadorLexico {
 		            } else if (ch.charValue()==':') {
 		                return  leerDosPuntosOAsignacion();
 		            } else if (ch.charValue()=='}') {
-		                throw new LexicException(3, lastLine);
+		                throw new ExcepcionLexica(3, lastLine);
 		            }
 		            //RECONOCIMIENTO DE IDENTIFICADORES Y PALABRAS RESERVADAS
 		            else  if (esLetra(ch)){
@@ -149,12 +146,62 @@ public class AnalizadorLexico {
 		                return getTokenNumero();
 		            } else {
 		                //caracter no perteneciente al alfabeto
-		                throw new LexicException(4, ch.toString(),lastLine);
+		                throw new ExcepcionLexica(4, ch.toString(),lastLine);
 		            }
 		        }
 		    }
 		 
 		 
+	private boolean esLetra(Character ch) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+
+	private Token getTokenID() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	private Token getTokenNumero() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	private boolean esDigito(Character ch) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+
+
+	private Token leerDosPuntosOAsignacion() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	private Token leerMenorIgualDist() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	private Token leerMayorIgual() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	private Token leerPuntoPunto() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+	private Token leerComentarioPar() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	private boolean esSeparador(Character ch) {
 			// TODO Auto-generated method stub
 			return false;

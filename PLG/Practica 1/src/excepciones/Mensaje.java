@@ -16,6 +16,9 @@ public class Mensaje{
 		this.tokenOk = tokenOk;
 		this.tokenErr = tokenErr;
 	}
+	public Mensaje(String string, int numLinea) {
+		// TODO Auto-generated constructor stub
+	}
 	public String toString(){
 		
 		return tokenErr.linea +": " +errores[error];
