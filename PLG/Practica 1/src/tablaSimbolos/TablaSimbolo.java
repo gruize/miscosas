@@ -8,16 +8,14 @@ public class TablaSimbolo {
   public Hashtable<String, DatosTabla> ht;
 
  
-  public TablaSimbolo creaTS()
+  public void creaTS()
 	{
 		ht= new Hashtable<String, DatosTabla>();
-		return this;
 	}
   
-  public TablaSimbolo añadeID (String id, DatosTabla datos)
+  public void añadeID (String id, DatosTabla datos)
 	{
 		ht.put(id, datos);
-		return this;
 	}
   
   public int dameDir(String id)  {
@@ -39,4 +37,4 @@ public class TablaSimbolo {
 	  
   }
 
-  }
+}
