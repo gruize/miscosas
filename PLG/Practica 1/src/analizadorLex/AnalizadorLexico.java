@@ -1,8 +1,10 @@
 package analizadorLex;
 
 import java.io.*;
+import java.util.HashSet;
 
 import excepciones.ExcepcionLexica;
+import excepciones.ExcepcionToken;
 import utilidades.*;
 import utilidades.Reader;
 
@@ -14,6 +16,29 @@ public class AnalizadorLexico {
 	private Reader reader = null;
 	private Token tokens[]=null;
 	private boolean fin=false;
+	
+  public static final HashSet<Character> digitos = new HashSet<Character>(10);
+    static{
+        for(char d = '0'; d<='9';d++) digitos.add(new Character(d));
+    }
+    
+    
+    public static final char[] listLetras={'a','b', 'c', 'd' ,'e', 'f', 'g' ,'h' ,'i', 'j' ,'k', 'l', 'm','n', 'o', 'p', 'q', 'r', 's','t','u','v','w','x','y','z',
+    'A','B','C','D','E','F','G','H','I','J','K','L', 'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
+    public static final HashSet<Character> letras  = new HashSet<Character>(listLetras.length);
+    static{
+        for(char ch:listLetras) letras.add(new Character(ch));
+    }
+    
+  
+    private static final HashSet<Character> separadores = new HashSet<Character>(4);
+    static{
+        separadores.add(new Character(' '));
+        separadores.add(new Character('\n'));
+        separadores.add(new Character('\t'));
+        separadores.add(new Character('\r'));
+    }
+    
 	
 	  
 	public boolean esFin()
@@ -70,7 +95,7 @@ public class AnalizadorLexico {
 		            //guardo la ultima linea
 		            int lastLine = numLinea;
 		            Character ch = ultimoCharLeido;
-		            
+		            try{ 
 		            if(ch == Reader.EOF){
 		            	fin=true;
 		                return null;
@@ -102,7 +127,7 @@ public class AnalizadorLexico {
 		                if(token!=null) return token;
 		                continue;
 		            }
-		            
+		          
 		            //RECONOCIMIENTO DE CARACTERES SIMPLES
 		            else if (ch.charValue()=='+') {
 		                //avanza al proximo carater antes de retornar
@@ -148,13 +173,15 @@ public class AnalizadorLexico {
 		                //caracter no perteneciente al alfabeto
 		                throw new ExcepcionLexica(4, ch.toString(),lastLine);
 		            }
+		            }catch(ExcepcionToken e){};
 		        }
-		    }
+		    
+		}
 		 
 		 
 	private boolean esLetra(Character ch) {
 			// TODO Auto-generated method stub
-			return false;
+			return letras.contains(ch);
 		}
 
 
@@ -171,7 +198,7 @@ public class AnalizadorLexico {
 
 	private boolean esDigito(Character ch) {
 			// TODO Auto-generated method stub
-			return false;
+			return digitos.contains(ch);
 		}
 
 
@@ -212,4 +239,5 @@ public class AnalizadorLexico {
 		return tokens;
 	}
 
+	
 }
