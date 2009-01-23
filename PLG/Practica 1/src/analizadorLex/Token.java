@@ -12,7 +12,7 @@ public class Token extends Object{
 	public static final int END=1; 
 	public static final int PROGRAM= 2;
 	public static final int VAR=3;
-	public static final int CONS=4;
+	public static final int CONST=4;
 	public static final int READ=5;
 	public static final int WRITE=6;
 	public static final int INTEGER=7;
@@ -61,7 +61,7 @@ public class Token extends Object{
 		LEXICOS.put(END, "end");
 		LEXICOS.put(PROGRAM, "program");
 		LEXICOS.put(VAR, "var");
-		LEXICOS.put(CONS, "cons");
+		LEXICOS.put(CONST, "const");
 		LEXICOS.put(READ, "read");
 		LEXICOS.put(WRITE, "write");
 		LEXICOS.put(INTEGER, "integer");
