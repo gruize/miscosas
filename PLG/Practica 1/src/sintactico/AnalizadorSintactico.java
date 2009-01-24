@@ -1,5 +1,6 @@
 package sintactico;
 
+import java.io.FileInputStream;
 import java.lang.reflect.Array;
 
 import tablaSimbolos.TablaSimbolo;
@@ -15,6 +16,13 @@ public class AnalizadorSintactico {
 	public int pos_token;
 	public ExcepcionSintactica excepcion = new ExcepcionSintactica();
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
+	private FileInputStream ficheroEntrada;
+	public void run (String fichero){
+		
+	}
+	public void finish() {
+		
+	}
 	public AnalizadorSintactico(){
 		pos_token = 0;
 		AnalizadorLexico aLex = new AnalizadorLexico();
@@ -68,9 +76,25 @@ public class AnalizadorSintactico {
 	}
 
 	private void DECLARACIONES() {
-		VARIABLES();
+		if (this.tokenActual() == Token.VAR)
+			VARIABLES1();
+		else
+			VARIALBES2();
 		CONSTANTES();
 		// TODO Auto-generated method stub
+		
+	}
+	
+	private void VARIABLES1() {
+		Token t = rec();
+		// it's necessary because it's cheked in DECLARACIONES
+		// if (t.codigo == Token.VAR)
+			DECS();
+		
+	}
+
+	private void VARIALBES2() {
+		this.tablaDeSimbolos.creaTS();
 		
 	}
 
@@ -79,40 +103,20 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private void VARIABLES() {
-		Token t = rec();
-		if (t.codigo != Token.VAR){
-			/*
-			 * VARIABLES::= {ts=creaTS()}
-			 */
-			this.pos_token--;
-			this.tablaDeSimbolos.creaTS();
-		}
-		
-		else {
-			/*
-			 * VARIABLES::= {Rec(tkVAR)}
-			 * 				DECS 
-			 */
-			DECS();
-		}
-		
-
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	private void DECS() {
 		String lex_de_DEC = new String();
 		int tipo_de_DEC= 0;
 		DEC(lex_de_DEC,tipo_de_DEC);
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	private void DEC(String lex, int tipo) {
 		
 		// XXX posible error
+		
 		VARIABLE(lex);
 		Token t = rec();
 		TIPO(tipo);
@@ -125,12 +129,21 @@ public class AnalizadorSintactico {
 		
 	}
 
+	private int tokenActual() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private void TIPO(int tipo) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	private void VARIABLE(String lex) {
+		Token t = rec();
+		// 
+		if ()
+		
 		// TODO Auto-generated method stub
 		
 	}
