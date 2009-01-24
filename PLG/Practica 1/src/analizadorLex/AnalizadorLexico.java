@@ -13,18 +13,23 @@ import utilidades.Reader;
 public class AnalizadorLexico {
 	
 	private int numLinea;
+	private int numColumna;
 	private Character ultimoCharLeido;
 	private Reader reader = null;
 	private Token tokens[]=null;
 	private boolean fin=false;
 	
-  public static final HashSet<Character> digitos = new HashSet<Character>(10);
-    static{
+	
+	public static final HashSet<Character> digitos = new HashSet<Character>(10);
+    static
+    {
         for(char d = '0'; d<='9';d++) digitos.add(new Character(d));
     }
     
+    
     private static final HashMap<String,Integer> palabrasReservadas = new HashMap<String,Integer>(25);
-    static{
+    static
+    {
     	palabrasReservadas.put("program",new Integer(Token.PROGRAM));
     	palabrasReservadas.put("begin",new Integer(Token.BEGIN));
     	palabrasReservadas.put("end",new Integer(Token.END));
@@ -35,8 +40,7 @@ public class AnalizadorLexico {
         palabrasReservadas.put("not",new Integer(Token.NOT));
         palabrasReservadas.put("or",new Integer(Token.OR));
         palabrasReservadas.put("and",new Integer(Token.AND));
-        palabrasReservadas.put("div",new Integer(Token.DIV));
-      
+        palabrasReservadas.put("div",new Integer(Token.DIV));  
     }
     
     public static final char[] listLetras={'a','b', 'c', 'd' ,'e', 'f', 'g' ,'h' ,'i', 'j' ,'k', 'l', 'm','n', 'o', 'p', 'q', 'r', 's','t','u','v','w','x','y','z',
@@ -64,14 +68,16 @@ public class AnalizadorLexico {
 	
 	public AnalizadorLexico() {
 		numLinea=1;
-		
+		numColumna=0;
 	
 	}
     private Character leerCaracter()throws IOException {
         if(reader==null) throw new IOException("Reader no inizializado");
         
         ultimoCharLeido = reader.readCharacter();
+        numColumna = 0;
         if(esFinalDeLinea(ultimoCharLeido)) {
+        	numColumna=0;
             numLinea++; //incrementa la linea
         }
         return ultimoCharLeido;
@@ -88,6 +94,7 @@ public class AnalizadorLexico {
 		        Token t= null;
 		        boolean sigue=true;
 		        leerCaracter();
+		        numColumna++;
 		       
 		        int i=0;
 		        for( t = nextToken(); esFin(); t = nextToken()){
@@ -120,6 +127,7 @@ public class AnalizadorLexico {
 		            else if (esSeparador(ch)) {
 		                do{
 		                    ch = leerCaracter();
+		                    numColumna++;
 		                }
 		                while(ch!=Reader.EOF && esSeparador(ch));
 		                //continue;
@@ -128,9 +136,14 @@ public class AnalizadorLexico {
 		            else if(ch.charValue() == '{'){
 		                do{
 		                    ch = leerCaracter();
+		                    numColumna++;
 		                }
 		                while(ch!=Reader.EOF && ch.charValue()!='}');
-		                if(ch!=Reader.EOF) leerCaracter();
+		                if(ch!=Reader.EOF) 
+		                {
+		                	leerCaracter();
+		                	numColumna++;
+		                	}
 		                else{
 		                    throw new ExcepcionLexica(2,numLinea);
 		                }
@@ -148,26 +161,32 @@ public class AnalizadorLexico {
 		            else if (ch.charValue()=='+') {
 		                //avanza al proximo carater antes de retornar
 		                leerCaracter();
-		                return new Token(Token.OP_SUMA ,"",lastLine);
+		                numColumna++;
+		                return new Token(Token.OP_SUMA ,"",lastLine, numColumna);
 		            } else if (ch.charValue()=='-') {
 		                leerCaracter();
-		                return new Token(Token.OP_RESTA ,"",lastLine);
+		                numColumna++;
+		                return new Token(Token.OP_RESTA ,"",lastLine, numColumna);
 		            } else if (ch.charValue()=='*') {
 		                leerCaracter();
-		                return new Token(Token.OP_MUL,"", lastLine);
+		                numColumna++;
+		                return new Token(Token.OP_MUL,"", lastLine, numColumna);
 		            }else if (ch.charValue()=='=') {
 		                leerCaracter();
-		                return new Token(Token.OP_COMPARACION,"", lastLine);
+		                numColumna++;
+		                return new Token(Token.OP_COMPARACION,"", lastLine, numColumna);
 		            }
 		            //LEYO UN . PERO PUEDE TAMBIEN SER ..
 		            else if (ch.charValue()=='.') {
 		                return leerPuntoPunto();
 		            } else if (ch.charValue()==';') {
 		                leerCaracter();
-		                return new Token(Token.PUNTO_Y_COMA,"", lastLine);
+		                numColumna++;
+		                return new Token(Token.PUNTO_Y_COMA,"", lastLine, numColumna);
 		            } else if (ch.charValue()==')') {
 		                leerCaracter();
-		                return new Token(Token.C_PARENTESIS,"", lastLine);
+		                numColumna++;
+		                return new Token(Token.C_PARENTESIS,"", lastLine, numColumna);
 		          
 		            } else if (ch.charValue()=='>') {
 		                return leerMayorIgual();
@@ -189,7 +208,7 @@ public class AnalizadorLexico {
 		                //caracter no perteneciente al alfabeto
 		                throw new ExcepcionLexica(4, ch.toString(),lastLine);
 		            }
-		            }catch(ExcepcionToken e){};
+		            }catch(ExcepcionLexica e){};
 		        }
 		    
 		}
@@ -220,17 +239,17 @@ public class AnalizadorLexico {
         String lexema = lex.toLowerCase();
         
         Integer cod = palabrasReservadas.get(lexema);
-        try {
+     
         if(cod!=null){
            
-			return new Token(cod.intValue(),lex,ultimaLinea);
+			return new Token(cod.intValue(),lex,ultimaLinea, numColumna);
 			 
         } else
-            return new Token(Token.ID, lex, ultimaLinea);
-        }catch (ExcepcionToken e) {}
-		return null;
+            return new Token(Token.ID, lex, ultimaLinea, numColumna);
 		}
 
+	
+	
 	private Token getTokenNumero() {
 			// TODO Auto-generated method stub
 		Character c;
@@ -242,7 +261,11 @@ public class AnalizadorLexico {
             buff.append(c.charValue());
             try {
 				c = leerCaracter();
-			} catch (IOException e) {return null;}
+				numColumna++;
+			} catch (IOException e) 
+			{	numColumna--;
+				return null;
+			}
         }
         while (esDigito(c));
         
@@ -252,11 +275,14 @@ public class AnalizadorLexico {
 			} catch (ExcepcionLexica e) {return null;}
 			
         }
-        try {
-			return new Token(Token.NUM,buff.toString(),lineaUlt);
-		} catch (ExcepcionToken e) {return null;}
+       
+			return new Token(Token.NUM,buff.toString(),lineaUlt, numColumna);
+	
 		
 		}
+	
+	
+	
 
 	private boolean esDigito(Character ch) {
 			// TODO Auto-generated method stub
