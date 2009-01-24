@@ -7,23 +7,24 @@ import excepciones.ExcepcionToken;
 
 public class Token extends Object{
 	
-	/*PALABRAS RESERVADAS*/
-	public static final int BEGIN= 0; 
-	public static final int END=1; 
-	public static final int PROGRAM= 2;
-	public static final int VAR=3;
-	public static final int CONST=4;
-	public static final int READ=5;
-	public static final int WRITE=6;
-	public static final int INTEGER=7;
-	public static final int BOOLEAN=8;
-	public static final int NOT= 9;
-	public static final int AND= 10;
-	public static final int OR= 11;
-	public static final int DIV=12;
-	public static final int MOD=13;
-	public static final int REAL=14;
-	public static final int CHAR=15;
+	/*PALABRAS RESERVADAS todas con valores negatvos*/
+	 //
+	public static final int END=-1; //
+	public static final int PROGRAM= -2;//
+	public static final int VAR=-3;//
+	public static final int CONST=-4;//
+	public static final int READ=-5;
+	public static final int WRITE=-6;
+	public static final int INTEGER=-7;
+	public static final int BOOLEAN=-8;
+	public static final int NOT= -9;//
+	public static final int AND= -10;//
+	public static final int OR= -11;//
+	public static final int DIV=-12;//
+	public static final int MOD=-13;
+	public static final int REAL=-14;
+	public static final int CHAR=-15;
+	public static final int BEGIN= -16;
 
 	// VALORES E ID'S
 	public static final int ID=16;
@@ -109,6 +110,8 @@ public class Token extends Object{
 
 
 	};
+	
+	
 
 
 	public String lexema;
@@ -122,7 +125,7 @@ public class Token extends Object{
 	public Token clon() {
 		Token t = new Token();
 		t.codigo = this.codigo;
-		t.lexema = this.lexema;
+		t.lexema = this.lexema.toLowerCase();
 		t.linea = this.linea;
 		return t;
 	}
@@ -132,7 +135,7 @@ public class Token extends Object{
 	public Token (int codigo,String lexema, int line, int columna){ 
 	
 		this.codigo = codigo;
-		this.lexema = lexema;
+		this.lexema = lexema.toLowerCase();
 		this.columna = columna;
 		this.linea=line;
 	}
