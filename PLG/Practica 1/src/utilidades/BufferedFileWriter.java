@@ -1,34 +1,17 @@
 package utilidades;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
-/**
- * Permite bufferear la escritura en archivo
- *
- * @author Agustin Ramone
- */
 public class BufferedFileWriter extends BufferedWriter {
     
-    /** Nombre de archivo */
-    private String strFile = null;
+    private String nombreFichero = null;
     
-    /** 
-     * Constructor 
-     * @param file nombre de archivo
-     */
-    public BufferedFileWriter(String file)throws IOException {
-        super(new FileWriter(file));
-        strFile = file;
+   public BufferedFileWriter(String fichero)throws IOException {
+        super(new FileWriter(fichero));
+        nombreFichero = fichero;
     }
     
-    /**
-     * Obtiene el objeto File del archivo 
-     * @return File el archivo
-     */
     public File getFile(){
-        return new File(strFile);
+        return new File(nombreFichero);
     }
 }
