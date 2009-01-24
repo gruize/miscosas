@@ -3,8 +3,9 @@ package sintactico;
 import java.io.FileInputStream;
 import java.lang.reflect.Array;
 
-import tablaSimbolos.TablaSimbolo;
-import tablaSimbolos.Tipo;
+import sintactico.tablaSimbolos.DatosTabla;
+import sintactico.tablaSimbolos.TablaSimbolo;
+import sintactico.tablaSimbolos.Tipo;
 import utilidades.PalabrasReservadas;
 
 import excepciones.*;
@@ -32,7 +33,7 @@ public class AnalizadorSintactico {
 			this.PROG();
 		} catch (ExcepcionSintactica e) {
 			
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -67,7 +68,7 @@ public class AnalizadorSintactico {
 	
 	private void CUERPO() throws ExcepcionSintactica {
 		DECLARACIONES();
-		INSTRUCCIONES();// TODO Auto-generated method stub
+		INSTRUCCIONES();
 		
 	}
 
@@ -77,20 +78,22 @@ public class AnalizadorSintactico {
 	}
 
 	private void DECLARACIONES() {
-		if (this.tokenActual() == Token.VAR)
+		if (this.tokenSiguiente() == Token.VAR)
 			VARIABLES1();
 		else
 			VARIALBES2();
 		CONSTANTES();
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
 	private void VARIABLES1() {
-		Token t = rec();
+		rec(); //VAR 
 		// it's necessary because it's cheked in DECLARACIONES
 		// if (t.codigo == Token.VAR)
-			DECS();
+		DECS();
+		
+		
 		
 	}
 
@@ -110,7 +113,12 @@ public class AnalizadorSintactico {
 		String lex_de_DEC = new String();
 		int tipo_de_DEC= 0;
 		DEC(lex_de_DEC,tipo_de_DEC);
-
+		tablaDeSimbolos.creaTS();
+		// it's not necessary because is the first variable
+		// tablaDeSimbolos.existeID();
+		
+		tablaDeSimbolos.añadeID(lex_de_DEC,tipo_de_DEC,true);
+		RDECS();
 		
 	}
 
@@ -119,18 +127,21 @@ public class AnalizadorSintactico {
 		// XXX posible error
 		
 		VARIABLE(lex);
+		
 		Token t = rec();
-		TIPO(tipo);
 		if (t.codigo != Token.DOSPUNTOS)
 		{
 			this.excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.DOSPUNTOS, t);
 		}
 		
+		TIPO(tipo);
+		
+		
 		// TODO Auto-generated method stub
 		
 	}
 
-	private int tokenActual() {
+	private int tokenSiguiente() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -145,12 +156,10 @@ public class AnalizadorSintactico {
 		// ID
 		if (PalabrasReservadas.PALABRAS_RESERVADAS.containsKey(t.lexema)){
 			// this isn't good word
-			excepc
+			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,t);
 			
 		}
-		
-		// TODO Auto-generated method stub
-		
+		lex = t.lexema; 
 	}
 
 }
