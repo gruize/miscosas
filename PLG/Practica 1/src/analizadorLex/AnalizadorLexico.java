@@ -40,7 +40,31 @@ public class AnalizadorLexico {
         palabrasReservadas.put("not",new Integer(Token.NOT));
         palabrasReservadas.put("or",new Integer(Token.OR));
         palabrasReservadas.put("and",new Integer(Token.AND));
-        palabrasReservadas.put("div",new Integer(Token.DIV));  
+        palabrasReservadas.put("mod",new Integer(Token.DIV));
+        palabrasReservadas.put("integer",new Integer(Token.DIV));
+        palabrasReservadas.put("real",new Integer(Token.DIV));
+        palabrasReservadas.put("char",new Integer(Token.DIV));
+        
+        
+        
+        /*
+         * public static final int BEGIN= 0; 
+    public static final int END=1; 
+    public static final int PROGRAM= 2;
+    public static final int VAR=3;
+    public static final int CONST=4;
+    public static final int READ=5;
+    public static final int WRITE=6;
+    public static final int INTEGER=7;
+    public static final int BOOLEAN=8;
+    public static final int NOT= 9;
+    public static final int AND= 10;
+    public static final int OR= 11;
+    public static final int DIV=12;
+    public static final int MOD=13;
+    public static final int REAL=14;
+    public static final int CHAR=15;
+         * */
     }
     
     public static final char[] listLetras={'a','b', 'c', 'd' ,'e', 'f', 'g' ,'h' ,'i', 'j' ,'k', 'l', 'm','n', 'o', 'p', 'q', 'r', 's','t','u','v','w','x','y','z',
