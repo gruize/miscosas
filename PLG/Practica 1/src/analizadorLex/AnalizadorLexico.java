@@ -97,7 +97,8 @@ public class AnalizadorLexico {
 		        numColumna++;
 		       
 		        int i=0;
-		        for( t = nextToken(); esFin(); t = nextToken()){
+		        for( t = nextToken(); !esFin(); t = nextToken())
+		        {
 		        	tokens.add(t);
 		        	System.out.println(t.lexema);
 		        }
@@ -233,17 +234,18 @@ public class AnalizadorLexico {
 			} catch (IOException e) {}
 			
         }while(esDigito(c)||esLetra(c));
+        
         String lex =  buff.toString();
         String lexema = lex.toLowerCase();
         
         Integer cod = PalabrasReservadas.PALABRAS_RESERVADAS.get(lexema);
      
-        if(cod<0){
+        if(cod==null){
            
-			return new Token(cod.intValue(),lex,ultimaLinea, numColumna);
-			 
+        	return new Token(Token.ID, lex, ultimaLinea, numColumna);
         } else
-            return new Token(Token.ID, lex, ultimaLinea, numColumna);
+        	return new Token(cod.intValue(),lex,ultimaLinea, numColumna);
+		 
 		}
 
 	
