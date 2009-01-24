@@ -13,7 +13,7 @@ public class Main {
 	{
 		AnalizadorLexico aLex=new AnalizadorLexico (args[0]);
 		aLex.run();
-		
+		aLex.finish();
 
 	}
 
