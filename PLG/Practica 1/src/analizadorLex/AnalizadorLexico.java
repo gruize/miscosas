@@ -58,6 +58,13 @@ public class AnalizadorLexico {
 		numColumna=0;
 	
 	}
+	
+	public AnalizadorLexico(String Fichero) throws IOException {
+		numLinea=1;
+		numColumna=0;
+		reader = new BufferedFileReader(Fichero);
+	
+	}
     private Character leerCaracter()throws IOException {
         if(reader==null) throw new IOException("Reader no inizializado");
         
