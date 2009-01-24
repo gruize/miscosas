@@ -15,12 +15,12 @@ public class TablaSimbolo {
 		dirAct=0;
 	}
   
-  public void añadeID (String id, Tipo tipo, boolean modificable)
+  public void añadeID (String id, int tipo_de_DEC, boolean modificable)
 	{
 	  	
 		DatosTabla datos = new DatosTabla();
 		datos.modificable = modificable;
-		datos.tipo = tipo;
+		datos.tipo = tipo_de_DEC;
 		datos.dir=dirAct;
 		ht.put(id, datos);
 		dirAct++;
@@ -33,7 +33,7 @@ public class TablaSimbolo {
 	  
   }
   
-  public Tipo dameTipo(String id){
+  public int dameTipo(String id){
 	  DatosTabla datos=(DatosTabla) ht.get(id);
 	  return datos.dameTipo();
 	  

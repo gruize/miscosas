@@ -3,7 +3,7 @@ package tablaSimbolos;
 public class DatosTabla {
 	
 	public int dir;
-	public Tipo tipo;
+	public int tipo;
 	public boolean modificable;
 	
 
@@ -12,7 +12,7 @@ public int dameDir(){
 }
 
 
-public Tipo dameTipo(){
+public int dameTipo(){
 	return this.tipo;
 }
 
