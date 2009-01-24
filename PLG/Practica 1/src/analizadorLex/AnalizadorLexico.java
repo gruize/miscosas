@@ -1,8 +1,8 @@
 package analizadorLex;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
+
 
 import excepciones.ExcepcionLexica;
 import excepciones.ExcepcionToken;
@@ -16,9 +16,9 @@ public class AnalizadorLexico {
 	private int numColumna;
 	private Character ultimoCharLeido;
 	private Reader reader = null;
-	private Token tokens[]=null;
+	private Vector tokens=null;
 	private boolean fin=false;
-	
+	palabrasR=new PalabrasReservadas();
 	
 	public static final HashSet<Character> digitos = new HashSet<Character>(10);
     static
@@ -51,18 +51,22 @@ public class AnalizadorLexico {
 	public boolean esFin()
 	{
 		return fin;
+		
 	}
 	
 	public AnalizadorLexico() {
 		numLinea=1;
 		numColumna=0;
-	
+		tokens= new Vector <Token> () ;
+		
+		
 	}
 	
 	public AnalizadorLexico(String Fichero) throws IOException {
 		numLinea=1;
 		numColumna=0;
 		reader = new BufferedFileReader(Fichero);
+		tokens= new Vector <Token> () ;
 	
 	}
     private Character leerCaracter()throws IOException {
@@ -92,8 +96,8 @@ public class AnalizadorLexico {
 		       
 		        int i=0;
 		        for( t = nextToken(); esFin(); t = nextToken()){
-		        	tokens[i]=t;
-		            
+		        	tokens.add(t);
+		        	System.out.println(t.lexema);
 		        }
 		        //imprimo eof
 		        System.out.println(t);
@@ -351,9 +355,11 @@ public class AnalizadorLexico {
 		return separadores.contains(ch);
 		}
 
-	public Token[] getTokens(){
-		
-		return tokens;
+	
+
+	public void finish() {
+		// TODO Auto-generated method stub
+		reader.close();
 	}
 
 }
