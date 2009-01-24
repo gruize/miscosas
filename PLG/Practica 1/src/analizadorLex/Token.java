@@ -15,16 +15,16 @@ public class Token extends Object{
 	public static final int CONST=-4;//
 	public static final int READ=-5;
 	public static final int WRITE=-6;
-	public static final int INTEGER=-7;
-	public static final int BOOLEAN=-8;
 	public static final int NOT= -9;//
 	public static final int AND= -10;//
 	public static final int OR= -11;//
 	public static final int DIV=-12;//
 	public static final int MOD=-13;
-	public static final int REAL=-14;
-	public static final int CHAR=-15;
 	public static final int BEGIN= -16;
+	public static final int INTEGER=-1001;
+	public static final int BOOLEAN=-1002;
+	public static final int CHAR=-1003;
+	public static final int REAL=-1004;
 
 	// VALORES E ID'S
 	public static final int ID=16;
