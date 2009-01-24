@@ -136,13 +136,7 @@ public class AnalizadorLexico {
 		                }
 		                //continue;
 		            }
-		            //LEYO UN PARENTESIS QUE ABRE, PUEDE SER COMENTARIO O NO.
-		            else if(ch.charValue() == '('){
-		                Token token = leerComentarioPar();
-		                //SI NO ES NULL ENTONCES ES UN PARENTESIS
-		                if(token!=null) return token;
-		                continue;
-		            }
+		            
 		          
 		            //RECONOCIMIENTO DE CARACTERES SIMPLES
 		            else if (ch.charValue()=='+') {
@@ -165,7 +159,7 @@ public class AnalizadorLexico {
 		            }
 		            //LEYO UN . PERO PUEDE TAMBIEN SER ..
 		            else if (ch.charValue()=='.') {
-		                return leerPuntoPunto();
+		                return leerPunto();
 		            } else if (ch.charValue()==';') {
 		                leerCaracter();
 		                numColumna++;
@@ -174,6 +168,10 @@ public class AnalizadorLexico {
 		                leerCaracter();
 		                numColumna++;
 		                return new Token(Token.C_PARENTESIS,"", lastLine, numColumna);
+		            } else if (ch.charValue()=='(') {
+		                leerCaracter();
+		                numColumna++;
+		                return new Token(Token.A_PARENTESIS,"", lastLine, numColumna);    
 		          
 		            } else if (ch.charValue()=='>') {
 		                return leerMayorIgual();
@@ -225,7 +223,7 @@ public class AnalizadorLexico {
         String lex =  buff.toString();
         String lexema = lex.toLowerCase();
         
-        Integer cod = palabrasReservadas.get(lexema);
+        Integer cod = PalabrasReservadas.PALABRAS_RESERVADAS.get(lexema);
      
         if(cod!=null){
            
@@ -279,30 +277,67 @@ public class AnalizadorLexico {
 
 
 
-	private Token leerDosPuntosOAsignacion() {
+	private Token leerDosPuntosOAsignacion() throws IOException {
 			// TODO Auto-generated method stub
-			return null;
+		   // asume que ultimoCharLeido :
+        int lineaUlt = numLinea; //salva la linea actual
+        
+        Character ch = leerCaracter();
+        if ((ch==Reader.EOF) || (ch.charValue()!= '=')) {
+            return new Token( Token.DOSPUNTOS,"",lineaUlt,numColumna);
+        }
+        //el caracter actual es =
+        leerCaracter(); //avanza al proximo carater antes de retornar
+        return new Token(Token.OP_ASIGNACION,"",lineaUlt,numColumna);
 		}
 
-	private Token leerMenorIgualDist() {
-			// TODO Auto-generated method stub
-			return null;
+	private Token leerMenorIgualDist() throws IOException 
+	
+	{int lineaUlt = numLinea; //salva la linea actual
+    
+    Character proxi = leerCaracter();
+    if ((proxi==Reader.EOF) || (proxi.charValue()!= '='  && proxi.charValue()!='>')) {
+        return new Token(Token.OP_MENOR_QUE,"<",lineaUlt,numColumna);}
+    
+    leerCaracter();   //avanza al proximo carater antes de retornar
+    
+    if (proxi.charValue()=='='){ //debe ser <=            
+        return new Token(Token.OP_MENOR_IGUAL,"<=",lineaUlt,numColumna);
+    }
+    //el caracter leido proxi debe ser >
+    return new Token(Token.OP_DISTINTO,"<>",lineaUlt,numColumna);
+		
+		
 		}
 
-	private Token leerMayorIgual() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+	private Token leerMayorIgual() throws IOException
+	{
+		int lineaUlt = numLinea; //salva la linea actual
+        
+        Character proxi=leerCaracter();
+        if ((proxi==Reader.EOF) || (proxi.charValue()!= '=')) {
+            return new Token(Token.OP_MAYOR_QUE,">",lineaUlt,numColumna);}
+        //el caracter actual es =
+        leerCaracter(); //avanza al proximo carater antes de retouna
+        return new Token(Token.OP_MAYOR_IGUAL,">=",lineaUlt,numColumna);
+	}
+	
+	
 
-	private Token leerPuntoPunto() {
-			// TODO Auto-generated method stub
+	private Token leerPunto() throws IOException 
+	
+	{
+		 int lineaUlt = numLinea;
+	        
+	        Character proxi = leerCaracter();
+	        if ((proxi==Reader.EOF) ) {
+	            return new Token(Token.PUNTO,"",lineaUlt,numColumna);}
 			return null;
-		}
+	        
+	        
+	}
 
-	private Token leerComentarioPar() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+
 
 	private boolean esSeparador(Character ch) {
 			// TODO Auto-generated method stub
@@ -314,97 +349,8 @@ public class AnalizadorLexico {
 		return tokens;
 	}
 
-	/****
-	 * ****************************************************************************
-	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	 * ******/
-	
-	/**
-     * Reconoce la asignacion(:=)  y los dos puntos (:).
-     * Asume que el ultimo caracter leido fue ':'
-     * @return el Token ASIGNACION si el proximo caracter es ':', en otro caso
-     * 		   retorna el token DOS_PUNTOS.
-     * @throws IOException si ocurrio error de I/O
-     */
-    private Token leerDosPuntosOAsignacion()throws IOException{
-        // asume que ultimoCharLeido :
-        int lineaUlt = numLinea; //salva la linea actual
-        
-        Character ch = leerCaracter();
-        if ((ch==Reader.EOF) || (ch.charValue()!= '=')) {
-            return new Token(Token.DOS_PUNTOS,"",lineaUlt);
-        }
-        //el caracter actual es =
-        leerCaracter(); //avanza al proximo carater antes de retornar
-        return new Token(Token.ASIGNACION,"",lineaUlt);
-    }
-    
-    /**
-     * Reconoce el punto '.' o los dos puntos '..'
-     * @return el token PUNTO_PUNTO si el proximo caracter es '.'; en otro
-     *         caso retorna el token PUNTO
-     * @throws IOException si ocurrio error de I/O
-     */
-    private Token leerPuntoPunto()throws IOException{
-        int lineaUlt = numLinea;
-        
-        Character proxi = leerCaracter();
-        if ((proxi==Reader.EOF) || (proxi.charValue()!= '.')) {
-            return new Token(Token.PUNTO,"",lineaUlt);}
-        
-        leerCaracter(); //avanza al proximo carater antes de retornar
-        return new Token(Token.PUNTO_PUNTO,"",lineaUlt);
-    }
-    
-    
-    /**
-     * reconoce el mayor (>) o el mayor igual (>=)
-     * @return el token OP_RELACIONAL con el lexema '>=' si el proximo caracter es '='
-     *         , en otro caso es '>'
-     * @throws IOException si ocurrio error de I/O
-     */
-    private Token leerMayorIgual()throws IOException{
-        // asume que ultimoCharLeido >
-        int lineaUlt = numLinea; //salva la linea actual
-        
-        Character proxi=leerCaracter();
-        if ((proxi==Reader.EOF) || (proxi.charValue()!= '=')) {
-            return new Token(Token.OP_RELACIONAL,">",lineaUlt);}
-        //el caracter actual es =
-        leerCaracter(); //avanza al proximo carater antes de retouna
-        return new Token(Token.OP_RELACIONAL,">=",lineaUlt);
-    }
-    
-    
-    /**
-     * Reconoce el menor (<), el menor igual (<=) o el distinto (<>)
-     * Asume que se leyo el caracter '<'
-     * @return el token OP_RELACIONAL <pre>
-     * 			con el lexema '<' si el siguiente caracter no es ni '=' ni '>', o
-     *          con el lexema '<=' si el siguiente caracter es '=', o
-     *          con el lexema '<>' si el siguiente caracter es '>' </pre>
-     * @throws IOException si ocurrio error de I/O
-     */
-    private Token leerMenorIgualDist()throws IOException{
-        // asume que ultimoCharLeido <
-        int lineaUlt = numLinea; //salva la linea actual
-        
-        Character proxi = leerCaracter();
-        if ((proxi==Reader.EOF) || (proxi.charValue()!= '='  && proxi.charValue()!='>')) {
-            return new Token(Token.OP_RELACIONAL,"<",lineaUlt);}
-        
-        leerCaracter();   //avanza al proximo carater antes de retornar
-        
-        if (proxi.charValue()=='='){ //debe ser <=            
-            return new Token(Token.OP_RELACIONAL,"<=",lineaUlt);
-        }
-        //el caracter leido proxi debe ser >
-        return new Token(Token.OP_RELACIONAL,"<>",lineaUlt);
-    }
-	
-	
-	
 }
+	
+
+
+	
