@@ -3,6 +3,13 @@ import java.util.Hashtable;
 
 import excepciones.ExcepcionToken;
 
+/**
+ * Los valores 1000, 1001, 1002 y 1003 estan reservados para las operaciones:
+ *  APILA(NUM)
+ *  APILA_DIR(POS)
+ *  DESAPILA_DIR(POS)
+ *  STOP
+ */
 
 
 public class Token extends Object{
