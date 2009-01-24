@@ -1,5 +1,7 @@
 package main;
 
+import java.io.IOException;
+
 /**
  * @author GabiPC
  * Permite crear objetos testeables
@@ -8,13 +10,13 @@ package main;
  */
 public interface Testeable {
 
-	public void run();
+	public void run() throws Exception;
 	
 	/**
 	 * permite la modificacion del archivo de lectura.
 	 * @param source
 	 */
-	public void setArchivoLectura(String source);
+	public void setArchivoLectura(String source) throws IOException;
 	
 	public void finish();
 	
@@ -23,6 +25,6 @@ public interface Testeable {
 	 * @param source
 	 * @return
 	 */
-	public boolean extensionArchivo(String source);	
+	public boolean extensionArchivoValida(String file);	
 	
 }
