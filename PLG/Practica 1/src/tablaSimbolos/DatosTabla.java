@@ -2,9 +2,9 @@ package tablaSimbolos;
 
 public class DatosTabla {
 	
-	int dir;
-	Tipo tipo;
-	boolean modificable;
+	public int dir;
+	public Tipo tipo;
+	public boolean modificable;
 	
 
 public int dameDir(){
