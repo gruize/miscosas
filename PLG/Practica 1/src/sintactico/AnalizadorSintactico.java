@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 import sintactico.tablaSimbolos.DatosTabla;
 import sintactico.tablaSimbolos.TablaSimbolo;
 import sintactico.tablaSimbolos.Tipo;
+import utilidades.BufferedFileReader;
 import utilidades.PalabrasReservadas;
 
 import excepciones.*;
@@ -18,14 +19,15 @@ public class AnalizadorSintactico {
 	public int pos_token;
 	public ExcepcionSintactica excepcion = new ExcepcionSintactica();
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
-	public FileInputStream ficheroEntrada;
-	public void run (String fichero){
+	public BufferedFileReader ficheroEntrada;
+	public void run (){
 		
 	}
 	public void finish() {
 		
 	}
-	public AnalizadorSintactico(){
+	public AnalizadorSintactico(BufferedFileReader file){
+		ficheroEntrada = file;
 		pos_token = 0;
 		AnalizadorLexico aLex = new AnalizadorLexico();
 		tokens = aLex.getTokens();
@@ -110,23 +112,40 @@ public class AnalizadorSintactico {
 	
 
 	private void DECS() {
-		String lex_de_DEC = new String();
-		int tipo_de_DEC= 0;
+		Token lex_de_DEC = new Token();
+		Token tipo_de_DEC= new Token();
 		DEC(lex_de_DEC,tipo_de_DEC);
 		tablaDeSimbolos.creaTS();
 		// it's not necessary because is the first variable
 		// tablaDeSimbolos.existeID();
 		
-		tablaDeSimbolos.añadeID(lex_de_DEC,tipo_de_DEC,true);
-		RDECS();
+		tablaDeSimbolos.añadeID(lex_de_DEC.lexema,tipo_de_DEC.codigo,true);
+		if (tokenSiguiente() == Token.PUNTO_Y_COMA)
+			RDECS1();
+		//RDECS2(); no hace nada no se crea
 		
 	}
 
-	private void DEC(String lex, int tipo) {
+	private void RDECS1() {
+		// TODO Auto-generated method stub
+		Token t = rec();
+		// no es necesario
+		/*if (t.codigo != Token.PUNTO_Y_COMA)
+			excepcion.addMensaje(Mensaje.ERROR_FALTA_PUNTO_Y_COMA,Token.PUNTO_Y_COMA,t);
+			*/
+		
+		// XXX puede no funcionar referencias y mierdas varias
+		Token tipo_de_DEC = new Token();
+		Token lex_de_DEC = new Token();
+		DEC(lex_de_DEC,tipo_de_DEC);
+		if(tablaDeSimbolos.existeID(lex_de_DEC.lexema))
+			excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC);
+	}
+	private void DEC(Token lex_de_DEC, Token tipo_de_DEC) {
 		
 		// XXX posible error
 		
-		VARIABLE(lex);
+		VARIABLE(lex_de_DEC);
 		
 		Token t = rec();
 		if (t.codigo != Token.DOSPUNTOS)
@@ -134,7 +153,7 @@ public class AnalizadorSintactico {
 			this.excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.DOSPUNTOS, t);
 		}
 		
-		TIPO(tipo);
+		TIPO(tipo_de_DEC);
 		
 		
 		// TODO Auto-generated method stub
@@ -146,12 +165,12 @@ public class AnalizadorSintactico {
 		return 0;
 	}
 
-	private void TIPO(int tipo) {
+	private void TIPO(Token tipo_de_DEC) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void VARIABLE(String lex) {
+	private void VARIABLE(Token lex_de_DEC) {
 		Token t = rec();
 		// ID
 		if (PalabrasReservadas.PALABRAS_RESERVADAS.containsKey(t.lexema)){
@@ -159,7 +178,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,t);
 			
 		}
-		lex = t.lexema; 
+		lex_de_DEC = t.clon(); 
 	}
 
 }
