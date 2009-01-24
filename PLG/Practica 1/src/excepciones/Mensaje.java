@@ -8,6 +8,7 @@ public class Mensaje{
 	public int tokenOk;
 	public static int ERROR_TOKEN_INCORRECTO = 0;
 	public static int ERROR_ID_DUPLICADO= 1;
+	public static int ERROR_ID_PALABRA_RESERVADA=2;
 	public static String errores[] = {
 		"Palabra no esperada"//ERROR_TOKEN_INCORRECTO 
 	};
