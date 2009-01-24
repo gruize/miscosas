@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 
 import tablaSimbolos.TablaSimbolo;
 import tablaSimbolos.Tipo;
+import utilidades.PalabrasReservadas;
 
 import excepciones.*;
 
@@ -16,7 +17,7 @@ public class AnalizadorSintactico {
 	public int pos_token;
 	public ExcepcionSintactica excepcion = new ExcepcionSintactica();
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
-	private FileInputStream ficheroEntrada;
+	public FileInputStream ficheroEntrada;
 	public void run (String fichero){
 		
 	}
@@ -141,8 +142,12 @@ public class AnalizadorSintactico {
 
 	private void VARIABLE(String lex) {
 		Token t = rec();
-		// 
-		if ()
+		// ID
+		if (PalabrasReservadas.PALABRAS_RESERVADAS.containsKey(t.lexema)){
+			// this isn't good word
+			excepc
+			
+		}
 		
 		// TODO Auto-generated method stub
 		
