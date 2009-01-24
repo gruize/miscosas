@@ -6,16 +6,20 @@ import java.util.*;
 public class TablaSimbolo {
     
   public Hashtable<String, DatosTabla> ht;
+  public int dirAct;
 
  
   public void creaTS()
 	{
 		ht= new Hashtable<String, DatosTabla>();
+		dirAct=0;
 	}
   
   public void añadeID (String id, DatosTabla datos)
 	{
+	  	datos.dir=dirAct;
 		ht.put(id, datos);
+		dirAct++;
 	}
   
   public int dameDir(String id)  {
@@ -35,6 +39,10 @@ public class TablaSimbolo {
 	  DatosTabla datos=(DatosTabla) ht.get(id);
 	  return datos.dameModificable();
 	  
+  }
+  
+  public boolean existeID(String ID){
+	  return ht.containsKey(ID);
   }
 
 }
