@@ -83,12 +83,23 @@ public class AnalizadorSintactico {
 		if (this.tokenSiguiente() == Token.VAR)
 			VARIABLES1();
 		else
-			VARIALBES2();
-		CONSTANTES();
+			VARIABLES2();
+		if (this.tokenSiguiente() == Token.CONST)
+			CONSTANTES1();
+		else
+			CONSTANTES2();
 		
 		
 	}
 	
+	private void CONSTANTES2() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void CONSTANTES1() {
+		// TODO Auto-generated method stub
+		
+	}
 	private void VARIABLES1() {
 		rec(); //VAR 
 		// it's necessary because it's cheked in DECLARACIONES
@@ -99,7 +110,7 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private void VARIALBES2() {
+	private void VARIABLES2() {
 		this.tablaDeSimbolos.creaTS();
 		
 	}
@@ -118,7 +129,10 @@ public class AnalizadorSintactico {
 		tablaDeSimbolos.creaTS();
 		// it's not necessary because is the first variable
 		// tablaDeSimbolos.existeID();
-		
+		if (esReservada(lex_de_DEC.lexema)){
+			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,lex_de_DEC);
+		}
+		else
 		tablaDeSimbolos.añadeID(lex_de_DEC.lexema,tipo_de_DEC.codigo,true);
 		if (tokenSiguiente() == Token.PUNTO_Y_COMA)
 			RDECS1();
@@ -126,37 +140,35 @@ public class AnalizadorSintactico {
 		
 	}
 
+	private boolean esReservada(String lexema) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	private void RDECS1() {
 		// TODO Auto-generated method stub
 		Token t = rec();
-		// no es necesario
-		/*if (t.codigo != Token.PUNTO_Y_COMA)
-			excepcion.addMensaje(Mensaje.ERROR_FALTA_PUNTO_Y_COMA,Token.PUNTO_Y_COMA,t);
-			*/
 		
+		if (t.codigo != Token.PUNTO_Y_COMA)
+			excepcion.addMensaje(Mensaje.ERROR_FALTA_PUNTO_Y_COMA,Token.PUNTO_Y_COMA,t);
+				
 		// XXX puede no funcionar referencias y mierdas varias
 		Token tipo_de_DEC = new Token();
 		Token lex_de_DEC = new Token();
 		DEC(lex_de_DEC,tipo_de_DEC);
 		if(tablaDeSimbolos.existeID(lex_de_DEC.lexema))
 			excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC);
+		else
+		tablaDeSimbolos.añadeID(lex_de_DEC.lexema, tipo_de_DEC.codigo, true);
 	}
-	private void DEC(Token lex_de_DEC, Token tipo_de_DEC) {
+	private void DEC(Token lex, Token tipo) {
 		
 		// XXX posible error
 		
-		VARIABLE(lex_de_DEC);
-		
-		Token t = rec();
+		VARIABLE(lex);
+		Token t = rec(); //:
 		if (t.codigo != Token.DOSPUNTOS)
-		{
-			this.excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.DOSPUNTOS, t);
-		}
-		
-		TIPO(tipo_de_DEC);
-		
-		
-		// TODO Auto-generated method stub
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.DOSPUNTOS,t);
+		TIPO(tipo);
 		
 	}
 
@@ -165,20 +177,29 @@ public class AnalizadorSintactico {
 		return 0;
 	}
 
-	private void TIPO(Token tipo_de_DEC) {
-		// TODO Auto-generated method stub
-		
+	private void TIPO(Token tipo) {
+		Token t = rec();
+		// estan entre los tipos? los tipos estan
+		// entre -1000 y -1999
+		if ((t.codigo < -1000) && (t.codigo >-1999))
+			tipo = t.clon();
+		else
+			excepcion.addMensaje(Mensaje.ERROR_TIPOS,0,t);
 	}
 
-	private void VARIABLE(Token lex_de_DEC) {
+	private void VARIABLE(Token lex) {
+		ID(lex);
+	}
+	private void ID(Token lex) {
 		Token t = rec();
-		// ID
 		if (PalabrasReservadas.PALABRAS_RESERVADAS.containsKey(t.lexema)){
 			// this isn't good word
 			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,t);
 			
 		}
-		lex_de_DEC = t.clon(); 
+		lex = t.clon();
+		// TODO Auto-generated method stub
+		
 	}
 
 }

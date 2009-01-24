@@ -9,6 +9,8 @@ public class Mensaje{
 	public static int ERROR_TOKEN_INCORRECTO = 0;
 	public static int ERROR_ID_DUPLICADO= 1;
 	public static int ERROR_ID_PALABRA_RESERVADA=2;
+	public static int ERROR_FALTA_PUNTO_Y_COMA= 3;
+	public static int ERROR_TIPOS= 4;
 	public static String errores[] = {
 		"Palabra no esperada"//ERROR_TOKEN_INCORRECTO 
 	};
