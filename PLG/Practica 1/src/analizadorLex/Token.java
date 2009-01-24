@@ -39,7 +39,7 @@ public class Token extends Object{
 	public static final int OP_SUMA=23;
 	public static final int OP_RESTA=35;
 	public static final int OP_MUL=24;
-	//public static final int BARRA_NORMAL/ ::= “/”
+	//public static final int BARRA_NORMAL/ ::= /
 	public static final int OP_MENOR_QUE=25;
 	public static final int OP_MAYOR_QUE=26;
 	public static final int OP_DISTINTO=27;	
@@ -114,23 +114,11 @@ public class Token extends Object{
 	public String lexema;
 	public int codigo;
 	public int linea;
+	public int columna;
 	public Token (){
 		
 	}
 	
-	public Token (int codigo) throws ExcepcionToken{
-		this.codigo=codigo;
-		this.lexema = LEXICOS.get(codigo);
-		if (this.lexema == null)
-			throw new ExcepcionToken("El token tiene una expresion no valida o no tiene expresion");
-		
-	}
-	public Token (int codigo,String lexema) throws ExcepcionToken{
-		this.codigo = codigo;
-		if (LEXICOS.get(codigo) != null)
-			throw new ExcepcionToken("El token tiene una expresion no valida");
-		this.lexema = lexema;
-	}
 	public Token clon() {
 		Token t = new Token();
 		t.codigo = this.codigo;
@@ -141,12 +129,11 @@ public class Token extends Object{
 	/*
 	 * Constructora con atributo linea
 	 * */
-	public Token (int codigo,String lexema, int line) throws ExcepcionToken { 
+	public Token (int codigo,String lexema, int line, int columna){ 
 	
 		this.codigo = codigo;
-		if (LEXICOS.get(codigo) != null)
-			throw new ExcepcionToken("El token tiene una expresion no valida");
 		this.lexema = lexema;
+		this.columna = columna;
 		this.linea=line;
 	}
 
