@@ -107,17 +107,25 @@ public class AnalizadorLexicoMaquinaEjecucion {
 	public TokenMaquina siguienteToken() throws Exception{
 		TokenMaquina siguiente = null;
 		//Separadores
-		
+		if(this.caracterSeparador()){
+			
+		}
 		//End Of File <EOF>
 		
 		//Menos --> Genera numeros negativos
 		
-		//Coma
+		//Punto
 		
 		//Numeros
 		
 		//Instrucciones
 		
 		return siguiente;
+	}
+
+	private boolean caracterSeparador() {
+		boolean separador = false;
+		
+		return separador;
 	}
 }

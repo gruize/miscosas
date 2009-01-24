@@ -12,7 +12,7 @@ public class Instrucciones {
 	/** Nombre de la instrucción */
 	private String nombre;
 
-	/** Codigo de la instruccion */
+	/** Codigo de la instrucción */
 	public int codigo;
 	
 	/** Numero de lineas */
@@ -26,9 +26,6 @@ public class Instrucciones {
 	
 	/** Tercer operando */
 	public int op3 = -1;	
-	
-	/** Etiqueta */
-	public String etiqueta;
 
 	public Instrucciones(String nombre, int codigo, int numeroLineas) {
 		this.nombre = nombre;
