@@ -9,6 +9,8 @@ import excepciones.ExcepcionMaquina;
 
 import main.Testeable;
 
+import analizadorLex.Token;
+
 /**
  * @author GabiPC
  *
@@ -65,8 +67,32 @@ public class MaquinaEjecucion implements Testeable{
 	
 	public void ejecutar(Instrucciones instruccion) throws Exception{
 	    try{
-	    	switch(instruccion.codigo){	    	
+	    	switch(instruccion.codigo){
+	    	/** 
+	    	 * APILA
+	    	 */
+	    	case 1000:
 	    		
+	    		break;
+	    	/**
+	    	 * APILA_DIR
+	    	 */
+	    	case 1001:
+	    		
+	    		break;
+	    	/**
+	    	 * DESAPILA_DIR
+	    	 */
+	    	case 1002:
+	    		
+	    		break;
+	    	/**
+	    	 * STOP
+	    	 */
+	    	case 1003:
+	    		
+	    		break;
+	    	case Token.OP_SUMA:
 	    	}
 		}catch (IndexOutOfBoundsException e){
 	        throw new ExcepcionMaquina(2,i);
