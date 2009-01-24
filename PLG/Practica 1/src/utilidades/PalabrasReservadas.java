@@ -9,7 +9,7 @@ import java.util.Vector;
 import analizadorLex.Token;
 
 public class PalabrasReservadas {
-    private static final Hashtable<String,Integer> PALABRAS_RESERVADAS = new Hashtable<String,Integer>(25);
+    public static final Hashtable<String,Integer> PALABRAS_RESERVADAS = new Hashtable<String,Integer>(25);
     static
     {
     	Enumeration<Integer> claves = Token.LEXICOS.keys();
