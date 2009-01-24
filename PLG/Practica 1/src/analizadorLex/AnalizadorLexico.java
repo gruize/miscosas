@@ -16,9 +16,11 @@ public class AnalizadorLexico {
 	private int numColumna;
 	private Character ultimoCharLeido;
 	private Reader reader = null;
-	private Vector tokens=null;
-	private boolean fin=false;
-	palabrasR=new PalabrasReservadas();
+	private Vector <Token> tokens=null;
+	private boolean fin= false;
+	
+	
+	PalabrasReservadas palabrasR=new PalabrasReservadas();
 	
 	public static final HashSet<Character> digitos = new HashSet<Character>(10);
     static
@@ -100,7 +102,7 @@ public class AnalizadorLexico {
 		        	System.out.println(t.lexema);
 		        }
 		        //imprimo eof
-		        System.out.println(t);
+		        System.out.println(t.lexema);
 		        cerrarLector();
 		    }
 		    	 
@@ -236,7 +238,7 @@ public class AnalizadorLexico {
         
         Integer cod = PalabrasReservadas.PALABRAS_RESERVADAS.get(lexema);
      
-        if(cod!=null){
+        if(cod<0){
            
 			return new Token(cod.intValue(),lex,ultimaLinea, numColumna);
 			 

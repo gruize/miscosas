@@ -72,11 +72,11 @@ public class Token extends Object{
 
 		
 		/* id's y variables*/
-		LEXICOS.put(ID, null);
-		LEXICOS.put(NUM, null);
-		LEXICOS.put(VALORCHAR, null);
-		LEXICOS.put(NUMREAL, null);
-		LEXICOS.put(VALORBOOLEAN, null);
+		LEXICOS.put(ID, "");
+		LEXICOS.put(NUM, "");
+		LEXICOS.put(VALORCHAR, "");
+		LEXICOS.put(NUMREAL, "");
+		LEXICOS.put(VALORBOOLEAN, "");
 
 		
 		/*PUNTUACION*/

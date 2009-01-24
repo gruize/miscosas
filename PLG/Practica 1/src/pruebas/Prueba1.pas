@@ -1,4 +1,4 @@
-PROGRAM Primera_Prueba; 
+PROGRAM PrimeraPrueba; 
 CONST 
 Mensaje = 'Introduce un valor entero: '; 
 Respuesta = 'El valor es: '; 
