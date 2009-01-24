@@ -7,12 +7,13 @@ public class Main {
 	/**
 	 * 
 	 * @param args
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] args) throws Exception 
 	{
 		AnalizadorLexico aLex=new AnalizadorLexico (args[0]);
 		aLex.run();
+		
 
 	}
 
