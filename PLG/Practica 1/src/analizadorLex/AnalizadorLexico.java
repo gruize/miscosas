@@ -27,45 +27,8 @@ public class AnalizadorLexico {
     }
     
     
-    private static final HashMap<String,Integer> palabrasReservadas = new HashMap<String,Integer>(25);
-    static
-    {
-    	palabrasReservadas.put("program",new Integer(Token.PROGRAM));
-    	palabrasReservadas.put("begin",new Integer(Token.BEGIN));
-    	palabrasReservadas.put("end",new Integer(Token.END));
-        palabrasReservadas.put("const",new Integer(Token.CONST));
-        palabrasReservadas.put("var",new Integer(Token.VAR));
-        palabrasReservadas.put(":",new Integer(Token.DOSPUNTOS));
-        palabrasReservadas.put(":=",new Integer(Token.OP_ASIGNACION));      
-        palabrasReservadas.put("not",new Integer(Token.NOT));
-        palabrasReservadas.put("or",new Integer(Token.OR));
-        palabrasReservadas.put("and",new Integer(Token.AND));
-        palabrasReservadas.put("mod",new Integer(Token.DIV));
-        palabrasReservadas.put("integer",new Integer(Token.DIV));
-        palabrasReservadas.put("real",new Integer(Token.DIV));
-        palabrasReservadas.put("char",new Integer(Token.DIV));
-        
-        
-        
-        /*
-         * public static final int BEGIN= 0; 
-    public static final int END=1; 
-    public static final int PROGRAM= 2;
-    public static final int VAR=3;
-    public static final int CONST=4;
-    public static final int READ=5;
-    public static final int WRITE=6;
-    public static final int INTEGER=7;
-    public static final int BOOLEAN=8;
-    public static final int NOT= 9;
-    public static final int AND= 10;
-    public static final int OR= 11;
-    public static final int DIV=12;
-    public static final int MOD=13;
-    public static final int REAL=14;
-    public static final int CHAR=15;
-         * */
-    }
+    
+   
     
     public static final char[] listLetras={'a','b', 'c', 'd' ,'e', 'f', 'g' ,'h' ,'i', 'j' ,'k', 'l', 'm','n', 'o', 'p', 'q', 'r', 's','t','u','v','w','x','y','z',
     'A','B','C','D','E','F','G','H','I','J','K','L', 'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
@@ -351,5 +314,97 @@ public class AnalizadorLexico {
 		return tokens;
 	}
 
+	/****
+	 * ****************************************************************************
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * ******/
+	
+	/**
+     * Reconoce la asignacion(:=)  y los dos puntos (:).
+     * Asume que el ultimo caracter leido fue ':'
+     * @return el Token ASIGNACION si el proximo caracter es ':', en otro caso
+     * 		   retorna el token DOS_PUNTOS.
+     * @throws IOException si ocurrio error de I/O
+     */
+    private Token leerDosPuntosOAsignacion()throws IOException{
+        // asume que ultimoCharLeido :
+        int lineaUlt = numLinea; //salva la linea actual
+        
+        Character ch = leerCaracter();
+        if ((ch==Reader.EOF) || (ch.charValue()!= '=')) {
+            return new Token(Token.DOS_PUNTOS,"",lineaUlt);
+        }
+        //el caracter actual es =
+        leerCaracter(); //avanza al proximo carater antes de retornar
+        return new Token(Token.ASIGNACION,"",lineaUlt);
+    }
+    
+    /**
+     * Reconoce el punto '.' o los dos puntos '..'
+     * @return el token PUNTO_PUNTO si el proximo caracter es '.'; en otro
+     *         caso retorna el token PUNTO
+     * @throws IOException si ocurrio error de I/O
+     */
+    private Token leerPuntoPunto()throws IOException{
+        int lineaUlt = numLinea;
+        
+        Character proxi = leerCaracter();
+        if ((proxi==Reader.EOF) || (proxi.charValue()!= '.')) {
+            return new Token(Token.PUNTO,"",lineaUlt);}
+        
+        leerCaracter(); //avanza al proximo carater antes de retornar
+        return new Token(Token.PUNTO_PUNTO,"",lineaUlt);
+    }
+    
+    
+    /**
+     * reconoce el mayor (>) o el mayor igual (>=)
+     * @return el token OP_RELACIONAL con el lexema '>=' si el proximo caracter es '='
+     *         , en otro caso es '>'
+     * @throws IOException si ocurrio error de I/O
+     */
+    private Token leerMayorIgual()throws IOException{
+        // asume que ultimoCharLeido >
+        int lineaUlt = numLinea; //salva la linea actual
+        
+        Character proxi=leerCaracter();
+        if ((proxi==Reader.EOF) || (proxi.charValue()!= '=')) {
+            return new Token(Token.OP_RELACIONAL,">",lineaUlt);}
+        //el caracter actual es =
+        leerCaracter(); //avanza al proximo carater antes de retouna
+        return new Token(Token.OP_RELACIONAL,">=",lineaUlt);
+    }
+    
+    
+    /**
+     * Reconoce el menor (<), el menor igual (<=) o el distinto (<>)
+     * Asume que se leyo el caracter '<'
+     * @return el token OP_RELACIONAL <pre>
+     * 			con el lexema '<' si el siguiente caracter no es ni '=' ni '>', o
+     *          con el lexema '<=' si el siguiente caracter es '=', o
+     *          con el lexema '<>' si el siguiente caracter es '>' </pre>
+     * @throws IOException si ocurrio error de I/O
+     */
+    private Token leerMenorIgualDist()throws IOException{
+        // asume que ultimoCharLeido <
+        int lineaUlt = numLinea; //salva la linea actual
+        
+        Character proxi = leerCaracter();
+        if ((proxi==Reader.EOF) || (proxi.charValue()!= '='  && proxi.charValue()!='>')) {
+            return new Token(Token.OP_RELACIONAL,"<",lineaUlt);}
+        
+        leerCaracter();   //avanza al proximo carater antes de retornar
+        
+        if (proxi.charValue()=='='){ //debe ser <=            
+            return new Token(Token.OP_RELACIONAL,"<=",lineaUlt);
+        }
+        //el caracter leido proxi debe ser >
+        return new Token(Token.OP_RELACIONAL,"<>",lineaUlt);
+    }
+	
+	
 	
 }
