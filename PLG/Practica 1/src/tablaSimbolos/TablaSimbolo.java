@@ -15,9 +15,13 @@ public class TablaSimbolo {
 		dirAct=0;
 	}
   
-  public void añadeID (String id, DatosTabla datos)
+  public void añadeID (String id, Tipo tipo, boolean modificable)
 	{
-	  	datos.dir=dirAct;
+	  	
+		DatosTabla datos = new DatosTabla();
+		datos.modificable = modificable;
+		datos.tipo = tipo;
+		datos.dir=dirAct;
 		ht.put(id, datos);
 		dirAct++;
 	}
