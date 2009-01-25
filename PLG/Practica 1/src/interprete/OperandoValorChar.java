@@ -1,14 +1,11 @@
 package interprete;
 
-public class OperandoValorChar implements Operandos {
+import java.io.Serializable;
 
-	public OperandoValorChar(Character valor) {
-		super();
-		this.valor = valor;
-	}
+public class OperandoValorChar implements Operandos, Serializable {
 
-	public Character valor;
-	public int tipo = Operandos.VALORCHAR;
+	public char valor;
+	private int tipo = Operandos.VALORCHAR;
 	
 	@Override
 	public int dameTipo() {
@@ -17,7 +14,7 @@ public class OperandoValorChar implements Operandos {
 
 	@Override
 	public Object dameValor() {
-		return this.valor;
+		return (char)this.valor;
 	}
 
 }
