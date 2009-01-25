@@ -12,8 +12,15 @@ public int numErrores=0;
 		numErrores++;
 		// TODO Auto-generated constructor stub
 	}
+	
+public ExcepcionLexica(String  i, int numLinea, int columna) {
+		
+		erroresLex.add(new MensajeLex(i,numLinea,columna));
+		numErrores++;
+		// TODO Auto-generated constructor stub
+	}
 
-	public ExcepcionLexica(int i, String string, int lastLine) {
+	public ExcepcionLexica(String string) {
 		// TODO Auto-generated constructor stub
 	}
 
