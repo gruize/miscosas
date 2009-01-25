@@ -148,8 +148,8 @@ public class MaquinaEjecucion implements Testeable{
 	    		case TokenMaquina.MAYOR:
 	    			temp1 = this.pila.pop();
 	    			temp2 = this.pila.pop();	    		
-	    			
-	    			this.pila.push(temp1);
+	    			OperandoValorBoolean temp3 = OperandoValorBoolean(temp1.dameValor() > temp2.dameValor());
+	    			this.pila.push(temp3);
 	    			break;	    			
 	    		case TokenMaquina.MENOR:
 	    			
