@@ -75,7 +75,7 @@ public class AnalizadorLexico {
         if(reader==null) throw new IOException("Reader no inizializado");
         
         ultimoCharLeido = reader.readCharacter();
-        numColumna = 0;
+        numColumna++;
         if(esFinalDeLinea(ultimoCharLeido)) {
         	numColumna=0;
             numLinea++; //incrementa la linea
@@ -94,7 +94,7 @@ public class AnalizadorLexico {
 		        Token t= null;
 		       
 		        leerCaracter();
-		        numColumna++;
+		        
 		       
 		       
 		        for( t = nextToken(); !esFin(); t = nextToken())
@@ -104,7 +104,7 @@ public class AnalizadorLexico {
 		        	}
 		        }
 		        //imprimo eof
-		        System.out.println("Fin PROGRAMA ");
+		        System.out.println("Fin PROGRAMA");
 		        cerrarLector();
 		    }
 		    	 
@@ -129,7 +129,7 @@ public class AnalizadorLexico {
 		            else if (esSeparador(ch)) {
 		                do{
 		                    ch = leerCaracter();
-		                    numColumna++;
+		                   
 		                }
 		                while(ch!=Reader.EOF && esSeparador(ch));
 		                //continue;
@@ -138,13 +138,13 @@ public class AnalizadorLexico {
 		            else if(ch.charValue() == '{'){
 		                do{
 		                    ch = leerCaracter();
-		                    numColumna++;
+		                   
 		                }
 		                while(ch!=Reader.EOF && ch.charValue()!='}');
 		                if(ch!=Reader.EOF) 
 		                {
 		                	leerCaracter();
-		                	numColumna++;
+		                	
 		                	}
 		                else{
 		                    throw new ExcepcionLexica(2,numLinea);
@@ -152,24 +152,32 @@ public class AnalizadorLexico {
 		                //continue;
 		            }
 		            
-		          
+		          //RECONOCIMIENTO DE CHAR
+		            else if (ch.charValue()=='\'') {
+		                //avanza al proximo carater antes de retornar
+		                
+		            	Character c=leerCaracter();
+		            	
+		                return caracter(c);
+		            } 
+		            
 		            //RECONOCIMIENTO DE CARACTERES SIMPLES
 		            else if (ch.charValue()=='+') {
 		                //avanza al proximo carater antes de retornar
 		                leerCaracter();
-		                numColumna++;
+		              
 		                return new Token(Token.OP_SUMA ,"",lastLine, numColumna);
 		            } else if (ch.charValue()=='-') {
 		                leerCaracter();
-		                numColumna++;
+		           
 		                return new Token(Token.OP_RESTA ,"",lastLine, numColumna);
 		            } else if (ch.charValue()=='*') {
 		                leerCaracter();
-		                numColumna++;
+		               
 		                return new Token(Token.OP_MUL,"", lastLine, numColumna);
 		            }else if (ch.charValue()=='=') {
 		                leerCaracter();
-		                numColumna++;
+		                
 		                return new Token(Token.OP_COMPARACION,"", lastLine, numColumna);
 		            }
 		            //LEYO UN . PERO PUEDE TAMBIEN SER ..
@@ -177,15 +185,15 @@ public class AnalizadorLexico {
 		                return leerPunto();
 		            } else if (ch.charValue()==';') {
 		                leerCaracter();
-		                numColumna++;
+		              
 		                return new Token(Token.PUNTO_Y_COMA,"", lastLine, numColumna);
 		            } else if (ch.charValue()==')') {
 		                leerCaracter();
-		                numColumna++;
+		              
 		                return new Token(Token.C_PARENTESIS,"", lastLine, numColumna);
 		            } else if (ch.charValue()=='(') {
 		                leerCaracter();
-		                numColumna++;
+		           
 		                return new Token(Token.A_PARENTESIS,"", lastLine, numColumna);    
 		          
 		            } else if (ch.charValue()=='>') {
@@ -214,6 +222,22 @@ public class AnalizadorLexico {
 		}
 		 
 		 
+	private Token caracter(Character c) {
+			// TODO Auto-generated method stub
+		Character ch=null;
+		if (esLetra(c))
+			try {
+				ch= leerCaracter();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (ch.charValue()=='\'') {	
+			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
+		
+		return null;
+	}
+
 	private boolean esLetra(Character ch) {
 			// TODO Auto-generated method stub
 			return letras.contains(ch);
@@ -257,18 +281,38 @@ public class AnalizadorLexico {
         StringBuffer buff = new StringBuffer();
         c = ultimoCharLeido; //asume que es un digito
         int lineaUlt = numLinea;//salva la liena actual
-        
+        boolean esreal=false;
         do {
             buff.append(c.charValue());
             try {
 				c = leerCaracter();
-				numColumna++;
 			} catch (IOException e) 
-			{	numColumna--;
+			{	
 				return null;
 			}
         }
         while (esDigito(c));
+        
+        if (c.charValue()=='.') {
+        	try {
+        		buff.append(c.charValue());
+				c = leerCaracter();
+				
+			} catch (IOException e1) {
+				return null;
+			}
+        	while (esDigito(c))
+        	{  
+                buff.append(c.charValue());
+                try {
+    				c = leerCaracter();
+    				numColumna++;
+    			} catch (IOException e) 
+    			{	numColumna--;
+    				return null;
+    			}
+        	}
+        esreal=true;}
         
         if (esLetra(c)){
             try {
@@ -276,7 +320,9 @@ public class AnalizadorLexico {
 			} catch (ExcepcionLexica e) {return null;}
 			
         }
-       
+      
+	if (esreal) return new Token(Token.NUMREAL,buff.toString(),lineaUlt, numColumna); 
+       else
 			return new Token(Token.NUM,buff.toString(),lineaUlt, numColumna);
 	
 		
