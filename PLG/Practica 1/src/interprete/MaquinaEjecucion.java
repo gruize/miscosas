@@ -6,6 +6,7 @@ package interprete;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Vector;
 
 import utilidades.Operaciones;
 import excepciones.ExcepcionMaquina;
@@ -19,40 +20,32 @@ public class MaquinaEjecucion implements Testeable{
             
     /** Tamaño maximo de la Pila */
     private static final int MAX_PILA = 65536;
-    
-    /** Tamaño maximo del Display */
-    private static final int MAX_DISPLAY = 10;
-    
+       
     /** Tope de pila */
     private int topePila;
     
     /** Contador de programa */
     private int i;
     
-    /** Display */
-    private int[] display = null;
+    /** Direcciones de memoria */
+    private Vector<Object> memoria = null;
     
     /** Pila */
-    private int[] pila = null;
+    private Object[] pila = null;
 
     /**Lectura de objetos*/
     private ObjectInputStream entrada;
     
-    
-    
     /** 
      * Constructor
-     * Carga los parametros de configuracion 
      */
-
 	public MaquinaEjecucion(FileInputStream sourceFile)throws Exception{
 		this.entrada = new ObjectInputStream(sourceFile);
-		this.leerOperaciones();
 	}
 
 	@Override
-	public void finish() {
-		
+	public void run()throws Exception{
+		this.leerOperaciones();		
 	}
 
 	public void leerOperaciones() throws Exception{
@@ -60,11 +53,13 @@ public class MaquinaEjecucion implements Testeable{
 		do{
 			instruccion = (Operaciones) this.entrada.readObject();
 			this.ejecutar(instruccion);
-		}while(this.entrada.read() == -1);
+		}while(instruccion.codigoOperacion == TokenMaquina.STOP);
 	}
 	
 	public void ejecutar(Operaciones instruccion) throws Exception{
 	    try{
+	    	
+	    	
 	    	int codigo = instruccion.codigoOperacion;
 	    	switch(codigo){
 	    		case TokenMaquina.APILA:
@@ -140,23 +135,21 @@ public class MaquinaEjecucion implements Testeable{
 	        throw new ExcepcionMaquina(2,i);
 	    }		
 	}
-	
-	@Override
-	public void run() throws Exception{
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void setArchivoLectura(String source) {
-		this.display = new int[this.MAX_DISPLAY];
-		this.pila = new int[this.MAX_PILA];
-		// TODO Auto-generated method stub		
-	}
-	
 	@Override
 	public boolean extensionArchivoValida(String file){
 		return file.endsWith(".em");
+	}
+	
+	@Override
+	public void setArchivoLectura(String source) {
+		// TODO Auto-generated method stub		
+	}	
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
