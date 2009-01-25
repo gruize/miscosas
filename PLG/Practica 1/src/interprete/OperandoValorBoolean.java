@@ -2,6 +2,10 @@ package interprete;
 
 public class OperandoValorBoolean implements Operandos{
 
+	public OperandoValorBoolean(Boolean valor) {
+		super();
+		this.valor = valor;
+	}
 	public Boolean valor;
 	private int tipo = Operandos.VALORBOOLEAN;
 	
