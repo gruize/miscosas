@@ -1,19 +1,18 @@
 package sintactico;
 
-import java.io.FileInputStream;
-import java.lang.reflect.Array;
+import interprete.Operandos;
+import interprete.TokenMaquina;
+
 import java.util.Vector;
 
-import sintactico.tablaSimbolos.DatosTabla;
 import sintactico.tablaSimbolos.TablaSimbolo;
-import sintactico.tablaSimbolos.Tipo;
-
-import utilidades.*;
-
-import excepciones.*;
-
+import utilidades.BufferedFileReader;
+import utilidades.Operaciones;
+import utilidades.PalabrasReservadas;
 import analizadorLex.AnalizadorLexico;
 import analizadorLex.Token;
+import excepciones.ExcepcionSintactica;
+import excepciones.Mensaje;
 
 public class AnalizadorSintactico {
 	public Token tokens[]; 
@@ -21,7 +20,7 @@ public class AnalizadorSintactico {
 	public ExcepcionSintactica excepcion = new ExcepcionSintactica();
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
 	public BufferedFileReader ficheroEntrada;
-	public Vector <Operaciones> operaciones;
+	public Vector <Object> operaciones;
 	
 	public void run (){
 		
@@ -30,7 +29,7 @@ public class AnalizadorSintactico {
 		
 	}
 	public AnalizadorSintactico(BufferedFileReader file){
-		operaciones = new Vector<Operaciones>();
+		operaciones = new Vector<Object>();
 		ficheroEntrada = file;
 		pos_token = 0;
 		AnalizadorLexico aLex = new AnalizadorLexico();
@@ -79,10 +78,34 @@ public class AnalizadorSintactico {
 	}
 
 	private void INSTRUCCIONES() {
-		// TODO Auto-generated method stub
+		Token t = rec();
+		BLOQUE();
+		t = rec();
+		if (t.codigo != Token.PUNTO) {
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.PUNTO,t);
+		}
+		
+		
 		
 	}
 
+	private void BLOQUE() {
+		Token t= rec();
+		if (t.codigo != Token.BEGIN) {
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.BEGIN,t);
+		}
+		SENTS();
+		t = rec();
+		if (t.codigo != Token.END) {
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.END,t);
+		}
+	}
+	private void SENTS() {
+		SENT();
+		RSENTS();
+		// TODO Auto-generated method stub
+		
+	}
 	private void DECLARACIONES() {
 		if (this.tokenSiguiente() == Token.VAR)
 			VARIABLES1();
@@ -122,12 +145,73 @@ public class AnalizadorSintactico {
 			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
 		else
 			
-			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false)
-		// TODO Auto-generated method stub
+			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
+		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA);
+			RDECS_CONST();
+		
+		// RDECS_CONST2(); no es necseario porque no hace nada
+		
 		
 	}
 	private void DEC_CONST(Token lex, Token tipo) {
+		VARIABLE(lex);
+		Token t = rec(); //:
+		if (t.codigo != Token.OP_COMPARACION)
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.OP_COMPARACION,t);
+		VALOR(tipo);
+	}
+	private void VALOR(Token tipo) {
+		Token t = rec();
+		Operandos oper;
+		switch (t.codigo) {
+		case Token.NUM :
+			tipo.codigo = Token.INTEGER;
+			emit(TokenMaquina.APILA,oper);
+			break;
+		case Token.NUMREAL :
+			tipo.codigo = Token.REAL;
+			emit(TokenMaquina.APILA,oper);
+			break;
+		case Token.VALORCHAR :
+			tipo.codigo = Token.CHAR;
+			emit(TokenMaquina.APILA,oper);
+			break;
+		case Token.VALORBOOLEAN :
+			tipo.codigo = Token.BOOLEAN;
+			emit(TokenMaquina.APILA,oper);
+			break;
+		default:
+				
+		}
+		
+		
+		
+		
 		// TODO Auto-generated method stub
+		
+	}
+
+	private void emit(Vector<Object> opers) {
+		// TODO Auto-generated method stub
+		
+	}
+	private void RDECS_CONST() {
+		rec();
+		// no hace falta reconocer el token porqu si se mete aqui es que es un ;
+		
+		Token lex_de_DEC_CONST = new Token();
+		Token tipo_de_DEC_CONST = new Token();
+		DEC_CONST(lex_de_DEC_CONST,tipo_de_DEC_CONST);
+		
+		// err = err v existeID();
+		if (this.tablaDeSimbolos.existeID(lex_de_DEC_CONST.lexema))
+			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
+		else
+			
+			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
+		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA);
+			RDECS_CONST();
+		
 		
 	}
 	private void VARIABLES1() {
@@ -145,10 +229,7 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private void CONSTANTES() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	
 
@@ -204,7 +285,7 @@ public class AnalizadorSintactico {
 
 	private int tokenSiguiente() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.tokens[this.pos_token+1].codigo;
 	}
 
 	private void TIPO(Token tipo) {
@@ -228,7 +309,7 @@ public class AnalizadorSintactico {
 			
 		}
 		lex = t.clon();
-		// TODO Auto-generated method stub
+		
 		
 	}
 
