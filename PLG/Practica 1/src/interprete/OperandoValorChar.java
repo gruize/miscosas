@@ -2,7 +2,7 @@ package interprete;
 
 public class OperandoValorChar implements Operandos {
 
-	public char valor;
+	public Character valor;
 	private int tipo = Operandos.VALORCHAR;
 	
 	@Override
@@ -12,7 +12,7 @@ public class OperandoValorChar implements Operandos {
 
 	@Override
 	public Object dameValor() {
-		return (char)this.valor;
+		return this.valor;
 	}
 
 }

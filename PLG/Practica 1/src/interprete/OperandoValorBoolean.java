@@ -2,7 +2,7 @@ package interprete;
 
 public class OperandoValorBoolean implements Operandos{
 
-	public boolean valor;
+	public Boolean valor;
 	private int tipo = Operandos.VALORBOOLEAN;
 	
 	@Override
@@ -11,7 +11,7 @@ public class OperandoValorBoolean implements Operandos{
 	}
 	@Override
 	public Object dameValor() {
-		return (boolean)this.valor;
+		return this.valor;
 	}
 	
 	

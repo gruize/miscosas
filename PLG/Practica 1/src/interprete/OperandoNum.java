@@ -12,7 +12,7 @@ public class OperandoNum implements Operandos{
 
 	@Override
 	public Object dameValor() {
-		return (int)this.valor;
+		return this.valor;
 	}
 
 }
