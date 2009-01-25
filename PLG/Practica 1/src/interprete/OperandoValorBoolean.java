@@ -1,6 +1,6 @@
 package interprete;
 
-public class OperandosValorBoolean implements Operandos{
+public class OperandoValorBoolean implements Operandos{
 
 	public boolean valor;
 	private int tipo = Operandos.VALORBOOLEAN;
