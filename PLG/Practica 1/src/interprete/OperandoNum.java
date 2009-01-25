@@ -2,7 +2,7 @@ package interprete;
 
 public class OperandoNum implements Operandos{
 
-	private int valor;
+	public int valor;
 	private int tipo = Operandos.NUM;
 	
 	@Override

@@ -2,7 +2,7 @@ package interprete;
 
 public class OperandosValorBoolean implements Operandos{
 
-	private boolean valor;
+	public boolean valor;
 	private int tipo = Operandos.VALORBOOLEAN;
 	
 	@Override
