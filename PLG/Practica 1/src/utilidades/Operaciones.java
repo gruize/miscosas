@@ -2,6 +2,9 @@ package utilidades;
 
 public class Operaciones {
 	public int codigoOperacion;
-	public int operando;
+	public Operaciones(int codigoOperacion) {
+		super();
+		this.codigoOperacion = codigoOperacion;
+	}
 }
 
