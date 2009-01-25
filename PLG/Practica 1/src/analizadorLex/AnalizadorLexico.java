@@ -121,7 +121,7 @@ public class AnalizadorLexico {
 		                	
 		                	}
 		                else{
-		                    throw new ExcepcionLexica(2,numLinea);
+		                    throw new ExcepcionLexica(new MensajeLex("error Lexico se esperaba }",numLinea,numColumna));
 		                }
 		                //continue;
 		            }
@@ -153,7 +153,8 @@ public class AnalizadorLexico {
 		                leerCaracter();
 		                
 		                return new Token(Token.OP_COMPARACION,"", lastLine, numColumna);
-		            }else if (ch.charValue()=='/') {
+		            }
+		            else if (ch.charValue()=='/') {
 		                leerCaracter();
 		                
 		                return new Token(Token.OP_DIV,"", lastLine, numColumna);
@@ -181,7 +182,7 @@ public class AnalizadorLexico {
 		            } else if (ch.charValue()==':') {
 		                return  leerDosPuntosOAsignacion();
 		            } else if (ch.charValue()=='}') {
-		                throw new ExcepcionLexica("} no esperada", numLinea, numColumna);
+		                throw new ExcepcionLexica(new MensajeLex("} no esperada", numLinea, numColumna));
 		            }
 		            //RECONOCIMIENTO DE IDENTIFICADORES Y PALABRAS RESERVADAS
 		            else  if (esLetra(ch)){
@@ -192,7 +193,7 @@ public class AnalizadorLexico {
 		                return getTokenNumero();
 		            } else {
 		                //caracter no perteneciente al alfabeto
-		                throw new ExcepcionLexica(4, ch.toString(),lastLine);
+		                throw new ExcepcionLexica(new MensajeLex("caracter no perteneciente al alfabeto",numLinea,numColumna));
 		            }
 		            }catch(ExcepcionLexica e){};
 		        }
@@ -227,16 +228,11 @@ public class AnalizadorLexico {
 			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
 			
 			else throw new ExcepcionLexica(new MensajeLex("se esperaba ' ",numLinea,numColumna));
-		
-		return null;
 	}
 
 
 
-	private String new MensajeLex(String string, int numLinea2, int numColumna2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	private Token getTokenID() {
 		// TODO Auto-generated method stub
@@ -268,7 +264,7 @@ public class AnalizadorLexico {
 
 	
 	
-	private Token getTokenNumero() {
+	private Token getTokenNumero() throws ExcepcionLexica {
 		// TODO Auto-generated method stub
 		Character c;
 		StringBuffer buff = new StringBuffer();
@@ -308,9 +304,9 @@ public class AnalizadorLexico {
 			esreal=true;}
 
 		if (esLetra(c)){
-			try {
-				throw new ExcepcionLexica(0,buff.toString()+c.toString(), lineaUlt);
-			} catch (ExcepcionLexica e) {return null;}
+			
+				throw new ExcepcionLexica(new MensajeLex("no se esperaba una letra",numLinea,numColumna));
+		
 
 		}
 
