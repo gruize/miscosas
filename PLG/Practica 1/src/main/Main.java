@@ -3,6 +3,9 @@ package main;
 
 import interprete.MaquinaEjecucion;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import analizadorLex.AnalizadorLexico;
@@ -13,25 +16,27 @@ import utilidades.BufferedFileReader;
 
 public class Main {
     
-	private static AnalizadorSintactico as = null;
-	//private String fichero;
-	private static MaquinaEjecucion me;
+	public static AnalizadorSintactico as = null;
+	public static MaquinaEjecucion me;
 	
 	
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
+		
     	BufferedFileReader file= new BufferedFileReader(args[0]);
-    	as = new AnalizadorSintactico(file);
     	
-    	traductor t= new traductor();
-        java.io.File f = t.getOutputFile();
+    	//ANALIZADOR
+    	as = new AnalizadorSintactico(file);
+    	as.run();
+    	
+    	//TRADUCTOR
+    	traductor t= new traductor(as);
+    	String nombre= (String) t.crearFileOut();
+     
+     
+        //INTERPRETE      
+        me=new MaquinaEjecucion(nombre);                       
+        me.run();
         
-        //PUEDE SER NULL SI COMPILO SIN GENERACION DE CODIGO
-        if(f==null) return;
-                    
-        //CREO LA MEPA Y EJECUTO EL ARCHIVO            
-        me = new MaquinaEjecucion();                        
-        me.setArchivoLectura(f.getAbsolutePath());                        
-        me.run();            
 	}
 }
