@@ -2,7 +2,7 @@ package interprete;
 
 public class OperandoValorChar implements Operandos {
 
-	private char valor;
+	public char valor;
 	private int tipo = Operandos.VALORCHAR;
 	
 	@Override
