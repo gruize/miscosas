@@ -2,12 +2,13 @@ package sintactico;
 
 import java.io.FileInputStream;
 import java.lang.reflect.Array;
+import java.util.Vector;
 
 import sintactico.tablaSimbolos.DatosTabla;
 import sintactico.tablaSimbolos.TablaSimbolo;
 import sintactico.tablaSimbolos.Tipo;
-import utilidades.BufferedFileReader;
-import utilidades.PalabrasReservadas;
+
+import utilidades.*;
 
 import excepciones.*;
 
@@ -20,6 +21,8 @@ public class AnalizadorSintactico {
 	public ExcepcionSintactica excepcion = new ExcepcionSintactica();
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
 	public BufferedFileReader ficheroEntrada;
+	public Vector <Operaciones> operaciones;
+	
 	public void run (){
 		
 	}
@@ -27,10 +30,11 @@ public class AnalizadorSintactico {
 		
 	}
 	public AnalizadorSintactico(BufferedFileReader file){
+		operaciones = new Vector<Operaciones>();
 		ficheroEntrada = file;
 		pos_token = 0;
 		AnalizadorLexico aLex = new AnalizadorLexico();
-		tokens = aLex.getTokens();
+		//tokens = aLex.getTokens();
 		try {
 			this.PROG();
 		} catch (ExcepcionSintactica e) {
@@ -86,17 +90,43 @@ public class AnalizadorSintactico {
 			VARIABLES2();
 		if (this.tokenSiguiente() == Token.CONST)
 			CONSTANTES1();
-		else
-			CONSTANTES2();
+		
+		// no es necesario 
+		/*
+		 * else
+		 * 	CONSTANTES2();
+		 */
+			
 		
 		
 	}
-	
+	/*
 	private void CONSTANTES2() {
+		
+		
+	}*/
+	private void CONSTANTES1() {
+		rec();
+		// si entra en esta funcino es porque el token es CONST
+		
+		DECS_CONST();
+		
+		
+	}
+	private void DECS_CONST() {
+		Token lex_de_DEC_CONST = new Token();
+		Token tipo_de_DEC_CONST = new Token();
+		DEC_CONST(lex_de_DEC_CONST,tipo_de_DEC_CONST);
+		// err = err v existeID();
+		if (this.tablaDeSimbolos.existeID(lex_de_DEC_CONST.lexema))
+			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
+		else
+			
+			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false)
 		// TODO Auto-generated method stub
 		
 	}
-	private void CONSTANTES1() {
+	private void DEC_CONST(Token lex, Token tipo) {
 		// TODO Auto-generated method stub
 		
 	}
