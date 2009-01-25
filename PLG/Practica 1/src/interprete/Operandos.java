@@ -1,6 +1,6 @@
 package interprete;
 
-public interface Operandos {
+public interface Operandos{
 
 	public static int NUM = 0;
 	public static int NUMREAL = 1;
