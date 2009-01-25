@@ -222,7 +222,7 @@ public class AnalizadorLexico {
 		}
 		 
 		 
-	private Token caracter(Character c) {
+	private Token caracter(Character c) throws IOException {
 			// TODO Auto-generated method stub
 		Character ch=null;
 		if (esLetra(c))
@@ -232,7 +232,7 @@ public class AnalizadorLexico {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (ch.charValue()=='\'') {	
+			if (ch.charValue()=='\'') {	ultimoCharLeido=leerCaracter();
 			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
 		
 		return null;
