@@ -8,7 +8,7 @@ public class OperandoNumReal implements Operandos{
 	}
 
 	public Double valor;
-	private int tipo = Operandos.NUMREAL;
+	public int tipo = Operandos.NUMREAL;
 	
 	@Override
 	public int dameTipo() {

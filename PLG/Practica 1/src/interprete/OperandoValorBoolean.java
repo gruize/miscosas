@@ -7,7 +7,7 @@ public class OperandoValorBoolean implements Operandos{
 		this.valor = valor;
 	}
 	public Boolean valor;
-	private int tipo = Operandos.VALORBOOLEAN;
+	public int tipo = Operandos.VALORBOOLEAN;
 	
 	@Override
 	public int dameTipo() {

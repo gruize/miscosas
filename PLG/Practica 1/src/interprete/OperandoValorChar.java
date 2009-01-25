@@ -8,7 +8,7 @@ public class OperandoValorChar implements Operandos {
 	}
 
 	public Character valor;
-	private int tipo = Operandos.VALORCHAR;
+	public int tipo = Operandos.VALORCHAR;
 	
 	@Override
 	public int dameTipo() {
