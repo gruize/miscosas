@@ -1,13 +1,11 @@
 package interprete;
 
-public class OperandoValorBoolean implements Operandos{
+import java.io.Serializable;
 
-	public OperandoValorBoolean(Boolean valor) {
-		super();
-		this.valor = valor;
-	}
-	public Boolean valor;
-	public int tipo = Operandos.VALORBOOLEAN;
+public class OperandoValorBoolean implements Operandos, Serializable{
+
+	public boolean valor;
+	private int tipo = Operandos.VALORBOOLEAN;
 	
 	@Override
 	public int dameTipo() {
@@ -15,8 +13,9 @@ public class OperandoValorBoolean implements Operandos{
 	}
 	@Override
 	public Object dameValor() {
-		return this.valor;
+		return (boolean)this.valor;
 	}
 	
 	
 }
+
