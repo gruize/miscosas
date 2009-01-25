@@ -14,6 +14,13 @@ public class ExcepcionLexica extends Exception{
 	public ExcepcionLexica(){
 		super();
 	}
+	
+	
+	public ExcepcionLexica(MensajeLex mensajeLex) {
+		
+	}
+	
+	
 	public void addMensaje(MensajeLex msg){
 		errores.add(msg);
 	}
