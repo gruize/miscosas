@@ -92,18 +92,19 @@ public class AnalizadorLexico {
 		  public void run() throws Exception {
 		        //Obtengo los tokens
 		        Token t= null;
-		        boolean sigue=true;
+		       
 		        leerCaracter();
 		        numColumna++;
 		       
-		        int i=0;
+		       
 		        for( t = nextToken(); !esFin(); t = nextToken())
-		        {
+		        {	if (!(esFin())){
 		        	tokens.add(t);
 		        	System.out.println(t.lexema);
+		        	}
 		        }
 		        //imprimo eof
-		        System.out.println(t.lexema);
+		        System.out.println("Fin PROGRAMA ");
 		        cerrarLector();
 		    }
 		    	 
@@ -345,9 +346,11 @@ public class AnalizadorLexico {
 		 int lineaUlt = numLinea;
 	        
 	        Character proxi = leerCaracter();
-	        if ((proxi==Reader.EOF) ) {
-	            return new Token(Token.PUNTO,"",lineaUlt,numColumna);}
-			return null;
+	    //  if ((proxi==Reader.EOF) ) {
+	            return new Token(Token.PUNTO,"",lineaUlt,numColumna);
+			//}
+	      
+	      //else return null; 
 	        
 	        
 	}
