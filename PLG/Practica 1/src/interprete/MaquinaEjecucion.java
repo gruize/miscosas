@@ -55,7 +55,9 @@ public class MaquinaEjecucion implements Testeable{
 			Operandos valor = null;
 			if((instruccion.codigoOperacion == TokenMaquina.APILA)
 			 ||(instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
-			 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)){
+			 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)
+			 ||(instruccion.codigoOperacion == TokenMaquina.LECTURA)
+			 ||(instruccion.codigoOperacion == TokenMaquina.ESCRITURA)){
 				valor = (Operandos) this.entrada.readObject();
 			}
 			this.ejecutar(instruccion,valor);
@@ -148,32 +150,53 @@ public class MaquinaEjecucion implements Testeable{
 	    		case TokenMaquina.MAYOR:
 	    			temp1 = this.pila.pop();
 	    			temp2 = this.pila.pop();	    		
-	    			OperandoValorBoolean temp3 = OperandoValorBoolean(temp1.dameValor() > temp2.dameValor());
-	    			this.pila.push(temp3);
+	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) > ((Double)temp2.dameValor()))));
 	    			break;	    			
 	    		case TokenMaquina.MENOR:
-	    			
-	    			break;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) < ((Double)temp2.dameValor()))));
+	    			break;	    		
 	    		case TokenMaquina.IGUAL:
-	    			
-	    			break;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) == ((Double)temp2.dameValor()))));
+	    			break;	
 	    		case TokenMaquina.MAYOR_IGUAL:
-	    			
-	    			break;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) >= ((Double)temp2.dameValor()))));
+	    			break;	
 	    		case TokenMaquina.MENOR_IGUAL:
-	    			
-	    			break;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) <= ((Double)temp2.dameValor()))));
+	    			break;	
 	    		case TokenMaquina.DISTINTO:
-	    			
-	    			break;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) != ((Double)temp2.dameValor()))));
+	    			break;	
 	    		case TokenMaquina.OR:
-	    			
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    			
+	    			this.pila.push(new OperandoValorBoolean((Boolean)temp1.dameValor() || (Boolean)temp2.dameValor()));
 	    			break;
 	    		case TokenMaquina.AND:
-	    			
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();
+	    			this.pila.push(new OperandoValorBoolean((Boolean)temp1.dameValor() && (Boolean)temp2.dameValor()));
 	    			break;
 	    		case TokenMaquina.NOT:
+	    			temp1 = this.pila.pop();
+	    			this.pila.push(new OperandoValorBoolean(!(Boolean)temp1.dameValor()));
+	    			break;
+	    		case TokenMaquina.LECTURA:
 	    			
+	    			break;
+	    		case TokenMaquina.ESCRITURA:
+	    			temp1 = this.pila.pop();
+	    			System.out.println(temp1);
 	    			break;
 	    	}
 		}catch (IndexOutOfBoundsException e){
