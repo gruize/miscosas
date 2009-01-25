@@ -26,7 +26,7 @@ public class MaquinaEjecucion implements Testeable{
     private int i;
     
     /** Direcciones de memoria */
-    private Vector<Object> memoria;
+    private Vector<Operandos> memoria;
     
     /** Pila */
     private Stack<Operandos> pila;
@@ -69,24 +69,22 @@ public class MaquinaEjecucion implements Testeable{
 	    	int codigo = instruccion.codigoOperacion;
 	    	switch(codigo){
 	    		case TokenMaquina.APILA:
-	    			this.pila.
-	    			this.pila[this.topePila] = valor;
+	    			this.pila.push(valor);
 	    			break;
 	    		case TokenMaquina.APILA_DIR:
 	    			direccion = (OperandoNum)valor;
-	    			this.topePila++;
-	    			this.pila[this.topePila] = (Object)(this.memoria.elementAt((Integer)direccion.dameValor()));
+	    			this.pila.push((Operandos)(this.memoria.elementAt((Integer)direccion.dameValor())));
 	    			break;
 	    		case TokenMaquina.DESAPILA_DIR:
 	    			direccion = (OperandoNum)valor;
-	    			this.memoria.add((Integer)direccion.dameValor(), this.pila[this.topePila]);
-	    			this.topePila--;
+	    			this.memoria.add((Integer)direccion.dameValor(),this.pila.pop());
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
-	    			if(((Operandos) (this.pila[this.topePila])).dameTipo() == Operandos.NUM){    				    			
-	    				Integer i = ((OperandoNum)this.pila[this.topePila]).valor;
-	    				OperandoNum negar;
-	    				negar.valor= 0-i;
+	    			if(this.pila.lastElement().dameTipo() == Operandos.NUM){
+	    				OperandoNum temp = new OperandoNum(0 - (Integer) this.pila.pop().dameValor());
+	    				this.pila.push(temp);
+	    			}
+	    			if(((Operandos) (this.pila)).dameTipo() == Operandos.NUMREAL){    				    			
 	    				
 	    			}
 	    			if(((Operandos) (this.pila[this.topePila])).dameTipo() == Operandos.NUMREAL){
