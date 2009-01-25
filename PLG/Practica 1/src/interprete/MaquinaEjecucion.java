@@ -6,6 +6,7 @@ package interprete;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Stack;
 import java.util.Vector;
 
 import utilidades.Operaciones;
@@ -17,10 +18,7 @@ import main.Testeable;
  *
  */
 public class MaquinaEjecucion implements Testeable{
-            
-    /** Tamaño maximo de la Pila */
-    private static final int MAX_PILA = 65536;
-       
+                   
     /** Tope de pila */
     private int topePila;
     
@@ -31,7 +29,7 @@ public class MaquinaEjecucion implements Testeable{
     private Vector<Object> memoria;
     
     /** Pila */
-    private Object[] pila;
+    private Stack<Operandos> pila;
 
     /**Lectura de objetos*/
     private ObjectInputStream entrada;
@@ -41,8 +39,7 @@ public class MaquinaEjecucion implements Testeable{
      */
 	public MaquinaEjecucion(String sourceFile)throws Exception{
 		this.memoria = new Vector<Object>();
-		this.pila = new Object[MAX_PILA];
-		this.topePila = -1;
+		this.pila = new Stack<Operandos>();
 		this.entrada = new ObjectInputStream(new FileInputStream(sourceFile));
 	}
 
@@ -72,7 +69,7 @@ public class MaquinaEjecucion implements Testeable{
 	    	int codigo = instruccion.codigoOperacion;
 	    	switch(codigo){
 	    		case TokenMaquina.APILA:
-	    			this.topePila++;
+	    			this.pila.
 	    			this.pila[this.topePila] = valor;
 	    			break;
 	    		case TokenMaquina.APILA_DIR:
@@ -86,8 +83,15 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.topePila--;
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
-	    			if(((Operandos) (this.pila[this.topePila])).dameTipo() == Operandos.NUM)
-	    				Operando
+	    			if(((Operandos) (this.pila[this.topePila])).dameTipo() == Operandos.NUM){    				    			
+	    				Integer i = ((OperandoNum)this.pila[this.topePila]).valor;
+	    				OperandoNum negar;
+	    				negar.valor= 0-i;
+	    				
+	    			}
+	    			if(((Operandos) (this.pila[this.topePila])).dameTipo() == Operandos.NUMREAL){
+	    				
+	    			}
 	    			break;
 	    		case TokenMaquina.SUMA:
 	    			this.pila[this.topePila - 1]+= this.pila[this.topePila];
