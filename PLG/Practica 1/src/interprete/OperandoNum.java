@@ -3,7 +3,7 @@ package interprete;
 public class OperandoNum implements Operandos{
 
 	public Integer valor;
-	private int tipo = Operandos.NUM;
+	public int tipo = Operandos.NUM;
 	
 	public OperandoNum(Integer valor) {
 		super();

@@ -86,8 +86,8 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.topePila--;
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
-	    			
-	    			(Operando)pila[this.topePila].
+	    			if(((Operandos) (this.pila[this.topePila])).dameTipo() == Operandos.NUM)
+	    				Operando
 	    			break;
 	    		case TokenMaquina.SUMA:
 	    			this.pila[this.topePila - 1]+= this.pila[this.topePila];
@@ -153,7 +153,12 @@ public class MaquinaEjecucion implements Testeable{
 	
 	@Override
 	public void setArchivoLectura(String source) {
-		// TODO Auto-generated method stub		
+		try {
+			this.entrada.close();
+			this.entrada = new ObjectInputStream(new FileInputStream(source));			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}	
 
 	@Override
