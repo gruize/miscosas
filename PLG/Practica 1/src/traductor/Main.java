@@ -3,26 +3,23 @@ package traductor;
 import java.io.IOException;
 import java.util.Vector;
 
-
 public class Main {
 
-	
-	
-	
-	public static void main(){
-		traductor t;
-		Vector<Object> obj;
+	/**
+	 * 
+	 * @param args
+	 * @throws IOException 
+	 * @throws Exception 
+	 */
+	public static void main(String[] args) throws IOException{
+		/*Vector<Object> obj=new Vector();
 		Object e=3;
 		Object b=4;
-		obj=new Vector();
+		
 		obj.add(e);
 		obj.add(b);
-		try {
-			t=new traductor(obj);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		 traductor t = new traductor(obj);*/
+		 
 	}
 
 }
