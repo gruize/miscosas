@@ -1,5 +1,9 @@
 package sintactico;
 
+import interprete.OperandoNum;
+import interprete.OperandoNumReal;
+import interprete.OperandoValorBoolean;
+import interprete.OperandoValorChar;
 import interprete.Operandos;
 import interprete.TokenMaquina;
 
@@ -102,8 +106,228 @@ public class AnalizadorSintactico {
 	}
 	private void SENTS() {
 		SENT();
-		RSENTS();
+		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA)
+			RSENTS();
+		// inecesario
+		// else
+		// RSENTS2();
+	}
+	private void RSENTS() {
+		rec(); // ;
+
+		SENT();
+		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA)
+			RSENTS();
+		
+	}
+	private void SENT() {
+		
+		switch (this.tokenSiguiente()) {
+			case Token.READ :
+				SREAD();
+				break;
+			case Token.WRITE :
+				SWRITE();
+				break;
+			case Token.ID :
+				SASIGN();
+				break;
+		}
+		
+	}
+	private void SASIGN() {
+		
+		Token t = rec();
+		Token lex_de_VARIABLE = new Token();
+		VARIABLE(lex_de_VARIABLE);
+		t = rec();
+		if (t.codigo != Token.OP_ASIGNACION)
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.OP_ASIGNACION,t);
+		else if (!tablaDeSimbolos.existeID(lex_de_VARIABLE.lexema))
+			excepcion.addMensaje(Mensaje.ERROR_N0_EXISTE_ID, Token.ID,t);
+		else if (!tablaDeSimbolos.dameModificable(lex_de_VARIABLE.lexema))
+			excepcion.addMensaje(Mensaje.ERROR_NO_MODIFICABLE, Token.ID,t);
+		else
+		{
+			Token tipo_de_EXP = new Token();
+			EXP(tipo_de_EXP);
+			if (!compruebaTipos(Token.OP_ASIGNACION,
+					tablaDeSimbolos.dameTipo(lex_de_VARIABLE.lexema),tipo_de_EXP.codigo)) {
+				excepcion.addMensaje(Mensaje.ERROR_TIPOS,Token.ID,t);
+				
+				
+			}
+			else {
+				emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
+				emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_VARIABLE.lexema)));
+			}
+			
+			
+			
+		}
+	}
+	private boolean compruebaTipos(int op, int dameDir,
+			int tipo_de_EXP) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+	private void SWRITE() {
+		rec(); // si esta aqui es que es un WRITE
+
+		Token t = rec();
+		if (t.codigo != Token.A_PARENTESIS)
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.A_PARENTESIS,t);
+		else{
+			Token tipo_de_EXP = new Token();
+			EXP(tipo_de_EXP);
+			emit(new Operaciones(TokenMaquina.ESCRITURA));
+			t = rec();
+			if (t.codigo != Token.C_PARENTESIS)
+				excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.C_PARENTESIS, t);
+		}
+			
+		
+
+	}
+	private void EXP(Token tipo) {
+		Token tipo_de_EXPSIMPLE = new Token();
+		EXPSIMPLE(tipo_de_EXPSIMPLE);
+		// es un token de operacion?
+		if (esOP3(tokenSiguiente()))
+			REXP1(tipo_de_EXPSIMPLE,tipo);
+		else 
+			REXP2(tipo_de_EXPSIMPLE,tipo);
+		
+	}
+	private void EXPSIMPLE(Token tipo_de_EXPSIMPLE) {
+		// TODO Auto-generated method stub
+		
+	}
+	private void REXP2(Token tipo_de_EXPSIMPLE, Token tipo) {
+		tipo.codigo = tipo_de_EXPSIMPLE.codigo;
+		
+	}
+	private boolean esOP3(int t) {
+		if (t == Token.OP_MAYOR_IGUAL)
+			return true;
+		if (t == Token.OP_MAYOR_QUE)
+			return true;
+		if (t == Token.OP_MENOR_IGUAL)
+			return true;
+		if (t == Token.OP_MAYOR_QUE)
+			return true;
+		if (t == Token.OP_COMPARACION)
+			return true;
+		if (t == Token.OP_DISTINTO)
+			return true;
+		return false;
+	}
+	private boolean esOP2(int t) {
+		if (t == Token.OR)
+			return true;
+		if (t == Token.OP_SUMA)
+			return true;
+		if (t == Token.OP_RESTA)
+			return true;
+		return false;
+	}
+	
+	private boolean esOP1(int t) {
+		if (t == Token.OP_MUL)
+			return true;
+		if (t == Token.DIV)
+			return true;
+		if (t == Token.MOD)
+			return true;
+		if (t == Token.OP_DIV)
+			return true;
+		if (t == Token.AND)
+			return true;
+		if (t == Token.OP_DISTINTO)
+			return true;
+		return false;
+	}
+		
+	private void REXP1(Token tipo_companero, Token tipo) {
+		Token t = rec();// OPERACOIN
+		Token tipo_de_EXPSIMPLE = new Token();
+		EXPSIMPLE(tipo_de_EXPSIMPLE);
+		
+		if (compruebaTipos(t.codigo, tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo))
+			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
+		else{
+			
+			tipo = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_EXPSIMPLE.codigo);
+			emit(new Operaciones(DameCodigoMaquinaDoble(t.codigo)));
+		}
+		// TODO Auto-generated method stub
+		
+		
+	}
+	
+	private int DameCodigoMaquinaDoble(int codigo) {
+		switch (codigo){
+			case Token.OP_COMPARACION : 	return TokenMaquina.IGUAL;
+			case Token.OP_SUMA:				return TokenMaquina.SUMA;
+			case Token.OP_RESTA:			return TokenMaquina.RESTA;
+			case Token.OP_MUL:				return TokenMaquina.MULTIPLICACION;
+			case Token.OP_DIV:				return TokenMaquina.DIVISION;
+			case Token.OP_MENOR_QUE:		return TokenMaquina.MENOR;
+			case Token.OP_MAYOR_QUE:		return TokenMaquina.MAYOR;
+			case Token.OP_DISTINTO:			return TokenMaquina.DISTINTO;
+			case Token.OP_MENOR_IGUAL:		return TokenMaquina.MENOR_IGUAL;
+			case Token.OP_MAYOR_IGUAL:		return TokenMaquina.MAYOR_IGUAL;
+			case Token.AND:					return TokenMaquina.AND;
+			case Token.OR:					return TokenMaquina.OR;
+			case Token.DIV:					return TokenMaquina.DIV;
+			case Token.MOD:					return TokenMaquina.MOD;
+
+
+		}
+		return 0;
+	}
+	private int DameCodigoMaquinaSimple(int codigo) {
+		switch (codigo){
+			case Token.NOT : return TokenMaquina.NOT;
+			case Token.OP_RESTA: return TokenMaquina.RESTA;
+		}
+		return 666;
+	}
+
+	private Token dameTipo(int codigo, int codigo2, int codigo3) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private void REXP2() {
+		
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void SREAD() {
+		rec(); // si esta aqui es que es un READ
+
+		Token t = rec();
+		if (t.codigo != Token.A_PARENTESIS)
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.A_PARENTESIS,t);
+		else{
+			Token lex_de_VARIABLE = new Token();
+			VARIABLE(lex_de_VARIABLE);
+			if (!tablaDeSimbolos.existeID(lex_de_VARIABLE.lexema))
+					
+				excepcion.addMensaje(Mensaje.ERROR_N0_EXISTE_ID,Token.ID,t);
+			else if (!tablaDeSimbolos.dameModificable(lex_de_VARIABLE.lexema))
+				excepcion.addMensaje(Mensaje.ERROR_NO_MODIFICABLE,Token.ID,t);
+			emit(new Operaciones(TokenMaquina.LECTURA));
+			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
+			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_VARIABLE.lexema)));
+			t = rec();
+			if (t.codigo != Token.C_PARENTESIS)
+				excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.C_PARENTESIS, t);
+		}
+			
+		
+
 		
 	}
 	private void DECLARACIONES() {
@@ -143,9 +367,12 @@ public class AnalizadorSintactico {
 		// err = err v existeID();
 		if (this.tablaDeSimbolos.existeID(lex_de_DEC_CONST.lexema))
 			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
-		else
-			
+		else{
 			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
+			
+			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
+			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_DEC_CONST.lexema)));
+		}
 		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA);
 			RDECS_CONST();
 		
@@ -162,23 +389,26 @@ public class AnalizadorSintactico {
 	}
 	private void VALOR(Token tipo) {
 		Token t = rec();
-		Operandos oper;
 		switch (t.codigo) {
 		case Token.NUM :
-			tipo.codigo = Token.INTEGER;
-			emit(TokenMaquina.APILA,oper);
+			emit(new Operaciones(TokenMaquina.APILA));
+			emit(new OperandoNum(Integer.valueOf(t.lexema)));
+			tipo.codigo = Token.NUM;
 			break;
-		case Token.NUMREAL :
+		case Token.NUMREAL : 
+			emit(new Operaciones(TokenMaquina.APILA));
+			emit(new OperandoNumReal(Double.valueOf(t.lexema)));
 			tipo.codigo = Token.REAL;
-			emit(TokenMaquina.APILA,oper);
 			break;
 		case Token.VALORCHAR :
+			emit(new Operaciones(TokenMaquina.APILA));
+			emit(new OperandoValorChar(t.lexema.charAt(0)));
 			tipo.codigo = Token.CHAR;
-			emit(TokenMaquina.APILA,oper);
 			break;
-		case Token.VALORBOOLEAN :
+		case Token.VALORBOOLEAN : 
+			emit(new Operaciones(TokenMaquina.APILA));
+			emit(new OperandoValorBoolean(Boolean.valueOf(t.lexema)));
 			tipo.codigo = Token.BOOLEAN;
-			emit(TokenMaquina.APILA,oper);
 			break;
 		default:
 				
@@ -187,12 +417,12 @@ public class AnalizadorSintactico {
 		
 		
 		
-		// TODO Auto-generated method stub
+
 		
 	}
 
-	private void emit(Vector<Object> opers) {
-		// TODO Auto-generated method stub
+	private void emit(Object oper) {
+			operaciones.add(oper);
 		
 	}
 	private void RDECS_CONST() {
@@ -206,9 +436,13 @@ public class AnalizadorSintactico {
 		// err = err v existeID();
 		if (this.tablaDeSimbolos.existeID(lex_de_DEC_CONST.lexema))
 			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
-		else
+		else {
 			
 			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
+			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
+			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_DEC_CONST.lexema)));
+
+		}
 		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA);
 			RDECS_CONST();
 		
@@ -256,7 +490,6 @@ public class AnalizadorSintactico {
 		return false;
 	}
 	private void RDECS1() {
-		// TODO Auto-generated method stub
 		Token t = rec();
 		
 		if (t.codigo != Token.PUNTO_Y_COMA)
@@ -273,7 +506,6 @@ public class AnalizadorSintactico {
 	}
 	private void DEC(Token lex, Token tipo) {
 		
-		// XXX posible error
 		
 		VARIABLE(lex);
 		Token t = rec(); //:
@@ -284,7 +516,6 @@ public class AnalizadorSintactico {
 	}
 
 	private int tokenSiguiente() {
-		// TODO Auto-generated method stub
 		return this.tokens[this.pos_token+1].codigo;
 	}
 
