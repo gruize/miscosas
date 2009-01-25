@@ -5,6 +5,7 @@ import java.util.*;
 
 
 import excepciones.ExcepcionLexica;
+import excepciones.MensajeLex;
 import utilidades.*;
 import utilidades.Reader;
 
@@ -152,6 +153,10 @@ public class AnalizadorLexico {
 		                leerCaracter();
 		                
 		                return new Token(Token.OP_COMPARACION,"", lastLine, numColumna);
+		            }else if (ch.charValue()=='/') {
+		                leerCaracter();
+		                
+		                return new Token(Token.OP_DIV,"", lastLine, numColumna);
 		            }
 		            //LEYO UN . PERO PUEDE TAMBIEN SER ..
 		            else if (ch.charValue()=='.') {
@@ -176,7 +181,7 @@ public class AnalizadorLexico {
 		            } else if (ch.charValue()==':') {
 		                return  leerDosPuntosOAsignacion();
 		            } else if (ch.charValue()=='}') {
-		                throw new ExcepcionLexica(3, lastLine);
+		                throw new ExcepcionLexica("} no esperada", numLinea, numColumna);
 		            }
 		            //RECONOCIMIENTO DE IDENTIFICADORES Y PALABRAS RESERVADAS
 		            else  if (esLetra(ch)){
@@ -221,12 +226,17 @@ public class AnalizadorLexico {
 			if (ch.charValue()=='\'') {	ultimoCharLeido=leerCaracter();
 			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
 			
-			else throw new ExcepcionLexica("Reader no inizializado");
+			else throw new ExcepcionLexica(new MensajeLex("se esperaba ' ",numLinea,numColumna));
 		
 		return null;
 	}
 
 
+
+	private String new MensajeLex(String string, int numLinea2, int numColumna2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	private Token getTokenID() {
 		// TODO Auto-generated method stub
