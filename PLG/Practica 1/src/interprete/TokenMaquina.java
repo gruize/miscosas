@@ -34,6 +34,10 @@ public class TokenMaquina extends Object{
 	public static int AND = 18;
 	public static int NOT = 19;
 	
+	/** Lectura y escritura */
+	public static int LECTURA = 20;
+	public static int ESCRITURA = 21;
+	
 	public static final Hashtable <Integer,String>LEXEMAS = new Hashtable<Integer, String>(); 
 	
 	static
