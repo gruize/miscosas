@@ -38,7 +38,7 @@ public class MaquinaEjecucion implements Testeable{
      * Constructor
      */
 	public MaquinaEjecucion(String sourceFile)throws Exception{
-		this.memoria = new Vector<Object>();
+		this.memoria = new Vector<Operandos>();
 		this.pila = new Stack<Operandos>();
 		this.entrada = new ObjectInputStream(new FileInputStream(sourceFile));
 	}
@@ -66,6 +66,7 @@ public class MaquinaEjecucion implements Testeable{
 	public void ejecutar(Operaciones instruccion,Operandos valor) throws Exception{
 	    try{	    	
 	    	OperandoNum direccion;
+	    	Operandos temp1, temp2;
 	    	int codigo = instruccion.codigoOperacion;
 	    	switch(codigo){
 	    		case TokenMaquina.APILA:
@@ -90,8 +91,8 @@ public class MaquinaEjecucion implements Testeable{
 	    			}
 	    			break;
 	    		case TokenMaquina.SUMA:
-	    			Operandos temp1 = this.pila.pop();
-	    			Operandos temp2 = this.pila.pop();	    		
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
 	    			if(temp1.dameTipo() == Operandos.NUM)
 	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor + ((OperandoNum)temp2).valor;	  
 	    			if(temp1.dameTipo() == Operandos.NUMREAL)
@@ -99,8 +100,8 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.pila.push(temp1);
 	    			break;
 	    		case TokenMaquina.RESTA:
-	    			Operandos temp1 = this.pila.pop();
-	    			Operandos temp2 = this.pila.pop();	    		
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
 	    			if(temp1.dameTipo() == Operandos.NUM)
 	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor - ((OperandoNum)temp2).valor;	  
 	    			if(temp1.dameTipo() == Operandos.NUMREAL)
@@ -108,8 +109,8 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.pila.push(temp1);
 	    			break;
 	    		case TokenMaquina.MULTIPLICACION:
-	    			Operandos temp1 = this.pila.pop();
-	    			Operandos temp2 = this.pila.pop();	    		
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
 	    			if(temp1.dameTipo() == Operandos.NUM)
 	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor * ((OperandoNum)temp2).valor;	  
 	    			if(temp1.dameTipo() == Operandos.NUMREAL)
@@ -117,18 +118,39 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.pila.push(temp1);
 	    			break;
 	    		case TokenMaquina.DIVISION:
-	    			
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				((OperandoNum)temp1).valor = (((OperandoNum)temp1).valor / ((OperandoNum)temp2).valor);	  
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor / ((OperandoNumReal)temp2).valor;
+	    			}
+	    			this.pila.push(temp1);
+	    			break;	    			
 	    		case TokenMaquina.DIV:
-	    			this.pila[this.topePila - 1]= this.pila[this.topePila - 1] / this.pila[this.topePila];
-	    			this.topePila--;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor / ((OperandoNum)temp2).valor;	  
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor / ((OperandoNumReal)temp2).valor;	    			
+	    			this.pila.push((OperandoNum)temp1);
 	    			break;
 	    		case TokenMaquina.MOD:
-	    			this.pila[this.topePila - 1] = this.pila[this.topePila - 1] mod this.pila[this.topePila];
-	    			this.topePila--;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				((OperandoNum)temp1).valor = (((OperandoNum)temp1).valor % ((OperandoNum)temp2).valor);	  
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor % ((OperandoNumReal)temp2).valor;	    			
+	    			this.pila.push(temp1);
 	    			break;
 	    		case TokenMaquina.MAYOR:
-	    			this.pila[]
-	    			break;
+	    			temp1 = this.pila.pop();
+	    			temp2 = this.pila.pop();	    		
+	    			
+	    			this.pila.push(temp1);
+	    			break;	    			
 	    		case TokenMaquina.MENOR:
 	    			
 	    			break;
