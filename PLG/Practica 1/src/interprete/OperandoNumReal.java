@@ -1,14 +1,11 @@
 package interprete;
 
-public class OperandoNumReal implements Operandos{
+import java.io.Serializable;
 
-	public OperandoNumReal(Double valor) {
-		super();
-		this.valor = valor;
-	}
+public class OperandoNumReal implements Operandos, Serializable{
 
-	public Double valor;
-	public int tipo = Operandos.NUMREAL;
+	public double valor;
+	private int tipo = Operandos.NUMREAL;
 	
 	@Override
 	public int dameTipo() {
@@ -17,7 +14,7 @@ public class OperandoNumReal implements Operandos{
 
 	@Override
 	public Object dameValor() {
-		return this.valor;
+		return (double)this.valor;
 	}
 
 	
