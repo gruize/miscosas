@@ -5,38 +5,38 @@ import java.util.Hashtable;
 public class TokenMaquina extends Object{
 	
 	/** Instruccion de parada */
-	public static int STOP = 0;
+	public static final int STOP = 0;
 	
 	/** Instrucciones de la pila */
-	public static int APILA = 1;
-	public static int APILA_DIR = 2;
-	public static int DESAPILA_DIR = 3;
+	public static final int APILA = 1;
+	public static final int APILA_DIR = 2;
+	public static final int DESAPILA_DIR = 3;
 	
 	/** Instrucciones aritmenticas */
-	public static int NEGATIVO = 4;
-	public static int SUMA = 5;
-	public static int RESTA = 6;
-	public static int MULTIPLICACION = 7;
-	public static int DIVISION = 8;
-	public static int DIV = 9;
-	public static int MOD = 10;
+	public static final int NEGATIVO = 4;
+	public static final int SUMA = 5;
+	public static final int RESTA = 6;
+	public static final int MULTIPLICACION = 7;
+	public static final int DIVISION = 8;
+	public static final int DIV = 9;
+	public static final int MOD = 10;
 	
 	/** Instrucciones relacionales */
-	public static int MAYOR = 11;
-	public static int MENOR = 12;
-	public static int IGUAL = 13;
-	public static int MAYOR_IGUAL = 14;
-	public static int MENOR_IGUAL = 15;
-	public static int DISTINTO = 16;
+	public static final int MAYOR = 11;
+	public static final int MENOR = 12;
+	public static final int IGUAL = 13;
+	public static final int MAYOR_IGUAL = 14;
+	public static final int MENOR_IGUAL = 15;
+	public static final int DISTINTO = 16;
 	
 	/** Instrucciones lógicas */
-	public static int OR = 17;
-	public static int AND = 18;
-	public static int NOT = 19;
+	public static final int OR = 17;
+	public static final int AND = 18;
+	public static final int NOT = 19;
 	
 	/** Lectura y escritura */
-	public static int LECTURA = 20;
-	public static int ESCRITURA = 21;
+	public static final int LECTURA = 20;
+	public static final int ESCRITURA = 21;
 	
 	public static final Hashtable <Integer,String>LEXEMAS = new Hashtable<Integer, String>(); 
 	
