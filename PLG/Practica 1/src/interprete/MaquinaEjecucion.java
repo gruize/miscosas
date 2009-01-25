@@ -67,9 +67,8 @@ public class MaquinaEjecucion implements Testeable{
 	}
 	
 	public void ejecutar(Operaciones instruccion,Operandos valor) throws Exception{
-	    try{
-	    	
-	    	
+	    try{	    	
+	    	OperandoNum direccion;
 	    	int codigo = instruccion.codigoOperacion;
 	    	switch(codigo){
 	    		case TokenMaquina.APILA:
@@ -77,19 +76,18 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.pila[this.topePila] = valor;
 	    			break;
 	    		case TokenMaquina.APILA_DIR:
-	    			int direccion = (int)((OperandoNum)valor).dameValor();
+	    			direccion = (OperandoNum)valor;
 	    			this.topePila++;
-	    			this.pila[this.topePila] = this.memoria.get();
+	    			this.pila[this.topePila] = (Object)(this.memoria.elementAt((Integer)direccion.dameValor()));
 	    			break;
 	    		case TokenMaquina.DESAPILA_DIR:
-	    			
+	    			direccion = (OperandoNum)valor;
+	    			this.memoria.add((Integer)direccion.dameValor(), this.pila[this.topePila]);
 	    			this.topePila--;
-	    			/**
-	    			 * ¿Que se hace con lo que se desapila?
-	    			 */
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
-	    			this.pila[this.topePila] = 0 - this.pila[this.topePila];
+	    			
+	    			(Operando)pila[this.topePila].
 	    			break;
 	    		case TokenMaquina.SUMA:
 	    			this.pila[this.topePila - 1]+= this.pila[this.topePila];
