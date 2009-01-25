@@ -1,15 +1,13 @@
 package interprete;
 
-public class OperandoNum implements Operandos{
+import java.io.Serializable;
 
-	public Integer valor;
-	public int tipo = Operandos.NUM;
+
+public class OperandoNum implements Operandos, Serializable{
+
+	public int valor;
+	private int tipo = Operandos.NUM;
 	
-	public OperandoNum(Integer valor) {
-		super();
-		this.valor = valor;
-	}
-
 	@Override
 	public int dameTipo() {
 		return tipo;
@@ -17,7 +15,7 @@ public class OperandoNum implements Operandos{
 
 	@Override
 	public Object dameValor() {
-		return this.valor;
+		return (int)this.valor;
 	}
 
 }
