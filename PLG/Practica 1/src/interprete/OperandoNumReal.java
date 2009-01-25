@@ -2,7 +2,7 @@ package interprete;
 
 public class OperandoNumReal implements Operandos{
 
-	public double valor;
+	public Double valor;
 	private int tipo = Operandos.NUMREAL;
 	
 	@Override
@@ -12,7 +12,7 @@ public class OperandoNumReal implements Operandos{
 
 	@Override
 	public Object dameValor() {
-		return (double)this.valor;
+		return this.valor;
 	}
 
 	
