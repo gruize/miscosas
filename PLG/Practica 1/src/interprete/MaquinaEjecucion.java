@@ -28,10 +28,10 @@ public class MaquinaEjecucion implements Testeable{
     private int i;
     
     /** Direcciones de memoria */
-    private Vector<Object> memoria = null;
+    private Vector<Object> memoria;
     
     /** Pila */
-    private Object[] pila = null;
+    private Object[] pila;
 
     /**Lectura de objetos*/
     private ObjectInputStream entrada;
@@ -39,8 +39,11 @@ public class MaquinaEjecucion implements Testeable{
     /** 
      * Constructor
      */
-	public MaquinaEjecucion(FileInputStream sourceFile)throws Exception{
-		this.entrada = new ObjectInputStream(sourceFile);
+	public MaquinaEjecucion(String sourceFile)throws Exception{
+		this.memoria = new Vector<Object>();
+		this.pila = new Object[MAX_PILA];
+		this.topePila = -1;
+		this.entrada = new ObjectInputStream(new FileInputStream(sourceFile));
 	}
 
 	@Override
@@ -52,11 +55,18 @@ public class MaquinaEjecucion implements Testeable{
 		Operaciones instruccion = null;
 		do{
 			instruccion = (Operaciones) this.entrada.readObject();
-			this.ejecutar(instruccion);
+			Operandos valor = null;
+			if((instruccion.codigoOperacion == TokenMaquina.APILA)
+			 ||(instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
+			 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)){
+				valor = (Operandos) this.entrada.readObject();
+			}
+			this.ejecutar(instruccion,valor);
+			
 		}while(instruccion.codigoOperacion == TokenMaquina.STOP);
 	}
 	
-	public void ejecutar(Operaciones instruccion) throws Exception{
+	public void ejecutar(Operaciones instruccion,Operandos valor) throws Exception{
 	    try{
 	    	
 	    	
@@ -64,13 +74,15 @@ public class MaquinaEjecucion implements Testeable{
 	    	switch(codigo){
 	    		case TokenMaquina.APILA:
 	    			this.topePila++;
-	    			this.pila[this.topePila] = instruccion.operando;
+	    			this.pila[this.topePila] = valor;
 	    			break;
 	    		case TokenMaquina.APILA_DIR:
+	    			int direccion = (int)((OperandoNum)valor).dameValor();
 	    			this.topePila++;
-	    			this.pila[this.topePila] ;
+	    			this.pila[this.topePila] = this.memoria.get();
 	    			break;
 	    		case TokenMaquina.DESAPILA_DIR:
+	    			
 	    			this.topePila--;
 	    			/**
 	    			 * ¿Que se hace con lo que se desapila?
