@@ -2,26 +2,27 @@ package excepciones;
 
 import java.util.Vector;
 
-public class ExcepcionLexica extends Exception {
-public Vector erroresLex=null;
-public int numErrores=0;
 
-	public ExcepcionLexica(int i, int numLinea) {
-		
-		erroresLex.add(new Mensaje("i",numLinea));
-		numErrores++;
-		// TODO Auto-generated constructor stub
-	}
-	
-public ExcepcionLexica(String  i, int numLinea, int columna) {
-		
-		erroresLex.add(new MensajeLex(i,numLinea,columna));
-		numErrores++;
-		// TODO Auto-generated constructor stub
-	}
 
-	public ExcepcionLexica(String string) {
-		// TODO Auto-generated constructor stub
+public class ExcepcionLexica extends Exception{
+	public boolean CortaAnalisisSintactico = false;
+	/**
+	 * UN serial por defecto
+	 */
+	public Vector<MensajeLex> errores = new Vector<MensajeLex>(); 
+	private static final long serialVersionUID = 2L;
+	public ExcepcionLexica(){
+		super();
 	}
-
+	public void addMensaje(MensajeLex msg){
+		errores.add(msg);
+	}
+	public void addMensaje(String m, int f, int c){
+		errores.add(new MensajeLex(m,f,c));
+	}
+	public void printAll(){
+		for (MensajeLex msg:errores){
+			System.out.println(msg.toString());
+		}
+	}
 }
