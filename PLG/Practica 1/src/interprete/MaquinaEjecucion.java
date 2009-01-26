@@ -50,6 +50,7 @@ public class MaquinaEjecucion implements Testeable{
 
 	public void leerOperaciones() throws Exception{
 		Operaciones instruccion = null;
+		
 		do{
 			instruccion = (Operaciones) this.entrada.readObject();
 			Operandos valor = null;
@@ -62,7 +63,7 @@ public class MaquinaEjecucion implements Testeable{
 			}			
 			this.ejecutar(instruccion,valor);
 			
-		}while(instruccion.codigoOperacion == TokenMaquina.STOP);
+		}while(instruccion.codigoOperacion != TokenMaquina.STOP);
 	}
 	
 	public void ejecutar(Operaciones instruccion,Operandos valor) throws Exception{
@@ -208,19 +209,16 @@ public class MaquinaEjecucion implements Testeable{
 	    			}
 	    			break;
 	    		case TokenMaquina.ESCRITURA:
-	    			temp1 = this.pila.pop();
+	    			temp1 = (OperandoNum)valor;
 	    			temp2 = this.memoria.get(((Integer)temp1.dameValor()).intValue());
 	    			if(temp2.dameTipo() == Operandos.NUM){
-	    				Escritura escribeEntero = new Escritura("Valor del numero entero");
-	    				escribeEntero.insertaValor(((Integer) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).intValue());
+	    				System.out.println(((Integer) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).intValue());
 	    			}
 	    			if(temp2.dameTipo() == Operandos.NUMREAL){
-	    				Escritura escribeReal = new Escritura("Valor del numero real");
-	    				escribeReal.insertaValor(((Double) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).doubleValue());	    				
+	    				System.out.println(((Double) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).doubleValue());	    				
 	    			}
 	    			if(temp2.dameTipo() == Operandos.VALORCHAR){
-	    				Escritura escribeVarChar = new Escritura("Valor de un varChar");
-	    				escribeVarChar.insertaValor(((Character) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).charValue());
+	    				System.out.println(((Character) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).charValue());
 	    			}
 	    			break;
 	    	}
