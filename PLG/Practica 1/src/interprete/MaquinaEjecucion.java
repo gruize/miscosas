@@ -3,8 +3,10 @@
  */
 package interprete;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.Stack;
 import java.util.Vector;
@@ -222,27 +224,23 @@ public class MaquinaEjecucion implements Testeable{
 	    		case TokenMaquina.LECTURA:
 	    			temp1 = (OperandoNum)valor;
 	    			temp2 = this.memoria.get(((Integer)temp1.dameValor()).intValue());
-	    			if(temp2.dameTipo() == Operandos.NUM){	    			
-	    				String entero="";
-	    				System.out.println("Escribe un numero entero y pulsa Intro: ");
-	    				do{	    			
-	    					entero+=System.in.toString();	    					
-	    				}while(entero.charAt(entero.length()-1) != '\n');
-	    				Integer valo = Integer.parseInt(entero);
-	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNum(valo));	    				
+	    			if(temp2.dameTipo() == Operandos.NUM){	
+	    				BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    				System.out.println("Escribe un numero entero: ");
+	    				Integer valorInteger = Integer.parseInt(in.readLine());
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNum(valorInteger));	    				
 	    			}
 	    			if(temp2.dameTipo() == Operandos.NUMREAL){
-	    				String real="";
+	    				BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    				System.out.println("Escribe un numero real: ");
-	    				do{    					
-	    					real+=System.in.read();
-	    				}while(System.in.read() != -1);
-	    				Double val =  Double.parseDouble(real);
-	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNumReal(val));
+	    				Double valorDouble = Double.parseDouble(in.readLine());
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNumReal(valorDouble));
 	    			}
 	    			if(temp2.dameTipo() == Operandos.VALORCHAR){
-	    				System.out.println("Escribe un char");
-	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(),new OperandoValorChar(System.in.toString().charAt(0)));
+	    				BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	    				System.out.println("Escribe un caracter: ");
+	    				Character valorChar = in.readLine().charAt(0);
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoValorChar(valorChar));
 	    			}
 	    			break;
 	    		case TokenMaquina.ESCRITURA:
@@ -271,7 +269,7 @@ public class MaquinaEjecucion implements Testeable{
 
 	@Override
 	public boolean extensionArchivoValida(String file){
-		return file.endsWith(".em");
+		return file.endsWith(".mp");
 	}
 	
 	@Override
