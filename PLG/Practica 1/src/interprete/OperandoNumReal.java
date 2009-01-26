@@ -4,9 +4,14 @@ import java.io.Serializable;
 
 public class OperandoNumReal implements Operandos, Serializable{
 
-	public double valor;
+	public Double valor;
 	private int tipo = Operandos.NUMREAL;
 	
+	public OperandoNumReal(Double valor) {
+		super();
+		this.valor = valor;
+	}
+
 	@Override
 	public int dameTipo() {
 		return tipo;
@@ -14,7 +19,7 @@ public class OperandoNumReal implements Operandos, Serializable{
 
 	@Override
 	public Object dameValor() {
-		return (double)this.valor;
+		return this.valor;
 	}
 
 	
