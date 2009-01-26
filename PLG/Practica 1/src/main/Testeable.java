@@ -18,8 +18,6 @@ public interface Testeable {
 	 */
 	public void setArchivoLectura(String source) throws IOException;
 	
-	public void finish();
-	
 	/**
 	 * Verifica si el archivo de lectura tiene la extension correcta
 	 * @param source
