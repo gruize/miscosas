@@ -135,8 +135,8 @@ public class MaquinaEjecucion implements Testeable{
 	    			if(temp1.dameTipo() == Operandos.NUM)
 	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor / ((OperandoNum)temp2).valor;	  
 	    			if(temp1.dameTipo() == Operandos.NUMREAL)
-	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor / ((OperandoNumReal)temp2).valor;	    			
-	    			this.pila.push((OperandoNum)temp1);
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor / ((OperandoNumReal)temp2).valor;
+	    			this.pila.push(new OperandoNum((Integer)temp1.dameValor()));
 	    			break;
 	    		case TokenMaquina.MOD:
 	    			temp1 = this.pila.pop();
@@ -243,11 +243,5 @@ public class MaquinaEjecucion implements Testeable{
 			e.printStackTrace();
 		}
 	}	
-
-	@Override
-	public void finish() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 }
