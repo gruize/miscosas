@@ -59,8 +59,7 @@ public class MaquinaEjecucion implements Testeable{
 			if((instruccion.codigoOperacion == TokenMaquina.APILA)
 			 ||(instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
 			 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)
-			 ||(instruccion.codigoOperacion == TokenMaquina.LECTURA)
-			 ||(instruccion.codigoOperacion == TokenMaquina.ESCRITURA)){
+			 ||(instruccion.codigoOperacion == TokenMaquina.LECTURA)){
 				valor = (Operandos) this.entrada.readObject();
 			}			
 			this.ejecutar(instruccion,valor);
@@ -83,6 +82,10 @@ public class MaquinaEjecucion implements Testeable{
 	    			break;
 	    		case TokenMaquina.DESAPILA_DIR:
 	    			direccion = (OperandoNum)valor;
+	    			if((Integer)direccion.dameValor() >= this.memoria.size()){
+	    				for(int i = this.memoria.size(); i <= (Integer)direccion.dameValor(); i++)
+	    					this.memoria.add(null);
+	    			}
 	    			this.memoria.add((Integer)direccion.dameValor(),this.pila.pop());
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
@@ -244,19 +247,18 @@ public class MaquinaEjecucion implements Testeable{
 	    			}
 	    			break;
 	    		case TokenMaquina.ESCRITURA:
-	    			temp1 = (OperandoNum)valor;
-	    			temp2 = this.memoria.get(((Integer)temp1.dameValor()).intValue());
-	    			if(temp2.dameTipo() == Operandos.NUM){
-	    				System.out.println(((Integer) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).intValue());
+	    			temp1 = this.pila.pop();
+	    			if(temp1.dameTipo() == Operandos.NUM){
+	    				System.out.println(temp1.dameValor());
 	    			}
-	    			if(temp2.dameTipo() == Operandos.NUMREAL){
-	    				System.out.println(((Double) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).doubleValue());	    				
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
+	    				System.out.println(temp1.dameTipo());	    				
 	    			}
-	    			if(temp2.dameTipo() == Operandos.VALORCHAR){
-	    				System.out.println(((Character) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).charValue());
+	    			if(temp1.dameTipo() == Operandos.VALORCHAR){
+	    				System.out.println(temp1.dameValor());
 	    			}
-	    			if(temp2.dameTipo() == Operandos.VALORBOOLEAN){
-	    				System.out.println(this.memoria.get((Integer) temp1.dameValor()).dameValor());
+	    			if(temp1.dameTipo() == Operandos.VALORBOOLEAN){
+	    				System.out.println(temp1.dameValor());
 	    			}	    				
 	    			break;
 	    		case TokenMaquina.STOP:
