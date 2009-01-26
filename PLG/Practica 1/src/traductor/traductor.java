@@ -38,7 +38,7 @@ public traductor(AnalizadorSintactico as) {
 	}
 
 //para porbar el main
-/*public traductor(Vector<Object> o) throws IOException {
+public traductor(Vector<Object> o) throws IOException {
 	
 	//fichero=new File(nombreFichero);
 	
@@ -53,7 +53,7 @@ public traductor(AnalizadorSintactico as) {
 	salida.close();
 	
 	//return nombreFichero;
-}*/
+}
 public String dameNombre(){
 	return nombreFichero;
 }

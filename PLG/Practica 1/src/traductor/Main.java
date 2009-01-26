@@ -19,7 +19,7 @@ public class Main {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception{
-	/*	Vector<Object> obj=new Vector<Object>();
+		Vector<Object> obj=new Vector<Object>();
 		Object e=new Operaciones(TokenMaquina.APILA);
 		Object c=new OperandoNum(3);
 		Object f=new Operaciones(TokenMaquina.APILA);
@@ -29,7 +29,10 @@ public class Main {
 		Object dir = new OperandoNum(0);
 		Object escribe = new Operaciones(TokenMaquina.ESCRITURA);
 		Object dir2 = new OperandoNum(0);
+		Object lee = new Operaciones(TokenMaquina.LECTURA);
+		Object dir3 = new OperandoNum(0);
 		Object fin = new Operaciones(TokenMaquina.STOP);
+
 		obj.add(e);
 		obj.add(c);
 		obj.add(f);
@@ -39,10 +42,13 @@ public class Main {
 		obj.add(dir);
 		obj.add(escribe);
 		obj.add(dir2);
+		obj.add(lee);
+		obj.add(dir3);		
 		obj.add(fin);
+		
 		traductor t = new traductor(obj);
 		MaquinaEjecucion me=new MaquinaEjecucion(t.dameNombre());                       
-	    me.run();*/ 
+	    me.run();
 	}
 
 }
