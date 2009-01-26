@@ -31,9 +31,11 @@ public class AnalizadorSintactico {
 		try {
 			this.PROG();
 		} catch (ExcepcionSintactica e) {
-			// TODO Auto-generated catch block
+
 			e.printAll();
 		}
+		if (excepcion.errores.size()>0)
+			excepcion.printAll();
 	}
 	public void finish() {
 		
@@ -46,8 +48,10 @@ public class AnalizadorSintactico {
 			aLex = new AnalizadorLexico(nameFile);
 			aLex.run();
 			tokens = aLex.tokens;
+			if (aLex.excepcion.errores.size()>0)
+				aLex.excepcion.printAll();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		
@@ -68,6 +72,7 @@ public class AnalizadorSintactico {
 	private void PROG() throws ExcepcionSintactica{
 		CABECERA();
 		CUERPO();
+		emit(new Operacion(TokenMaquina.STOP));
 
 		
 	}
@@ -94,9 +99,9 @@ public class AnalizadorSintactico {
 	}
 
 	private void INSTRUCCIONES() {
-		Token t = rec();
+		//Token t = rec();
 		BLOQUE();
-		t = rec();
+		Token t = rec();
 		if (t.codigo != Token.PUNTO) {
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.PUNTO,t);
 		}
@@ -149,10 +154,10 @@ public class AnalizadorSintactico {
 	}
 	private void SASIGN() {
 		
-		Token t = rec();
+		
 		Token lex_de_VARIABLE = new Token();
 		VARIABLE(lex_de_VARIABLE);
-		t = rec();
+		Token t = rec();
 		if (t.codigo != Token.OP_ASIGNACION)
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.OP_ASIGNACION,t);
 		else if (!tablaDeSimbolos.existeID(lex_de_VARIABLE.lexema))
@@ -219,7 +224,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
 			tipo_companero.codigo = o.dameTipo(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo);
-			emit(o.codigo);
+			emit(new Operaciones(o.codigo));
 		}
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==3)
 
@@ -256,7 +261,7 @@ public class AnalizadorSintactico {
 		else{
 			
 			tipo.codigo = o.dameTipo(tipo_companero.codigo,tipo_de_TERMINO.codigo);
-			emit(o.codigo);
+			emit(new Operaciones(o.codigo));
 		}
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==2)
 			REXPSIMPLE1(tipo_de_TERMINO,tipo);
@@ -294,7 +299,7 @@ public class AnalizadorSintactico {
 		else{
 			
 			tipo.codigo = o.dameTipo(tipo_companero.codigo,tipo_de_FACTOR.codigo);
-			emit(o.codigo);
+			emit(new Operaciones(o.codigo));
 		}
 
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==1)
@@ -456,7 +461,7 @@ public class AnalizadorSintactico {
 			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
 			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_DEC_CONST.lexema)));
 		}
-		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA);
+		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RDECS_CONST();
 		
 		// RDECS_CONST2(); no es necseario porque no hace nada
@@ -565,7 +570,7 @@ public class AnalizadorSintactico {
 		if (t.codigo != Token.PUNTO_Y_COMA)
 			excepcion.addMensaje(Mensaje.ERROR_FALTA_PUNTO_Y_COMA,Token.PUNTO_Y_COMA,t);
 				
-		// XXX puede no funcionar referencias y mierdas varias
+
 		Token tipo_de_DEC = new Token();
 		Token lex_de_DEC = new Token();
 		DEC(lex_de_DEC,tipo_de_DEC);
@@ -594,7 +599,7 @@ public class AnalizadorSintactico {
 		// estan entre los tipos? los tipos estan
 		// entre -1000 y -1999
 		if ((t.codigo < -1000) && (t.codigo >-1999))
-			tipo = t.clon();
+			tipo.codigo = t.codigo;
 		else
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS,0,t);
 	}
@@ -609,7 +614,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,t);
 			
 		}
-		lex = t.clon();
+		lex.lexema = t.lexema;
 		
 		
 	}
