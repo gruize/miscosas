@@ -166,42 +166,42 @@ public class Operacion {
 	{
 		switch (codigo){
 
-			case Token.OP_COMPARACION	: 	codigo = OP_COMPARACION;
+			case Token.OP_COMPARACION	: 	this.codigo = OP_COMPARACION;
 											break;
-			case Token.OP_SUMA			: 	codigo = OP_SUMA;				
+			case Token.OP_SUMA			: 	this.codigo = OP_SUMA;				
 											break;
-			case Token.OP_MUL			:	codigo = OP_MUL;		 
+			case Token.OP_MUL			:	this.codigo = OP_MUL;		 
 											break;
-			case Token.OP_DIV			:	codigo = OP_DIV;				 
+			case Token.OP_DIV			:	this.codigo = OP_DIV;				 
 											break;
-			case Token.OP_MENOR_QUE		: 	codigo = OP_MENOR_QUE;			
+			case Token.OP_MENOR_QUE		: 	this.codigo = OP_MENOR_QUE;			
 											break;
-			case Token.OP_MAYOR_QUE		:	codigo = OP_MAYOR_QUE;
+			case Token.OP_MAYOR_QUE		:	this.codigo = OP_MAYOR_QUE;
 											break;
-			case Token.OP_DISTINTO		:	codigo = OP_DISTINTO;			 
+			case Token.OP_DISTINTO		:	this.codigo = OP_DISTINTO;			 
 											break;
-			case Token.OP_MENOR_IGUAL	:	codigo = OP_MENOR_IGUAL;		 
+			case Token.OP_MENOR_IGUAL	:	this.codigo = OP_MENOR_IGUAL;		 
 											break;
-			case Token.OP_MAYOR_IGUAL	:	codigo = OP_MAYOR_IGUAL;		 
+			case Token.OP_MAYOR_IGUAL	:	this.codigo = OP_MAYOR_IGUAL;		 
 											break;
-			case Token.AND				:	codigo = AND;					
+			case Token.AND				:	this.codigo = AND;					
 											break;
-			case Token.OR				:	codigo = OR;
+			case Token.OR				:	this.codigo = OR;
 											break;
-			case Token.DIV				:	codigo = DIV;
+			case Token.DIV				:	this.codigo = DIV;
 											break;
-			case Token.MOD				:	codigo = MOD;
+			case Token.MOD				:	this.codigo = MOD;
 											break;
-			case Token.NOT				:	codigo = NOT;
+			case Token.NOT				:	this.codigo = NOT;
 				break;
 			case Token.OP_RESTA			:
 				if (aridad == 1)
-					codigo = NEGACION;
+					this.codigo = NEGACION;
 				else if (aridad == 2)
-					codigo = OP_RESTA;
+					this.codigo = OP_RESTA;
 				break;
 			default:
-			codigo = -1;
+				this.codigo = -1;
 		}
 		
 			
