@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class OperandoValorChar implements Operandos, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3291903449547182775L;
 	public Character valor;
 	private int tipo = Operandos.VALORCHAR;
 	
