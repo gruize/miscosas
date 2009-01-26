@@ -307,6 +307,20 @@ public class Operacion {
 		return false;
 	
 	}
+	public int dameTipo (int tipo1, int tipo2){
+		if (codigo == Operacion.DIV)
+			return Token.INTEGER;
+		if (tipo1 == tipo2)
+			return tipo1;
+		if (tipo1 == Token.INTEGER && tipo2 == Token.REAL)
+			return Token.REAL;
+		if (tipo2 == Token.INTEGER && tipo1 == Token.REAL)
+			return Token.REAL;
+		return -1;
+	}
+	public int dameTipo(int tipo){
+		return tipo;
+	}
 }
 
 /*

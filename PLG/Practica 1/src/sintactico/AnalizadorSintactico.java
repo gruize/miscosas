@@ -206,8 +206,7 @@ public class AnalizadorSintactico {
 		if (o.compruebaTipos(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo))
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
-			
-			tipo_companero = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_EXPSIMPLE.codigo);
+			tipo_companero.codigo = o.dameTipo(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo);
 			emit(o.codigo);
 		}
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==3)
@@ -244,7 +243,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
 			
-			tipo = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_TERMINO.codigo);
+			tipo.codigo = o.dameTipo(tipo_companero.codigo,tipo_de_TERMINO.codigo);
 			emit(o.codigo);
 		}
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==2)
@@ -282,7 +281,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
 			
-			tipo = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_FACTOR.codigo);
+			tipo.codigo = o.dameTipo(tipo_companero.codigo,tipo_de_FACTOR.codigo);
 			emit(o.codigo);
 		}
 
@@ -374,12 +373,7 @@ public class AnalizadorSintactico {
 		}
 	}
 	
-	private Token dameTipo(int codigo, int codigo2, int codigo3) {
-		// TODO Auto-generated method stub
-		// HAY QUE CAMBIAR POR UNA QUE ESTE IMPLEMENTADA EN OTRA CLASE
 
-		return null;
-	}
 	
 	private void SREAD() {
 		rec(); // si esta aqui es que es un READ
