@@ -17,7 +17,7 @@ public class AnalizadorLexico {
 	private int numColumna;
 	private Character ultimoCharLeido;
 	private Reader reader = null;
-	private Vector <Token> tokens=null;
+	public Vector <Token> tokens=null;
 	private boolean fin= false;
 	public ExcepcionLexica excepcion = new ExcepcionLexica();
 	PalabrasReservadas palabrasR=new PalabrasReservadas();
