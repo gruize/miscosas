@@ -231,6 +231,8 @@ public class MaquinaEjecucion implements Testeable{
 	    				System.out.println(((Character) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).charValue());
 	    			}
 	    			break;
+	    		case TokenMaquina.STOP:
+	    			System.out.println("FIN");
 	    	}
 		}catch (IndexOutOfBoundsException e){
 	        throw new ExcepcionMaquina(2,i);
