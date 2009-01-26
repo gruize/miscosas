@@ -73,16 +73,19 @@ public class AnalizadorLexico {
 		       
 		        for( t = nextToken(); !esFin(); t = nextToken())
 				{	if (!(esFin())){
-					if(!(t==null))
+					if(!(t==null)){
+						// XXX Hay que borrarlo
 						tokens.add(t);
 						System.out.println(t.lexema);
 					}
+					
 				}
 		        //imprimo eof
-		        System.out.println("Fin  del Analizador Léxico \n");
+		        
 		        
 		    }
-		    	 
+		        System.out.println("Fin  del Analizador Léxico");
+		 } 	 
 		  
 		
 
@@ -215,14 +218,12 @@ public class AnalizadorLexico {
 	    }
 		 
 		 
-	private Token caracter(Character c) throws IOException  {
-			// TODO Auto-generated method stub
-		Character ch=null;
-		if (esLetra(c))
-			try {
-				ch= leerCaracter();
+		private Token caracter(Character c) throws IOException  {
+			Character ch=null;
+			if (esLetra(c))
+				try {
+					ch= leerCaracter();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				throw new IOException("Se esperaba un caracter");
 			}
 			if (ch.charValue()=='\'') {	ultimoCharLeido=leerCaracter();
@@ -239,7 +240,6 @@ public class AnalizadorLexico {
 
 
 	private Token getTokenID() {
-		// TODO Auto-generated method stub
 		Character c;
 		StringBuffer buff = new StringBuffer();
 		c=ultimoCharLeido; //asume que es una letra
@@ -269,7 +269,6 @@ public class AnalizadorLexico {
 	
 	
 	private Token getTokenNumero() throws ExcepcionLexica {
-		// TODO Auto-generated method stub
 		Character c;
 		StringBuffer buff = new StringBuffer();
 		c = ultimoCharLeido; //asume que es un digito
@@ -309,6 +308,13 @@ public class AnalizadorLexico {
 			esreal=true;}
 
 		if (esLetra(c)){
+			while(esDigito(c)||esLetra(c)||c.charValue()=='.')
+			{
+				try {
+					c = leerCaracter();
+				} catch (IOException e) {}
+
+			}
 			error=true;
 			this.excepcion.addMensaje("un Id no puede empezar por un numero ",numLinea,numColumna);
 			
@@ -330,7 +336,6 @@ public class AnalizadorLexico {
 
 
 	private Token leerDosPuntosOAsignacion() throws IOException {
-			// TODO Auto-generated method stub
 		   // asume que ultimoCharLeido :
         int lineaUlt = numLinea; //salva la linea actual
         
@@ -393,17 +398,14 @@ public class AnalizadorLexico {
 
 
 	private boolean esLetra(Character ch) {
-			// TODO Auto-generated method stub
 			return letras.contains(ch);
 		}
 
 	private boolean esDigito(Character ch) {
-			// TODO Auto-generated method stub
 			return digitos.contains(ch);
 		}
 
 	private boolean esSeparador(Character ch) {
-			// TODO Auto-generated method stub
 		return separadores.contains(ch);
 		}
 	
@@ -417,7 +419,6 @@ public class AnalizadorLexico {
 	
 
 	public void finish() {
-		// TODO Auto-generated method stub
 		excepcion.printAll();
 		reader.close();
 	}
