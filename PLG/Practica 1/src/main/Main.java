@@ -23,10 +23,10 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		
-    	BufferedFileReader file= new BufferedFileReader(args[0]);
+    	//BufferedFileReader file= new BufferedFileReader(args[0]);
     	
     	//ANALIZADOR
-    	as = new AnalizadorSintactico(file);
+    	as = new AnalizadorSintactico("src\\pruebas\\Prueba2.pas");
     	as.run();
     	
     	//TRADUCTOR

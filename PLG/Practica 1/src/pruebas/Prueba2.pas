@@ -1,7 +1,7 @@
 PROGRAM SegundaPrueba; 
-CONST x = 1.56;
-VAR 
+VAR
 Entero : Integer; 
+CONST x = 1.56;
 BEGIN 
 entero:=1;
 entero:=entero*x; 
