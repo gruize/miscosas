@@ -84,12 +84,13 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.memoria.add((Integer)direccion.dameValor(),this.pila.pop());
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
-	    			if(this.pila.lastElement().dameTipo() == Operandos.NUM){
-	    				OperandoNum temp = new OperandoNum(0 - (Integer)this.pila.pop().dameValor());
+	    			Operandos temp3 = this.pila.pop();
+	    			if(temp3.dameTipo() == Operandos.NUM){
+	    				OperandoNum temp = new OperandoNum((Integer)(0 - (Integer)((OperandoNum) temp3).dameValor()));
 	    				this.pila.push(temp);
 	    			}
-	    			if(((Operandos) (this.pila)).dameTipo() == Operandos.NUMREAL){    				    			
-	    				OperandoNumReal temp = new OperandoNumReal(0 - (Double)this.pila.pop().dameValor());
+	    			if(temp3.dameTipo() == Operandos.NUMREAL){    				    			
+	    				OperandoNumReal temp = new OperandoNumReal((Double)(0.0 - (Double)((OperandoNum) temp3).dameValor()));
 	    				this.pila.push(temp);
 	    			}
 	    			break;
@@ -150,33 +151,59 @@ public class MaquinaEjecucion implements Testeable{
 	    			break;
 	    		case TokenMaquina.MAYOR:
 	    			temp1 = this.pila.pop();
-	    			temp2 = this.pila.pop();	    		
-	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) > ((Double)temp2.dameValor()))));
-	    			break;	    			
+	    			temp2 = this.pila.pop();	    	
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Integer)temp1.dameValor()) > ((Integer)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) > ((Double)temp2.dameValor()))));
+	    			break;			
 	    		case TokenMaquina.MENOR:
 	    			temp1 = this.pila.pop();
 	    			temp2 = this.pila.pop();	    		
-	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) < ((Double)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Integer)temp1.dameValor()) < ((Integer)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) < ((Double)temp2.dameValor()))));
 	    			break;	    		
 	    		case TokenMaquina.IGUAL:
 	    			temp1 = this.pila.pop();
-	    			temp2 = this.pila.pop();	    		
-	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) == ((Double)temp2.dameValor()))));
+	    			temp2 = this.pila.pop();	    	
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) == (temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) == (temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.VALORCHAR)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) == (temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.VALORBOOLEAN)    				
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) == (temp2.dameValor()))));
 	    			break;	
 	    		case TokenMaquina.MAYOR_IGUAL:
 	    			temp1 = this.pila.pop();
 	    			temp2 = this.pila.pop();	    		
-	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) >= ((Double)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Integer)temp1.dameValor()) >= ((Integer)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) >= ((Double)temp2.dameValor()))));
 	    			break;	
 	    		case TokenMaquina.MENOR_IGUAL:
 	    			temp1 = this.pila.pop();
 	    			temp2 = this.pila.pop();	    		
-	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) <= ((Double)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Integer)temp1.dameValor()) <= ((Integer)temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) <= ((Double)temp2.dameValor()))));
 	    			break;	
 	    		case TokenMaquina.DISTINTO:
 	    			temp1 = this.pila.pop();
-	    			temp2 = this.pila.pop();	    		
-	    			this.pila.push(new OperandoValorBoolean((Boolean)(((Double)temp1.dameValor()) != ((Double)temp2.dameValor()))));
+	    			temp2 = this.pila.pop();	    	
+	    			if(temp1.dameTipo() == Operandos.NUM)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) != (temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) != (temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.VALORCHAR)
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) != (temp2.dameValor()))));
+	    			if(temp1.dameTipo() == Operandos.VALORBOOLEAN)    				
+	    				this.pila.push(new OperandoValorBoolean((Boolean)((temp1.dameValor()) != (temp2.dameValor()))));
 	    			break;	
 	    		case TokenMaquina.OR:
 	    			temp1 = this.pila.pop();
@@ -230,6 +257,9 @@ public class MaquinaEjecucion implements Testeable{
 	    			if(temp2.dameTipo() == Operandos.VALORCHAR){
 	    				System.out.println(((Character) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).charValue());
 	    			}
+	    			if(temp2.dameTipo() == Operandos.VALORBOOLEAN){
+	    				System.out.println(this.memoria.get((Integer) temp1.dameValor()).dameValor());
+	    			}	    				
 	    			break;
 	    		case TokenMaquina.STOP:
 	    			System.out.println("FIN");
