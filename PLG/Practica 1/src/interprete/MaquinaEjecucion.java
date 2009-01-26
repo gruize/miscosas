@@ -193,19 +193,29 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.pila.push(new OperandoValorBoolean(!(Boolean)temp1.dameValor()));
 	    			break;
 	    		case TokenMaquina.LECTURA:
-	    			temp1 = this.pila.pop();
+	    			temp1 = (OperandoNum)valor;
 	    			temp2 = this.memoria.get(((Integer)temp1.dameValor()).intValue());
-	    			if(temp2.dameTipo() == Operandos.NUM){
-	    				Lectura leerEntero = new Lectura("Introduzca un entero");
-	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNum((Integer)leerEntero.leeInt()));	    				
+	    			if(temp2.dameTipo() == Operandos.NUM){	    			
+	    				String entero="";
+	    				System.out.println("Escribe un numero entero y pulsa Intro: ");
+	    				do{	    			
+	    					entero+=System.in.toString();	    					
+	    				}while(entero.charAt(entero.length()-1) != '\n');
+	    				Integer valo = Integer.parseInt(entero);
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNum(valo));	    				
 	    			}
 	    			if(temp2.dameTipo() == Operandos.NUMREAL){
-	    				Lectura leerReal = new Lectura("Introduzca un numero real");
-	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNumReal((Double)leerReal.leeDouble()));
+	    				String real="";
+	    				System.out.println("Escribe un numero real: ");
+	    				do{    					
+	    					real+=System.in.read();
+	    				}while(System.in.read() != -1);
+	    				Double val =  Double.parseDouble(real);
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNumReal(val));
 	    			}
 	    			if(temp2.dameTipo() == Operandos.VALORCHAR){
-	    				Lectura leerVarChar = new Lectura("Introduzca un varchar");
-	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoValorChar((Character)leerVarChar.leeString()));
+	    				System.out.println("Escribe un char");
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(),new OperandoValorChar(System.in.toString().charAt(0)));
 	    			}
 	    			break;
 	    		case TokenMaquina.ESCRITURA:
