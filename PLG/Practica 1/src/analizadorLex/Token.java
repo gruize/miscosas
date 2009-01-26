@@ -4,6 +4,11 @@ import java.util.Hashtable;
 import excepciones.ExcepcionToken;
 
 public class Token extends Object{
+	public int linea;
+	public int columna;
+	public String lexema;
+	public int codigo;
+
 	
 	/*PALABRAS RESERVADAS todas con valores negatvos*/
 	 //
@@ -114,10 +119,6 @@ public class Token extends Object{
 	
 
 
-	public String lexema;
-	public int codigo;
-	public int linea;
-	public int columna;
 	public Token (){
 		
 	}
