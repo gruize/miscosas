@@ -106,7 +106,7 @@ public class AnalizadorSintactico {
 	}
 	private void SENTS() {
 		SENT();
-		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA)
+		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RSENTS();
 		// inecesario
 		// else
@@ -116,13 +116,13 @@ public class AnalizadorSintactico {
 		rec(); // ;
 
 		SENT();
-		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA)
+		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RSENTS();
 		
 	}
 	private void SENT() {
 		
-		switch (this.tokenSiguiente()) {
+		switch (this.tokenSiguiente().codigo) {
 			case Token.READ :
 				SREAD();
 				break;
@@ -151,8 +151,9 @@ public class AnalizadorSintactico {
 		{
 			Token tipo_de_EXP = new Token();
 			EXP(tipo_de_EXP);
-			if (!compruebaTipos(Token.OP_ASIGNACION,
-					tablaDeSimbolos.dameTipo(lex_de_VARIABLE.lexema),tipo_de_EXP.codigo)) {
+			if (!Operacion.tiposAsignacion(
+					tablaDeSimbolos.dameTipo(lex_de_VARIABLE.lexema),
+					tipo_de_EXP.codigo)) {
 				excepcion.addMensaje(Mensaje.ERROR_TIPOS,Token.ID,t);
 				
 				
@@ -166,11 +167,7 @@ public class AnalizadorSintactico {
 			
 		}
 	}
-	private boolean compruebaTipos(int op, int dameDir,
-			int tipo_de_EXP) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 	private void SWRITE() {
 		rec(); // si esta aqui es que es un WRITE
 
@@ -193,115 +190,195 @@ public class AnalizadorSintactico {
 		Token tipo_de_EXPSIMPLE = new Token();
 		EXPSIMPLE(tipo_de_EXPSIMPLE);
 		// es un token de operacion?
-		if (esOP3(tokenSiguiente()))
+		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==3)
+
 			REXP1(tipo_de_EXPSIMPLE,tipo);
 		else 
 			REXP2(tipo_de_EXPSIMPLE,tipo);
 		
 	}
-	private void EXPSIMPLE(Token tipo_de_EXPSIMPLE) {
-		// TODO Auto-generated method stub
-		
-	}
-	private void REXP2(Token tipo_de_EXPSIMPLE, Token tipo) {
-		tipo.codigo = tipo_de_EXPSIMPLE.codigo;
-		
-	}
-	private boolean esOP3(int t) {
-		if (t == Token.OP_MAYOR_IGUAL)
-			return true;
-		if (t == Token.OP_MAYOR_QUE)
-			return true;
-		if (t == Token.OP_MENOR_IGUAL)
-			return true;
-		if (t == Token.OP_MAYOR_QUE)
-			return true;
-		if (t == Token.OP_COMPARACION)
-			return true;
-		if (t == Token.OP_DISTINTO)
-			return true;
-		return false;
-	}
-	private boolean esOP2(int t) {
-		if (t == Token.OR)
-			return true;
-		if (t == Token.OP_SUMA)
-			return true;
-		if (t == Token.OP_RESTA)
-			return true;
-		return false;
-	}
-	
-	private boolean esOP1(int t) {
-		if (t == Token.OP_MUL)
-			return true;
-		if (t == Token.DIV)
-			return true;
-		if (t == Token.MOD)
-			return true;
-		if (t == Token.OP_DIV)
-			return true;
-		if (t == Token.AND)
-			return true;
-		if (t == Token.OP_DISTINTO)
-			return true;
-		return false;
-	}
-		
 	private void REXP1(Token tipo_companero, Token tipo) {
-		Token t = rec();// OPERACOIN
+		Token t = rec();// OPERACOIN TIPO 3
+		Operacion o = new Operacion(t.codigo,2);
 		Token tipo_de_EXPSIMPLE = new Token();
 		EXPSIMPLE(tipo_de_EXPSIMPLE);
 		
-		if (compruebaTipos(t.codigo, tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo))
+		if (o.compruebaTipos(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo))
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
 			
-			tipo = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_EXPSIMPLE.codigo);
-			emit(new Operaciones(DameCodigoMaquinaDoble(t.codigo)));
+			tipo_companero = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_EXPSIMPLE.codigo);
+			emit(o.codigo);
 		}
-		// TODO Auto-generated method stub
+		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==3)
+
+			REXP1(tipo_companero,tipo);
+		else 
+			REXP2(tipo_companero,tipo);
+
+		
+
+		
+	}
+	private void REXP2(Token tipo_companero, Token tipo) {
+		tipo.codigo = tipo_companero.codigo;
+		
+	}
+
+	private void EXPSIMPLE(Token tipo) {
+		Token tipo_de_TERMINO = new Token();
+		TERMINO(tipo_de_TERMINO);
+		// es un token de operacion de mi nivel?
+		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==2)
+			REXPSIMPLE1(tipo_de_TERMINO,tipo);
+		else 
+			REXPSIMPLE2(tipo_de_TERMINO,tipo);		
+	}
+	private void REXPSIMPLE1(Token tipo_companero, Token tipo) {
+		Token t = rec();// OPERACOIN TIPO 2
+		Operacion o = new Operacion(t.codigo,2);
+		Token tipo_de_TERMINO = new Token();
+		TERMINO(tipo_de_TERMINO);
+		
+		if (o.compruebaTipos(tipo_companero.codigo, tipo_de_TERMINO.codigo))
+			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
+		else{
+			
+			tipo = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_TERMINO.codigo);
+			emit(o.codigo);
+		}
+		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==2)
+			REXPSIMPLE1(tipo_de_TERMINO,tipo);
+		else 
+			REXPSIMPLE2(tipo_de_TERMINO,tipo);		
+	}
+	private void REXPSIMPLE2(Token tipo_companero, Token tipo) {
+		tipo.codigo = tipo_companero.codigo;
+		
+	}
+
+	private void TERMINO(Token tipo) {
+		Token tipo_de_FACTOR = new Token();
+
+		FACTOR(tipo_de_FACTOR);
+		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==1)
+			RTERMINO1(tipo_de_FACTOR,tipo);
+		else 
+			RTERMINO2(tipo_de_FACTOR,tipo);
+	
+	}
+
+		
+
+
+	private void RTERMINO1(Token tipo_companero, Token tipo) {
+		Token t = rec();// OPERACOIN TIPO 1
+		Token tipo_de_FACTOR = new Token();
+		Operacion o = new Operacion(t.codigo,2);
+
+		FACTOR(tipo_de_FACTOR);
+		
+		if (o.compruebaTipos(tipo_companero.codigo, tipo_de_FACTOR.codigo))
+			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
+		else{
+			
+			tipo = dameTipo(t.codigo, tipo_companero.codigo,tipo_de_FACTOR.codigo);
+			emit(o.codigo);
+		}
+
+		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==1)
+			RTERMINO1(tipo_de_FACTOR,tipo);
+		else 
+			RTERMINO2(tipo_de_FACTOR,tipo);
+
+	}
+	private void RTERMINO2(Token tipo_companero, Token tipo) {
+		tipo.codigo = tipo_companero.codigo;
 		
 		
 	}
 	
-	private int DameCodigoMaquinaDoble(int codigo) {
-		switch (codigo){
-			case Token.OP_COMPARACION : 	return TokenMaquina.IGUAL;
-			case Token.OP_SUMA:				return TokenMaquina.SUMA;
-			case Token.OP_RESTA:			return TokenMaquina.RESTA;
-			case Token.OP_MUL:				return TokenMaquina.MULTIPLICACION;
-			case Token.OP_DIV:				return TokenMaquina.DIVISION;
-			case Token.OP_MENOR_QUE:		return TokenMaquina.MENOR;
-			case Token.OP_MAYOR_QUE:		return TokenMaquina.MAYOR;
-			case Token.OP_DISTINTO:			return TokenMaquina.DISTINTO;
-			case Token.OP_MENOR_IGUAL:		return TokenMaquina.MENOR_IGUAL;
-			case Token.OP_MAYOR_IGUAL:		return TokenMaquina.MAYOR_IGUAL;
-			case Token.AND:					return TokenMaquina.AND;
-			case Token.OR:					return TokenMaquina.OR;
-			case Token.DIV:					return TokenMaquina.DIV;
-			case Token.MOD:					return TokenMaquina.MOD;
+	
+	private void FACTOR(Token tipo) {
+		
+		Operacion oper = null;
+		if (Operacion.getPrioridad(tokenSiguiente(), 1)==0)
+			 oper = new Operacion(rec().codigo,1);
 
-
+		
+		COMPONENTE(tipo);
+		if (oper != null)
+		{
+			if (!oper.compruebaTipos(tipo.codigo))
+				excepcion.addMensaje(Mensaje.ERROR_TIPOS,0,tipo);
+			else
+				emit(new Operaciones(oper.codigo));
 		}
-		return 0;
-	}
-	private int DameCodigoMaquinaSimple(int codigo) {
-		switch (codigo){
-			case Token.NOT : return TokenMaquina.NOT;
-			case Token.OP_RESTA: return TokenMaquina.RESTA;
-		}
-		return 666;
+		// NO TIENE ASOCIATIVIDAD, NO MAS ABAJO
 	}
 
+
+	
+
+	
+	private void COMPONENTE(Token tipo) {
+		Token t = rec();
+		if (t.codigo == Token.A_PARENTESIS)
+		{
+			EXP(tipo);
+			if ((t = rec()).codigo != Token.C_PARENTESIS)
+				excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO, Token.C_PARENTESIS, t);
+		}
+		else
+		{
+			Operandos o = null;
+			if (t.codigo == Token.NUM)
+			{
+				tipo.codigo = Token.INTEGER;
+				o = new OperandoNum(Integer.valueOf(t.lexema));
+			}
+			else if (t.codigo == Token.NUMREAL)
+			{
+				tipo.codigo = Token.REAL;
+				o = new OperandoNumReal(Double.valueOf(t.lexema));
+			}
+			else if (t.codigo == Token.VALORBOOLEAN)
+			{
+				tipo.codigo = Token.BOOLEAN;
+				o = new OperandoValorBoolean(Boolean.valueOf(t.lexema));
+				
+			}
+			else if (t.codigo == Token.VALORCHAR)
+			{
+				tipo.codigo = Token.CHAR;
+				o = new OperandoValorChar(t.lexema.charAt(0));
+			}
+			if (o != null)
+			{
+				emit(new Operaciones(TokenMaquina.APILA));
+				emit(o);
+			}
+			else if (t.codigo == Token.ID)
+			{
+				if (!tablaDeSimbolos.existeID(t.lexema))
+				{
+					excepcion.addMensaje(Mensaje.ERROR_N0_EXISTE_ID, Token.ID, t);
+				}
+				else
+				{
+					emit(new Operaciones(TokenMaquina.APILA_DIR));
+					int dir = tablaDeSimbolos.dameDir(t.lexema);
+					emit(new OperandoNum(dir));
+				}
+			}
+		}
+	}
+	
 	private Token dameTipo(int codigo, int codigo2, int codigo3) {
 		// TODO Auto-generated method stub
+		// HAY QUE CAMBIAR POR UNA QUE ESTE IMPLEMENTADA EN OTRA CLASE
+
 		return null;
-	}
-	private void REXP2() {
-		
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void SREAD() {
@@ -331,11 +408,11 @@ public class AnalizadorSintactico {
 		
 	}
 	private void DECLARACIONES() {
-		if (this.tokenSiguiente() == Token.VAR)
+		if (this.tokenSiguiente().codigo == Token.VAR)
 			VARIABLES1();
 		else
 			VARIABLES2();
-		if (this.tokenSiguiente() == Token.CONST)
+		if (this.tokenSiguiente().codigo == Token.CONST)
 			CONSTANTES1();
 		
 		// no es necesario 
@@ -368,12 +445,12 @@ public class AnalizadorSintactico {
 		if (this.tablaDeSimbolos.existeID(lex_de_DEC_CONST.lexema))
 			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
 		else{
-			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
+			this.tablaDeSimbolos.anadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
 			
 			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
 			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_DEC_CONST.lexema)));
 		}
-		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA);
+		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA);
 			RDECS_CONST();
 		
 		// RDECS_CONST2(); no es necseario porque no hace nada
@@ -411,14 +488,8 @@ public class AnalizadorSintactico {
 			tipo.codigo = Token.BOOLEAN;
 			break;
 		default:
-				
+			excepcion.addMensaje(Mensaje.ERROR_EXPRESION_INCORRECTA,0,t);	
 		}
-		
-		
-		
-		
-
-		
 	}
 
 	private void emit(Object oper) {
@@ -438,12 +509,12 @@ public class AnalizadorSintactico {
 			this.excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC_CONST);
 		else {
 			
-			this.tablaDeSimbolos.añadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
+			this.tablaDeSimbolos.anadeID(lex_de_DEC_CONST.lexema, tipo_de_DEC_CONST.codigo, false);
 			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
 			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_DEC_CONST.lexema)));
 
 		}
-		if (this.tokenSiguiente() == Token.PUNTO_Y_COMA);
+		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA);
 			RDECS_CONST();
 		
 		
@@ -474,21 +545,14 @@ public class AnalizadorSintactico {
 		tablaDeSimbolos.creaTS();
 		// it's not necessary because is the first variable
 		// tablaDeSimbolos.existeID();
-		if (esReservada(lex_de_DEC.lexema)){
-			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,lex_de_DEC);
-		}
-		else
-		tablaDeSimbolos.añadeID(lex_de_DEC.lexema,tipo_de_DEC.codigo,true);
-		if (tokenSiguiente() == Token.PUNTO_Y_COMA)
+		tablaDeSimbolos.anadeID(lex_de_DEC.lexema,tipo_de_DEC.codigo,true);
+		if (tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RDECS1();
 		//RDECS2(); no hace nada no se crea
 		
 	}
 
-	private boolean esReservada(String lexema) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 	private void RDECS1() {
 		Token t = rec();
 		
@@ -502,7 +566,7 @@ public class AnalizadorSintactico {
 		if(tablaDeSimbolos.existeID(lex_de_DEC.lexema))
 			excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC);
 		else
-		tablaDeSimbolos.añadeID(lex_de_DEC.lexema, tipo_de_DEC.codigo, true);
+		tablaDeSimbolos.anadeID(lex_de_DEC.lexema, tipo_de_DEC.codigo, true);
 	}
 	private void DEC(Token lex, Token tipo) {
 		
@@ -515,8 +579,8 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private int tokenSiguiente() {
-		return this.tokens[this.pos_token+1].codigo;
+	private Token tokenSiguiente() {
+		return this.tokens[this.pos_token+1];
 	}
 
 	private void TIPO(Token tipo) {
