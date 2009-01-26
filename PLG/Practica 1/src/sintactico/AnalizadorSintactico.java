@@ -72,7 +72,7 @@ public class AnalizadorSintactico {
 	private void PROG() throws ExcepcionSintactica{
 		CABECERA();
 		CUERPO();
-		emit(new Operacion(TokenMaquina.STOP));
+		emit(new Operaciones(TokenMaquina.STOP));
 
 		
 	}
