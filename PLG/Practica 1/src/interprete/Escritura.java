@@ -120,12 +120,12 @@ public class Escritura extends Frame implements ActionListener {
     /**
      *  Crea una caja con la etiqueta y valor indicados
      */
-    public void insertaValor (String n) {
+    public void insertaValor (Character n) {
     	String s = "VarChar";
     	Data d = new Data();
-        TextField t = new TextField(n.length()+2);
+        TextField t = new TextField(3);
         insertValue(d, s, t);
-        d.value = n;
+        d.value = n.toString();
         t.setText(d.value);
         table.put(s, d);
     }
