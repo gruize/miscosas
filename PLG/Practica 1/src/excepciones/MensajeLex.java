@@ -1,16 +1,22 @@
 package excepciones;
 
 public class MensajeLex {
-	private String mensaje="";
+	
+	String mensajeE;
+	int fila ;
+	int columna;
+	
 
-	public MensajeLex(String i, int numLinea, int columna) {
-		// TODO Auto-generated constructor stub
-		mensaje="/n"+mensaje+i+"en la linea: "+numLinea+"y columna: "+columna;
+	public MensajeLex(String i, int numLinea, int col) {
+		
+		mensajeE=i;
+		fila=numLinea;
+		columna=col;
 	}
 	
-	public void imprimirMensaje()
-	{
-		System.out.print(mensaje);
+	public String toString(){
+		
+		return this.mensajeE + "en la linea " +this.fila+ " columna "+this.columna;
 	}
 
 }

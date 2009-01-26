@@ -5,6 +5,7 @@ import java.util.*;
 
 
 import excepciones.ExcepcionLexica;
+import excepciones.ExcepcionSintactica;
 import excepciones.MensajeLex;
 import utilidades.*;
 import utilidades.Reader;
@@ -18,6 +19,7 @@ public class AnalizadorLexico {
 	private Reader reader = null;
 	private Vector <Token> tokens=null;
 	private boolean fin= false;
+	public ExcepcionLexica excepcion = new ExcepcionLexica();
 	PalabrasReservadas palabrasR=new PalabrasReservadas();
 	
 	
@@ -69,26 +71,22 @@ public class AnalizadorLexico {
 		        
 		       
 		       
-		        try {
-					for( t = nextToken(); !esFin(); t = nextToken())
-					{	if (!(esFin())){
-						tokens.add(t);
-						System.out.println(t.lexema);
-						}
+		        for( t = nextToken(); !esFin(); t = nextToken())
+				{	if (!(esFin())){
+					tokens.add(t);
+					if(!(t==null))
+					System.out.println(t.lexema);
 					}
-				} catch (ExcepcionLexica e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 		        //imprimo eof
-		        System.out.println("Fin PROGRAMA");
+		        System.out.println("Fin  del Analizador Léxico \n");
 		        
 		    }
 		    	 
 		  
 		
 
-		public Token nextToken() throws IOException, ExcepcionLexica{
+		public Token nextToken() throws IOException{
 		        
 		        while(true){
 		            //guardo la ultima linea
@@ -121,7 +119,8 @@ public class AnalizadorLexico {
 		                	
 		                	}
 		                else{
-		                    throw new ExcepcionLexica(new MensajeLex("error Lexico se esperaba }",numLinea,numColumna));
+		                    this.excepcion.addMensaje("error Lexico se esperaba }",numLinea,numColumna);
+		                    leerCaracter();
 		                }
 		                //continue;
 		            }
@@ -182,7 +181,8 @@ public class AnalizadorLexico {
 		            } else if (ch.charValue()==':') {
 		                return  leerDosPuntosOAsignacion();
 		            } else if (ch.charValue()=='}') {
-		                throw new ExcepcionLexica(new MensajeLex("} no esperada", numLinea, numColumna));
+		            	this.excepcion.addMensaje(" } no esperada ", numLinea, numColumna);
+		            	leerCaracter();
 		            }
 		            //RECONOCIMIENTO DE IDENTIFICADORES Y PALABRAS RESERVADAS
 		            else  if (esLetra(ch)){
@@ -193,7 +193,8 @@ public class AnalizadorLexico {
 		                return getTokenNumero();
 		            } else {
 		                //caracter no perteneciente al alfabeto
-		                throw new ExcepcionLexica(new MensajeLex("caracter no perteneciente al alfabeto",numLinea,numColumna));
+		            	this.excepcion.addMensaje("caracter no perteneciente al alfabeto",numLinea,numColumna);
+		            	leerCaracter();
 		            }
 		            }catch(ExcepcionLexica e){};
 		        }
@@ -214,7 +215,7 @@ public class AnalizadorLexico {
 	    }
 		 
 		 
-	private Token caracter(Character c) throws IOException , ExcepcionLexica {
+	private Token caracter(Character c) throws IOException  {
 			// TODO Auto-generated method stub
 		Character ch=null;
 		if (esLetra(c))
@@ -227,7 +228,10 @@ public class AnalizadorLexico {
 			if (ch.charValue()=='\'') {	ultimoCharLeido=leerCaracter();
 			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
 			
-			else throw new ExcepcionLexica(new MensajeLex("se esperaba ' ",numLinea,numColumna));
+			else {this.excepcion.addMensaje("se esperaba ' ",numLinea,numColumna);
+			leerCaracter();}
+			
+			return null;
 	}
 
 
@@ -271,6 +275,7 @@ public class AnalizadorLexico {
 		c = ultimoCharLeido; //asume que es un digito
 		int lineaUlt = numLinea;//salva la liena actual
 		boolean esreal=false;
+		boolean error=false;
 		do {
 			buff.append(c.charValue());
 			try {
@@ -304,15 +309,18 @@ public class AnalizadorLexico {
 			esreal=true;}
 
 		if (esLetra(c)){
+			error=true;
+			this.excepcion.addMensaje("un Id no puede empezar por un numero ",numLinea,numColumna);
 			
-				throw new ExcepcionLexica(new MensajeLex("no se esperaba una letra",numLinea,numColumna));
-		
 
 		}
 
-		if (esreal) return new Token(Token.NUMREAL,buff.toString(),lineaUlt, numColumna); 
-		else
-			return new Token(Token.NUM,buff.toString(),lineaUlt, numColumna);
+		if (error)
+			return null; 
+		else 
+			if (esreal) return new Token(Token.NUMREAL,buff.toString(),lineaUlt, numColumna);
+			else
+				return new Token(Token.NUM,buff.toString(),lineaUlt, numColumna);
 
 
 	}
@@ -410,6 +418,7 @@ public class AnalizadorLexico {
 
 	public void finish() {
 		// TODO Auto-generated method stub
+		excepcion.printAll();
 		reader.close();
 	}
 
