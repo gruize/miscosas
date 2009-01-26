@@ -53,13 +53,14 @@ public class MaquinaEjecucion implements Testeable{
 		do{
 			instruccion = (Operaciones) this.entrada.readObject();
 			Operandos valor = null;
-			if((instruccion.codigoOperacion == TokenMaquina.APILA)
-			 ||(instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
+			if((instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
 			 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)
 			 ||(instruccion.codigoOperacion == TokenMaquina.LECTURA)
 			 ||(instruccion.codigoOperacion == TokenMaquina.ESCRITURA)){
-				valor = (Operandos) this.entrada.readObject();
+				valor = (OperandoDirMemoria) this.entrada.readObject();
 			}
+			if(instruccion.codigoOperacion == TokenMaquina.APILA)
+				valor = (Operandos) this.entrada.readObject();
 			this.ejecutar(instruccion,valor);
 			
 		}while(instruccion.codigoOperacion == TokenMaquina.STOP);
@@ -192,11 +193,29 @@ public class MaquinaEjecucion implements Testeable{
 	    			this.pila.push(new OperandoValorBoolean(!(Boolean)temp1.dameValor()));
 	    			break;
 	    		case TokenMaquina.LECTURA:
-	    			
+	    			temp1 = this.pila.pop();
+	    			if(temp1.dameTipo() == Operandos.NUM){
+	    				Lectura leer = new Lectura("Introduzca un entero");
+	    				this.pila.push(new OperandoNum((Integer)leer.leeInt()));
+	    			}
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
+	    				
+	    			}
+	    			if(temp1.dameTipo() == Operandos.VALORCHAR){
+	    				
+	    			}
 	    			break;
 	    		case TokenMaquina.ESCRITURA:
 	    			temp1 = this.pila.pop();
-	    			System.out.println(temp1);
+	    			if(temp1.dameTipo() == Operandos.NUM){
+
+	    			}
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
+	    				
+	    			}
+	    			if(temp1.dameTipo() == Operandos.VALORCHAR){
+	    				
+	    			}
 	    			break;
 	    	}
 		}catch (IndexOutOfBoundsException e){
