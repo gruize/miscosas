@@ -15,7 +15,7 @@ public class TablaSimbolo {
 		dirAct=0;
 	}
   
-  public void añadeID (String id, int tipo_de_DEC, boolean modificable)
+  public void anadeID (String id, int tipo_de_DEC, boolean modificable)
 	{
 	  	
 		DatosTabla datos = new DatosTabla();
