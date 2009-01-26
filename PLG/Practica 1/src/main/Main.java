@@ -22,20 +22,21 @@ public class Main {
 	
 
 	public static void main(String[] args) throws Exception {
-		
+		//String nombre = args[0];
+		String nombre= "src\\pruebas\\Prueba2.pas";
     	//BufferedFileReader file= new BufferedFileReader(args[0]);
     	
     	//ANALIZADOR
-    	as = new AnalizadorSintactico("src\\pruebas\\Prueba2.pas");
+    	as = new AnalizadorSintactico(nombre);
     	as.run();
     	
     	//TRADUCTOR
     	traductor t= new traductor(as);
-    	String nombre= (String) t.crearFileOut();
+    	t.crearFileOut();
      
      
         //INTERPRETE      
-        me=new MaquinaEjecucion(nombre);                       
+        me=new MaquinaEjecucion(nombre+".obj");                       
         me.run();
         
 	}
