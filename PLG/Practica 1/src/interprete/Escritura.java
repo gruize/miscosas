@@ -94,7 +94,8 @@ public class Escritura extends Frame implements ActionListener {
     /**
      * Crea una caja con la etiqueta y valor indicados
      */
-    public void insertaValor (String s, int n) {
+    public void insertaValor (int n) {
+    	String s = "Entero";
         Data d = new Data();
         TextField t = new TextField(10);
         insertValue(d, s, t);
@@ -106,8 +107,9 @@ public class Escritura extends Frame implements ActionListener {
     /**
      * Crea una caja con la etiqueta y valor indicados
      */
-    public void insertaValor (String s, double n) {
-        Data d = new Data();
+    public void insertaValor (double n) {
+    	String s = "Double";
+    	Data d = new Data();
         TextField t = new TextField(10);
         insertValue(d, s, t);
         d.value = Double.toString(n);
@@ -118,8 +120,9 @@ public class Escritura extends Frame implements ActionListener {
     /**
      *  Crea una caja con la etiqueta y valor indicados
      */
-    public void insertaValor (String s, String n) {
-        Data d = new Data();
+    public void insertaValor (String n) {
+    	String s = "VarChar";
+    	Data d = new Data();
         TextField t = new TextField(n.length()+2);
         insertValue(d, s, t);
         d.value = n;
