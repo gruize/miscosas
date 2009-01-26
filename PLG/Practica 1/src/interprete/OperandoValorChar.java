@@ -4,9 +4,14 @@ import java.io.Serializable;
 
 public class OperandoValorChar implements Operandos, Serializable {
 
-	public char valor;
+	public Character valor;
 	private int tipo = Operandos.VALORCHAR;
 	
+	public OperandoValorChar(Character valor) {
+		super();
+		this.valor = valor;
+	}
+
 	@Override
 	public int dameTipo() {
 		return this.tipo;
@@ -14,7 +19,7 @@ public class OperandoValorChar implements Operandos, Serializable {
 
 	@Override
 	public Object dameValor() {
-		return (char)this.valor;
+		return this.valor;
 	}
 
 }
