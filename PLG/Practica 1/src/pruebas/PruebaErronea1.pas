@@ -1,4 +1,4 @@
-PROGRAM SegundaPrueba; 
+1235aaa4.5aa2 PROGRAM SegundaPrueba; 
 CONST x = 1.56;
 VAR 
 Entero : Integer; 
