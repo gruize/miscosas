@@ -23,7 +23,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		//String nombre = args[0];
-		String nombre= "src\\pruebas\\PruebaErronea1.pas";
+		String nombre= "src\\pruebas\\Prueba2.pas";
     	//BufferedFileReader file= new BufferedFileReader(args[0]);
     	
     	//ANALIZADOR
@@ -36,7 +36,7 @@ public class Main {
      
      
         //INTERPRETE      
-        me=new MaquinaEjecucion(nombre+".obj");                       
+        me=new MaquinaEjecucion("src\\interprete\\instrucciones.mp");                       
         me.run();
         
 	}
