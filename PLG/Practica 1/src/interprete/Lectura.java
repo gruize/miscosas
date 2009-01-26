@@ -133,15 +133,15 @@ public class Lectura extends Frame implements ActionListener {
                 throw e;
             }
         }
-
+               
         /**
          * Lee un String de la caja con esa etiqueta
          */
-        public String leeString () {
+        public Character leeString () {
         	String s = "VarChar";
         	try {
                 Data d = getEntry(s);
-                return d.value;
+                return d.value.charAt(0);
             } catch (NullPointerException e) {
                 Mensaje error =new Mensaje("Error");
                 error.escribe("Entrada "+s+" no encontrada");
