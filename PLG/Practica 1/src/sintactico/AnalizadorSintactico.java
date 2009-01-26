@@ -19,7 +19,7 @@ import excepciones.ExcepcionSintactica;
 import excepciones.Mensaje;
 
 public class AnalizadorSintactico {
-	public Token tokens[]; 
+	public Vector<Token> tokens; 
 	public int pos_token;
 	public ExcepcionSintactica excepcion = new ExcepcionSintactica();
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
@@ -37,7 +37,7 @@ public class AnalizadorSintactico {
 		ficheroEntrada = file;
 		pos_token = 0;
 		AnalizadorLexico aLex = new AnalizadorLexico();
-		//tokens = aLex.getTokens();
+		tokens = aLex.tokens;
 		try {
 			this.PROG();
 		} catch (ExcepcionSintactica e) {
@@ -49,7 +49,7 @@ public class AnalizadorSintactico {
 	
 	private Token rec(){
 		this.pos_token++;
-		return this.tokens[this.pos_token-1];
+		return this.tokens.elementAt(this.pos_token-1);
 	}
 	
 	
@@ -580,7 +580,7 @@ public class AnalizadorSintactico {
 	}
 
 	private Token tokenSiguiente() {
-		return this.tokens[this.pos_token+1];
+		return this.tokens.elementAt(this.pos_token+1);
 	}
 
 	private void TIPO(Token tipo) {
