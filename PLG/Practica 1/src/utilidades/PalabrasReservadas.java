@@ -13,10 +13,11 @@ public class PalabrasReservadas {
     static
     {
     	Enumeration<Integer> claves = Token.LEXICOS.keys();
-    	
-    	for (Integer i = claves.nextElement();claves.hasMoreElements();i=claves.nextElement()){
+    	Integer i=claves.nextElement();
+    	for (;claves.hasMoreElements();){
+    		i=claves.nextElement();
     		if (i < 0){
-    			PALABRAS_RESERVADAS.put(Token.LEXICOS.get(i),i);
+    			PALABRAS_RESERVADAS.put(Token.LEXICOS.get(i).toLowerCase(),i);
     		}
     			
     	}

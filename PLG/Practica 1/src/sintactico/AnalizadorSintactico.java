@@ -7,6 +7,7 @@ import interprete.OperandoValorChar;
 import interprete.Operandos;
 import interprete.TokenMaquina;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import sintactico.tablaSimbolos.TablaSimbolo;
@@ -27,29 +28,40 @@ public class AnalizadorSintactico {
 	public Vector <Object> operaciones;
 	
 	public void run (){
-		
+		try {
+			this.PROG();
+		} catch (ExcepcionSintactica e) {
+			// TODO Auto-generated catch block
+			e.printAll();
+		}
 	}
 	public void finish() {
 		
 	}
-	public AnalizadorSintactico(BufferedFileReader file){
+	public AnalizadorSintactico(String nameFile){
 		operaciones = new Vector<Object>();
-		ficheroEntrada = file;
 		pos_token = 0;
-		AnalizadorLexico aLex = new AnalizadorLexico();
-		tokens = aLex.tokens;
+		AnalizadorLexico aLex;
 		try {
-			this.PROG();
-		} catch (ExcepcionSintactica e) {
-			
-			
+			aLex = new AnalizadorLexico(nameFile);
+			aLex.run();
+			tokens = aLex.tokens;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 	
 	private Token rec(){
+		Token t = this.tokens.elementAt(this.pos_token);
+		if (t == null)
+		{
+			excepcion.addMensaje(0,0,t);
+			return null;
+		}		
 		this.pos_token++;
-		return this.tokens.elementAt(this.pos_token-1);
+		return t; 
 	}
 	
 	
@@ -574,7 +586,7 @@ public class AnalizadorSintactico {
 	}
 
 	private Token tokenSiguiente() {
-		return this.tokens.elementAt(this.pos_token+1);
+		return this.tokens.elementAt(this.pos_token);
 	}
 
 	private void TIPO(Token tipo) {
