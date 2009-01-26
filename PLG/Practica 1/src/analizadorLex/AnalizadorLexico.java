@@ -73,9 +73,9 @@ public class AnalizadorLexico {
 		       
 		        for( t = nextToken(); !esFin(); t = nextToken())
 				{	if (!(esFin())){
-					tokens.add(t);
 					if(!(t==null))
-					System.out.println(t.lexema);
+						tokens.add(t);
+						System.out.println(t.lexema);
 					}
 				}
 		        //imprimo eof
