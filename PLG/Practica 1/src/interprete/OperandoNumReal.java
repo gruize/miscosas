@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class OperandoNumReal implements Operandos, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8214621793528460071L;
 	public Double valor;
 	private int tipo = Operandos.NUMREAL;
 	
