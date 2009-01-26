@@ -118,10 +118,11 @@ public class Lectura extends Frame implements ActionListener {
         /**
          *  Lee un double de la caja con esa etiqueta
          */
-        public double leeDouble (String s) {
-            try {
+        public double leeDouble () {
+            String s = "Double";
+        	try {
                 Data d = getEntry(s);
-                return Double.valueOf(d.value).doubleValue();
+                return Double.valueOf(d.value);
             } catch (NumberFormatException e) {
                 Mensaje error =new Mensaje("Error");
                 error.escribe("Entero en la entrada "+s+" con formato incorrecto");
@@ -136,8 +137,9 @@ public class Lectura extends Frame implements ActionListener {
         /**
          * Lee un String de la caja con esa etiqueta
          */
-        public String leeString (String s) {
-            try {
+        public String leeString () {
+        	String s = "VarChar";
+        	try {
                 Data d = getEntry(s);
                 return d.value;
             } catch (NullPointerException e) {

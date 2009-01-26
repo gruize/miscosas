@@ -195,26 +195,31 @@ public class MaquinaEjecucion implements Testeable{
 	    		case TokenMaquina.LECTURA:
 	    			temp1 = this.pila.pop();
 	    			if(temp1.dameTipo() == Operandos.NUM){
-	    				Lectura leer = new Lectura("Introduzca un entero");
-	    				this.pila.push(new OperandoNum((Integer)leer.leeInt()));
+	    				Lectura leerEntero = new Lectura("Introduzca un entero");
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNum((Integer)leerEntero.leeInt()));	    				
 	    			}
 	    			if(temp1.dameTipo() == Operandos.NUMREAL){
-	    				
+	    				Lectura leerReal = new Lectura("Introduzca un numero real");
+	    				this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoNumReal((Double)leerReal.leeDouble()));
 	    			}
 	    			if(temp1.dameTipo() == Operandos.VALORCHAR){
-	    				
+	    				Lectura leerVarChar = new Lectura("Introduzca un varchar");
+	    				//this.memoria.add(((Integer)temp1.dameValor()).intValue(), new OperandoValorChar((Character)leerVarChar.leeString()));
 	    			}
 	    			break;
 	    		case TokenMaquina.ESCRITURA:
 	    			temp1 = this.pila.pop();
 	    			if(temp1.dameTipo() == Operandos.NUM){
-
+	    				Escritura escribeEntero = new Escritura("Valor del numero entero");
+	    				escribeEntero.insertaValor(((Integer) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).intValue());
 	    			}
 	    			if(temp1.dameTipo() == Operandos.NUMREAL){
-	    				
+	    				Escritura escribeReal = new Escritura("Valor del numero real");
+	    				escribeReal.insertaValor(((Double) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).doubleValue());	    				
 	    			}
 	    			if(temp1.dameTipo() == Operandos.VALORCHAR){
-	    				
+	    				Escritura escribeVarChar = new Escritura("Valor de un varChar");
+	    				escribeVarChar.insertaValor(((Character) this.memoria.get(((Integer)temp1.dameValor()).intValue()).dameValor()).charValue());
 	    			}
 	    			break;
 	    	}
