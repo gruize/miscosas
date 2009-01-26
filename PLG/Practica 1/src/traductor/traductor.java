@@ -18,6 +18,10 @@ import sintactico.AnalizadorSintactico;
 
 public class traductor implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5687060520503269110L;
 	private FileOutputStream fileOut;
 	//Variable que determina si generará código intermedio o no, en éste caso xa Máquina A no.
     private boolean genCodigo = true;
@@ -41,15 +45,18 @@ public traductor(AnalizadorSintactico as) {
 	fileOut= new FileOutputStream(nombreFichero);
 	
 	salida = new ObjectOutputStream(fileOut);
-	for(int i=0; i<o.size(); i++)
+	for(int i=0; i < o.size(); i++)
 	{
 		objetoSalida=o.elementAt(i);
 		salida.writeObject(objetoSalida);
 	}
 	salida.close();
+	
 	//return nombreFichero;
 }*/
-
+public String dameNombre(){
+	return nombreFichero;
+}
 public Object crearFileOut() throws IOException{
 	
 	fileOut = new FileOutputStream(nombreFichero);
