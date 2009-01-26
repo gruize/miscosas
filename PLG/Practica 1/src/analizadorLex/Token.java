@@ -38,7 +38,7 @@ public class Token extends Object{
 	public static final int OP_SUMA=23;
 	public static final int OP_RESTA=35;
 	public static final int OP_MUL=24;
-	public static final int OP_DIV=36;
+	public static final int OP_DIV=35;
 	//public static final int BARRA_NORMAL/ ::= /
 	public static final int OP_MENOR_QUE=25;
 	public static final int OP_MAYOR_QUE=26;
