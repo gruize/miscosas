@@ -13,6 +13,7 @@ public class Mensaje{
 	public static int ERROR_TIPOS= 4;
 	public static int ERROR_N0_EXISTE_ID=5;
     public static int ERROR_NO_MODIFICABLE=6;
+    public static int ERROR_EXPRESION_INCORRECTA=7;
 	//public static String errores[];
 	
 	public Mensaje(int error, int tokenOk, Token tokenErr) {
@@ -33,37 +34,37 @@ public class Mensaje{
 		String mensajeError="";
 		if(this.error==ERROR_TOKEN_INCORRECTO)
 		{
-			mensajeError="Error token inconrrecto en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error token inconrrecto en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna+"/nSe esperaba: "+this.tokenOk;
 		}
 		else if(this.error==ERROR_ID_DUPLICADO)
 		{
-			mensajeError="Error: Identificador duplicado en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error: Identificador duplicado en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna;
 		}
 		else if(this.error==ERROR_ID_PALABRA_RESERVADA)
 		{
-			mensajeError="Error: En palabra reservada en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error: En palabra reservada en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna;
 		}
 		else if(this.error==ERROR_FALTA_PUNTO_Y_COMA)
 		{
-			mensajeError="Error: Falta punto y coma en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error: Falta punto y coma en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna;
 		}
 		else if(this.error==ERROR_TIPOS)
 		{
-			mensajeError="Error: De tipos en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error: De tipos en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna;
 		}
 		else if(this.error==ERROR_N0_EXISTE_ID)
 		{
-			mensajeError="Error: No existe ID en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error: No existe ID en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna;
 		}
 		else if(this.error==ERROR_NO_MODIFICABLE)
 		{
-			mensajeError="Error: Es constate, no modificable en la línea: " +this.tokenErr.linea+ 
+			mensajeError="Error: Es constate, no modificable en la lï¿½nea: " +this.tokenErr.linea+ 
 			"columna: "+this.tokenErr.columna;
 		}
 		
