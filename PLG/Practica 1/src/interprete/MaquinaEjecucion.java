@@ -126,30 +126,55 @@ public class MaquinaEjecucion implements Testeable{
 	    			break;
 	    		case TokenMaquina.SUMA:
 	    			temp1 = this.pila.pop();
-	    			temp2 = this.pila.pop();	    		
-	    			if(temp1.dameTipo() == Operandos.NUM)
-	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor + ((OperandoNum)temp2).valor;	  
-	    			if(temp1.dameTipo() == Operandos.NUMREAL)
-	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor + ((OperandoNumReal)temp2).valor;	    			
-	    			this.pila.push(temp1);
+	    			temp2 = this.pila.pop();	    			    			
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor + ((OperandoNumReal)temp2).valor;
+	    				this.pila.push(temp1);
+	    			}
+	    			if(temp2.dameTipo() == Operandos.NUMREAL){
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor + ((OperandoNumReal)temp2).valor;
+	    				this.pila.push(temp2);	    				
+	    			}else{
+	    				if(temp1.dameTipo() == Operandos.NUM){
+	    					((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor + ((OperandoNum)temp2).valor;
+		    				this.pila.push(temp1);		    		
+	    				}
+	    			}	    			
 	    			break;
 	    		case TokenMaquina.RESTA:
 	    			temp1 = this.pila.pop();
-	    			temp2 = this.pila.pop();	    		
-	    			if(temp1.dameTipo() == Operandos.NUM)
-	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor - ((OperandoNum)temp2).valor;	  
-	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    			temp2 = this.pila.pop();	    			    				 
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
 	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor - ((OperandoNumReal)temp2).valor;	    			
-	    			this.pila.push(temp1);
+	    				this.pila.push(temp1);
+	    			}
+	    			if(temp2.dameTipo() == Operandos.NUMREAL){
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor - ((OperandoNumReal)temp2).valor;	    			
+	    				this.pila.push(temp1);	    				
+	    			}else{
+	    				if(temp1.dameTipo() == Operandos.NUM){
+		    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor - ((OperandoNum)temp2).valor;
+		    				this.pila.push(temp1);
+	    				}
+	    			}
 	    			break;
 	    		case TokenMaquina.MULTIPLICACION:
 	    			temp1 = this.pila.pop();
 	    			temp2 = this.pila.pop();	    		
-	    			if(temp1.dameTipo() == Operandos.NUM)
-	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor * ((OperandoNum)temp2).valor;	  
-	    			if(temp1.dameTipo() == Operandos.NUMREAL)
+	    				  
+	    			if(temp1.dameTipo() == Operandos.NUMREAL){
 	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor * ((OperandoNumReal)temp2).valor;	    			
-	    			this.pila.push(temp1);
+	    				this.pila.push(temp1);
+	    			}
+	    			if(temp2.dameTipo() == Operandos.NUMREAL){
+	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor * ((OperandoNumReal)temp2).valor;	    			
+	    				this.pila.push(temp1);	    				
+	    			}else{
+	    				if(temp1.dameTipo() == Operandos.NUM){
+		    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor * ((OperandoNum)temp2).valor;
+		    				this.pila.push(temp1);
+	    				}
+	    			}
 	    			break;
 	    		case TokenMaquina.DIVISION:
 	    			temp1 = this.pila.pop();
@@ -168,7 +193,7 @@ public class MaquinaEjecucion implements Testeable{
 	    				((OperandoNum)temp1).valor = ((OperandoNum)temp1).valor / ((OperandoNum)temp2).valor;	  
 	    			if(temp1.dameTipo() == Operandos.NUMREAL)
 	    				((OperandoNumReal)temp1).valor = ((OperandoNumReal)temp1).valor / ((OperandoNumReal)temp2).valor;
-	    			this.pila.push(new OperandoNum((Integer)temp1.dameValor()));
+	    			this.pila.push(new OperandoNumReal((Double)temp1.dameValor()));
 	    			break;
 	    		case TokenMaquina.MOD:
 	    			temp1 = this.pila.pop();

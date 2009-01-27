@@ -1,9 +1,8 @@
 PROGRAM SegundaPrueba; 
 VAR
 Entero : Integer
-CONST x = 156
+CONST x = 'c'
 BEGIN 
-entero:=634;
-entero:=entero*2; 
+entero:=3/10;
 write(entero)
 END. 

@@ -57,8 +57,8 @@ public class Operacion {
 		}
 		return -1;
 	}
-	public int DameCodigoMaquinaSimple(int codigo) {
-		switch (codigo){
+	public int getCodigoMaquinaSimple() {
+		switch (this.codigo){
 			case NOT : return TokenMaquina.NOT;
 			case OP_RESTA: return TokenMaquina.RESTA;
 		}
