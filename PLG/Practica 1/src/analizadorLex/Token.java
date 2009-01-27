@@ -76,7 +76,7 @@ public class Token extends Object{
 
 		
 		/* id's y variables*/
-		LEXICOS.put(ID, "");
+		LEXICOS.put(ID, "ID");
 		LEXICOS.put(NUM, "");
 		LEXICOS.put(VALORCHAR, "");
 		LEXICOS.put(NUMREAL, "");
@@ -120,14 +120,20 @@ public class Token extends Object{
 
 
 	public Token (){
+		this.lexema = "";
+		this.codigo = -666;
+		this.columna = -1;
+		this.linea = -1;
+
 		
 	}
 	
 	public Token clon() {
 		Token t = new Token();
 		t.codigo = this.codigo;
-		t.lexema = this.lexema.toLowerCase();
+		t.lexema = this.lexema;
 		t.linea = this.linea;
+		t.columna = this.columna;
 		return t;
 	}
 	/*
@@ -139,6 +145,14 @@ public class Token extends Object{
 		this.lexema = lexema.toLowerCase();
 		this.columna = columna;
 		this.linea=line;
+	}
+
+	public void copia(Token t) {
+		this.codigo = t.codigo;
+		this.lexema = t.lexema;
+		this.linea = t.linea;
+		this.columna = t.columna;
+	
 	}
 
 }	

@@ -13,7 +13,6 @@ import java.util.Vector;
 import sintactico.tablaSimbolos.TablaSimbolo;
 import utilidades.BufferedFileReader;
 import utilidades.Operaciones;
-import utilidades.PalabrasReservadas;
 import analizadorLex.AnalizadorLexico;
 import analizadorLex.Token;
 import excepciones.ExcepcionSintactica;
@@ -26,44 +25,63 @@ public class AnalizadorSintactico {
 	public TablaSimbolo tablaDeSimbolos= new TablaSimbolo();
 	public BufferedFileReader ficheroEntrada;
 	public Vector <Object> operaciones;
+	public boolean compilacion;
+	private String fichero; 
 	
 	public void run (){
-		try {
-			this.PROG();
-		} catch (ExcepcionSintactica e) {
 
-			e.printAll();
+		
+		operaciones = new Vector<Object>();
+		pos_token = 0;
+		AnalizadorLexico aLex;
+		try {
+			// LEXICO
+			aLex = new AnalizadorLexico(this.fichero);
+			aLex.run();
+			if (aLex.excepcion.errores.size() > 0)
+			{
+				excepcion.addMensaje(Mensaje.ERROR_ERRORES_SINTACTICOS,0,new Token());
+				aLex.excepcion.printAll();
+			}
+			tokens = aLex.tokens;
+			// SINTACTICO
+			this.PROG();
+			if (excepcion.errores.size()>0)
+			{
+				excepcion.printAll();
+				compilacion = false;
+				operaciones.clear();
+			}
+			else
+				compilacion = true;
+		} catch (IOException e) {
+			
+			e.printStackTrace();
 		}
-		if (excepcion.errores.size()>0)
+		catch (ExcepcionSintactica e) {
+
 			excepcion.printAll();
+			compilacion = false;
+			operaciones.clear();
+		}
+
+		
 	}
 	public void finish() {
 		
 	}
 	public AnalizadorSintactico(String nameFile){
-		operaciones = new Vector<Object>();
-		pos_token = 0;
-		AnalizadorLexico aLex;
-		try {
-			aLex = new AnalizadorLexico(nameFile);
-			aLex.run();
-			tokens = aLex.tokens;
-			if (aLex.excepcion.errores.size()>0)
-				aLex.excepcion.printAll();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
+		this.fichero = nameFile;
 		
 	}
 	
-	private Token rec(){
-		Token t = this.tokens.elementAt(this.pos_token);
-		if (t == null)
+	private Token rec() throws ExcepcionSintactica{
+		if (this.pos_token == tokens.size())
 		{
-			excepcion.addMensaje(0,0,t);
-			return null;
-		}		
+			excepcion.addMensaje(Mensaje.ERROR_FIN_DE_FICHERO_INCORRECTO,0,tokens.elementAt(pos_token-1));
+			throw excepcion;
+		}
+		Token t = this.tokens.elementAt(this.pos_token);
 		this.pos_token++;
 		return t; 
 	}
@@ -98,7 +116,7 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private void INSTRUCCIONES() {
+	private void INSTRUCCIONES() throws ExcepcionSintactica {
 		//Token t = rec();
 		BLOQUE();
 		Token t = rec();
@@ -110,7 +128,7 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private void BLOQUE() {
+	private void BLOQUE() throws ExcepcionSintactica {
 		Token t= rec();
 		if (t.codigo != Token.BEGIN) {
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.BEGIN,t);
@@ -121,7 +139,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.END,t);
 		}
 	}
-	private void SENTS() {
+	private void SENTS() throws ExcepcionSintactica {
 		SENT();
 		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RSENTS();
@@ -129,15 +147,17 @@ public class AnalizadorSintactico {
 		// else
 		// RSENTS2();
 	}
-	private void RSENTS() {
+	private void RSENTS() throws ExcepcionSintactica {
 		rec(); // ;
+		if (this.tokenSiguiente().codigo == Token.END)
+			excepcion.addMensaje(Mensaje.ERROR_TIPOS,Token.END,this.tokenSiguiente());
 
 		SENT();
 		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RSENTS();
 		
 	}
-	private void SENT() {
+	private void SENT() throws ExcepcionSintactica {
 		
 		switch (this.tokenSiguiente().codigo) {
 			case Token.READ :
@@ -152,7 +172,7 @@ public class AnalizadorSintactico {
 		}
 		
 	}
-	private void SASIGN() {
+	private void SASIGN() throws ExcepcionSintactica {
 		
 		
 		Token lex_de_VARIABLE = new Token();
@@ -185,7 +205,7 @@ public class AnalizadorSintactico {
 		}
 	}
 
-	private void SWRITE() {
+	private void SWRITE() throws ExcepcionSintactica {
 		rec(); // si esta aqui es que es un WRITE
 
 		Token t = rec();
@@ -203,7 +223,7 @@ public class AnalizadorSintactico {
 		
 
 	}
-	private void EXP(Token tipo) {
+	private void EXP(Token tipo) throws ExcepcionSintactica {
 		Token tipo_de_EXPSIMPLE = new Token();
 		EXPSIMPLE(tipo_de_EXPSIMPLE);
 		// es un token de operacion?
@@ -214,7 +234,7 @@ public class AnalizadorSintactico {
 			REXP2(tipo_de_EXPSIMPLE,tipo);
 		
 	}
-	private void REXP1(Token tipo_companero, Token tipo) {
+	private void REXP1(Token tipo_companero, Token tipo) throws ExcepcionSintactica {
 		Token t = rec();// OPERACOIN TIPO 3
 		Operacion o = new Operacion(t.codigo,2);
 		Token tipo_de_EXPSIMPLE = new Token();
@@ -236,12 +256,12 @@ public class AnalizadorSintactico {
 
 		
 	}
-	private void REXP2(Token tipo_companero, Token tipo) {
+	private void REXP2(Token tipo_companero, Token tipo) throws ExcepcionSintactica {
 		tipo.codigo = tipo_companero.codigo;
 		
 	}
 
-	private void EXPSIMPLE(Token tipo) {
+	private void EXPSIMPLE(Token tipo) throws ExcepcionSintactica {
 		Token tipo_de_TERMINO = new Token();
 		TERMINO(tipo_de_TERMINO);
 		// es un token de operacion de mi nivel?
@@ -250,7 +270,7 @@ public class AnalizadorSintactico {
 		else 
 			REXPSIMPLE2(tipo_de_TERMINO,tipo);		
 	}
-	private void REXPSIMPLE1(Token tipo_companero, Token tipo) {
+	private void REXPSIMPLE1(Token tipo_companero, Token tipo) throws ExcepcionSintactica {
 		Token t = rec();// OPERACOIN TIPO 2
 		Operacion o = new Operacion(t.codigo,2);
 		Token tipo_de_TERMINO = new Token();
@@ -273,7 +293,7 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private void TERMINO(Token tipo) {
+	private void TERMINO(Token tipo) throws ExcepcionSintactica {
 		Token tipo_de_FACTOR = new Token();
 
 		FACTOR(tipo_de_FACTOR);
@@ -287,7 +307,7 @@ public class AnalizadorSintactico {
 		
 
 
-	private void RTERMINO1(Token tipo_companero, Token tipo) {
+	private void RTERMINO1(Token tipo_companero, Token tipo) throws ExcepcionSintactica {
 		Token t = rec();// OPERACOIN TIPO 1
 		Token tipo_de_FACTOR = new Token();
 		Operacion o = new Operacion(t.codigo,2);
@@ -315,7 +335,7 @@ public class AnalizadorSintactico {
 	}
 	
 	
-	private void FACTOR(Token tipo) {
+	private void FACTOR(Token tipo)throws ExcepcionSintactica  {
 		
 		Operacion oper = null;
 		if (Operacion.getPrioridad(tokenSiguiente(), 1)==0)
@@ -337,7 +357,7 @@ public class AnalizadorSintactico {
 	
 
 	
-	private void COMPONENTE(Token tipo) {
+	private void COMPONENTE(Token tipo) throws ExcepcionSintactica {
 		Token t = rec();
 		if (t.codigo == Token.A_PARENTESIS)
 		{
@@ -392,7 +412,7 @@ public class AnalizadorSintactico {
 	
 
 	
-	private void SREAD() {
+	private void SREAD()throws ExcepcionSintactica  {
 		rec(); // si esta aqui es que es un READ
 
 		Token t = rec();
@@ -418,7 +438,7 @@ public class AnalizadorSintactico {
 
 		
 	}
-	private void DECLARACIONES() {
+	private void DECLARACIONES() throws ExcepcionSintactica {
 		if (this.tokenSiguiente().codigo == Token.VAR)
 			VARIABLES1();
 		else
@@ -440,7 +460,7 @@ public class AnalizadorSintactico {
 		
 		
 	}*/
-	private void CONSTANTES1() {
+	private void CONSTANTES1()throws ExcepcionSintactica  {
 		rec();
 		// si entra en esta funcino es porque el token es CONST
 		
@@ -448,7 +468,7 @@ public class AnalizadorSintactico {
 		
 		
 	}
-	private void DECS_CONST() {
+	private void DECS_CONST() throws ExcepcionSintactica {
 		Token lex_de_DEC_CONST = new Token();
 		Token tipo_de_DEC_CONST = new Token();
 		DEC_CONST(lex_de_DEC_CONST,tipo_de_DEC_CONST);
@@ -468,14 +488,14 @@ public class AnalizadorSintactico {
 		
 		
 	}
-	private void DEC_CONST(Token lex, Token tipo) {
+	private void DEC_CONST(Token lex, Token tipo) throws ExcepcionSintactica {
 		VARIABLE(lex);
 		Token t = rec(); //:
 		if (t.codigo != Token.OP_COMPARACION)
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.OP_COMPARACION,t);
 		VALOR(tipo);
 	}
-	private void VALOR(Token tipo) {
+	private void VALOR(Token tipo) throws ExcepcionSintactica {
 		Token t = rec();
 		switch (t.codigo) {
 		case Token.NUM :
@@ -507,10 +527,10 @@ public class AnalizadorSintactico {
 			operaciones.add(oper);
 		
 	}
-	private void RDECS_CONST() {
+	private void RDECS_CONST() throws ExcepcionSintactica {
 		rec();
 		// no hace falta reconocer el token porqu si se mete aqui es que es un ;
-		
+
 		Token lex_de_DEC_CONST = new Token();
 		Token tipo_de_DEC_CONST = new Token();
 		DEC_CONST(lex_de_DEC_CONST,tipo_de_DEC_CONST);
@@ -525,12 +545,12 @@ public class AnalizadorSintactico {
 			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_DEC_CONST.lexema)));
 
 		}
-		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA);
+		if (this.tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
 			RDECS_CONST();
 		
 		
 	}
-	private void VARIABLES1() {
+	private void VARIABLES1()throws ExcepcionSintactica  {
 		rec(); //VAR 
 		// it's necessary because it's cheked in DECLARACIONES
 		// if (t.codigo == Token.VAR)
@@ -549,7 +569,7 @@ public class AnalizadorSintactico {
 
 	
 
-	private void DECS() {
+	private void DECS() throws ExcepcionSintactica {
 		Token lex_de_DEC = new Token();
 		Token tipo_de_DEC= new Token();
 		DEC(lex_de_DEC,tipo_de_DEC);
@@ -564,11 +584,11 @@ public class AnalizadorSintactico {
 	}
 
 
-	private void RDECS1() {
-		Token t = rec();
+	private void RDECS1()throws ExcepcionSintactica {
+		rec();
 		
-		if (t.codigo != Token.PUNTO_Y_COMA)
-			excepcion.addMensaje(Mensaje.ERROR_FALTA_PUNTO_Y_COMA,Token.PUNTO_Y_COMA,t);
+		if (this.tokenSiguiente().codigo != Token.ID)
+			excepcion.addMensaje(Mensaje.ERROR_TIPOS,Token.ID,this.tokenSiguiente());
 				
 
 		Token tipo_de_DEC = new Token();
@@ -579,7 +599,7 @@ public class AnalizadorSintactico {
 		else
 		tablaDeSimbolos.anadeID(lex_de_DEC.lexema, tipo_de_DEC.codigo, true);
 	}
-	private void DEC(Token lex, Token tipo) {
+	private void DEC(Token lex, Token tipo) throws ExcepcionSintactica {
 		
 		
 		VARIABLE(lex);
@@ -590,31 +610,33 @@ public class AnalizadorSintactico {
 		
 	}
 
-	private Token tokenSiguiente() {
+	private Token tokenSiguiente() throws ExcepcionSintactica {
+		if (this.pos_token == tokens.size())
+			throw excepcion;
 		return this.tokens.elementAt(this.pos_token);
 	}
 
-	private void TIPO(Token tipo) {
+	private void TIPO(Token tipo) throws ExcepcionSintactica {
 		Token t = rec();
 		// estan entre los tipos? los tipos estan
 		// entre -1000 y -1999
 		if ((t.codigo < -1000) && (t.codigo >-1999))
-			tipo.codigo = t.codigo;
+			tipo.copia(t);
 		else
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS,0,t);
 	}
 
-	private void VARIABLE(Token lex) {
+	private void VARIABLE(Token lex) throws ExcepcionSintactica {
 		ID(lex);
 	}
-	private void ID(Token lex) {
+	private void ID(Token lex)throws ExcepcionSintactica  {
 		Token t = rec();
-		if (PalabrasReservadas.PALABRAS_RESERVADAS.containsKey(t.lexema)){
+		if (t.codigo != Token.ID){
 			// this isn't good word
-			excepcion.addMensaje(Mensaje.ERROR_ID_PALABRA_RESERVADA,Token.ID,t);
+			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.ID,t);
 			
 		}
-		lex.lexema = t.lexema;
+		lex.copia(t);
 		
 		
 	}
