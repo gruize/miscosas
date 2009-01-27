@@ -211,7 +211,7 @@ public class Operacion {
 		codigoFromToken(token.codigo, aridad);
 	}
 	public static boolean tiposAsignacion(int tipo1,int tipo2){
-		if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+		if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 			return true;
 		else return false;
 		
@@ -219,61 +219,61 @@ public class Operacion {
 	public boolean compruebaTipos(int tipo1,int tipo2){
 		if (codigo ==OP_COMPARACION)
 		{
-			if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_DISTINTO)
 		{
-			if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_MAYOR_IGUAL)
 		{
-			if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_MAYOR_QUE)
 		{
-			if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_MENOR_IGUAL)
 		{
-			if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_MENOR_QUE)
 		{
-			if ((tipo1==tipo2) || ((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_MUL)
 		{
-			if ((tipo1==Token.NUM && tipo2==Token.NUM)|| (tipo1==Token.NUMREAL && tipo2==Token.NUMREAL)||((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==Token.INTEGER && tipo2==Token.INTEGER)|| (tipo1==Token.REAL && tipo2==Token.REAL)||((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==OP_RESTA)
 		{
-			if ((tipo1==Token.NUM && tipo2==Token.NUM)|| (tipo1==Token.NUMREAL && tipo2==Token.NUMREAL)||((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==Token.INTEGER && tipo2==Token.INTEGER)|| (tipo1==Token.REAL && tipo2==Token.REAL)||((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==DIV)
 		{
-			if ((tipo1==Token.NUM && tipo2==Token.NUM)|| (tipo1==Token.NUMREAL && tipo2==Token.NUMREAL)||((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==Token.INTEGER && tipo2==Token.INTEGER)|| (tipo1==Token.REAL && tipo2==Token.REAL)||((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
 		else if(codigo==MOD)
 		{
-			if ((tipo1==Token.NUM && tipo2==Token.NUM)|| (tipo1==Token.NUMREAL && tipo2==Token.NUMREAL)||((tipo1==Token.NUM && tipo2==Token.NUMREAL) || (tipo2==Token.NUM && tipo1==Token.NUMREAL)))
+			if ((tipo1==Token.INTEGER && tipo2==Token.INTEGER)|| (tipo1==Token.REAL && tipo2==Token.REAL)||((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 				return true;
 			else return false;
 		}
@@ -300,7 +300,7 @@ public class Operacion {
 		}
 		else if (codigo ==NEGACION)
 		{
-			if ((tipo1==Token.NUM) || (tipo1==Token.NUMREAL))
+			if ((tipo1==Token.INTEGER) || (tipo1==Token.REAL))
 				return true;
 			else return false;
 		}

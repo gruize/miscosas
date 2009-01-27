@@ -29,11 +29,12 @@ public class traductor implements Serializable {
     private Object objetoSalida;
     private Vector<Object> ArrayOperaciones;
     private File fichero;
-    private String nombreFichero="src/interprete/instrucciones.mp";
+    private String nombreFichero;
     
 
-public traductor(AnalizadorSintactico as) {
+public traductor(AnalizadorSintactico as,String name) {
 	ArrayOperaciones=as.operaciones;
+	this.nombreFichero = name;
 	
 	}
 
