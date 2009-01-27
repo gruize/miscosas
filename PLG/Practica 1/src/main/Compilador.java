@@ -3,21 +3,11 @@ package main;
 
 import interprete.MaquinaEjecucion;
 
-import java.awt.List;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import analizadorLex.AnalizadorLexico;
 import sintactico.AnalizadorSintactico;
 import traductor.traductor;
-import utilidades.BufferedFileReader;
 
 
-public class Main {
+public class Compilador {
     
 	public static AnalizadorSintactico as = null;
 	public static MaquinaEjecucion me;
@@ -27,9 +17,8 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		//String nombre = args[0];
 		String nombre= "src/pruebas/Prueba2.pas";
-		String salida= "src/interprete/instrucciones.mp";
+		String salida= "a.mp";
 		try {
-			String opcion = args[0];
 			for (int i = 0; args[i] != null;i++)
 			{
 				if (args[i].equals("-f"))
@@ -50,8 +39,8 @@ public class Main {
 		catch (Exception e){
 			if (nombre == null){
 			System.out.println("El formato del compilador es el siguiente: ");
-			System.out.println("mp -f [nombre_fichero] -o [nombre_salida]");
-			System.out.println("mp -f [nombre_fichero] -o [nombre_salida]");
+			System.out.println("java Compilador -f [nombre_fichero] -o [nombre_salida]");
+			System.out.println("java Compilador -f [nombre_fichero] -o [nombre_salida]");
 			System.out.println("-o es opcional, si no se escribe la salida se hara sobre el fichero a.mp");
 			return;
 			}
@@ -63,8 +52,11 @@ public class Main {
     	as.run();
     	
     	//TRADUCTOR
-    	traductor t= new traductor(as);
-    	t.crearFileOut();
+    	if (as.compilacion)
+    	{
+    		traductor t= new traductor(as);
+    		t.crearFileOut();
+    	}
      
      
         //INTERPRETE      
