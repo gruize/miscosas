@@ -3,13 +3,24 @@ package sintactico;
 import interprete.TokenMaquina;
 import analizadorLex.Token;
 
+/**
+ * Esta clase realiza el analisis sintactico 
+ * @author Francisco Huertas Ferrer
+ * @author Sara Guerrero Garcia
+ * @author Gabriela Ruiz Escobar
+ * @author Jose Ignacio Perez Solis
+ */
 public class Operacion {
 	/**
 	 * Las prioridades van de + prioritarias 0 a menos prioritaria 3
 	 */
-
+	/**
+	 * codigo de la operacion almacenada
+	 */
 	public int codigo;
-	
+	/**
+	 * Constantes con las diferentes opciones
+	 */
 	static final public int OP_ASIGNACION = 0;
 	static final public int OP_COMPARACION= 1;
 	static final public int OP_DISTINTO= 2;
@@ -27,15 +38,27 @@ public class Operacion {
 	static final public int OP_DIV = 14;
 	static final public int NEGACION=15;
 	static final public int NOT=16;
-
+	/**
+	 * constructor parametrizado
+	 * @param codigo
+	 */
 	public Operacion(int codigo) {
 		super();
 		this.codigo = codigo;
 	}	
+	/**
+	 * Constructor desde un token
+	 * @param codigoToken Token desde el que va a crear (+ - etc...)
+	 * @param aridad Aridad del operador necesaria para diferenciar los distintos operandos
+	 */
 	public Operacion(int codigoToken,int aridad) {
 		super();
 		this.codigoFromToken(codigoToken, aridad);
 	}
+	/**
+	 * Te devuelve el codigo maquian de la operacion de aridad dos
+	 * @return el codigo maquina
+	 */
 	public int getCodigoMaquinaDoble() {
 		switch (codigo){
 			case OP_COMPARACION : 		return TokenMaquina.IGUAL;
@@ -57,6 +80,10 @@ public class Operacion {
 		}
 		return -1;
 	}
+	/**
+	 * Devuelve el codigo maqina de la operacion con aridad 1
+	 * @return el codigo
+	 */
 	public int getCodigoMaquinaSimple() {
 		switch (this.codigo){
 			case NOT : return TokenMaquina.NOT;
@@ -64,7 +91,10 @@ public class Operacion {
 		}
 		return 666;
 	}
-	
+	/**
+	 * Devuelve el token representativo de la operacion
+	 * @return el codigo del token
+	 */
 	public int getCodigoToken ()
 	{
 		switch (codigo){
@@ -89,6 +119,10 @@ public class Operacion {
 		}
 		return -1;
 	}
+	/**
+	 * Aridad de la operacion
+	 * @return aridad
+	 */
 	public int getAridad(){
 		switch (codigo){
 
@@ -112,6 +146,12 @@ public class Operacion {
 
 		return -1;
 	}
+	/**
+	 * Te devuelve staticamente la prioridad
+	 * @param token el token que pregunta la proridad
+	 * @param aridad aridad del operando
+	 * @return la prioridad
+	 */
 	static public int getPrioridad(Token token, int aridad)
 	{
 		switch (token.codigo){
@@ -138,7 +178,10 @@ public class Operacion {
 		}
 		return -1;
 	}
-
+	/**
+	 * Te da la prioridad de la operacion almacenada
+	 * @return la prioridad
+	 */
 	public int getPrioridad()
 	{
 		switch (codigo){
@@ -162,6 +205,12 @@ public class Operacion {
 		}
 		return -1;
 	}
+	
+	/**
+	 * nos coloca el codigo dado un token y su aridad
+	 * @param codigo codigo del toekn
+	 * @param aridad aridad
+	 */
 	public void codigoFromToken(int codigo, int aridad)
 	{
 		switch (codigo){
