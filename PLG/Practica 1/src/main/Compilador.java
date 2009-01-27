@@ -16,7 +16,7 @@ public class Compilador {
 
 	public static void main(String[] args) throws Exception {
 		//String nombre = args[0];
-		String nombre= "src\\pruebas\\Prueba2.pas";
+		String nombre= null;
 		String salida= "a.mp";
 		try {
 			for (int i = 0; args[i] != null;i++)
