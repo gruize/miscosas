@@ -11,17 +11,16 @@ public class ExcepcionMaquina extends Exception {
 	/**
 	 * Un serial por defecto
 	 */
-	private static final long serialVersionUID = 1L;
-	public Vector erroresMaquina = new Vector();
-	public int numErroresMaquina = 0;
+	private static final long serialVersionUID = -951330632360201136L;
+	public MensajeMaquina erroresMaquina;
 	
-	public ExcepcionMaquina(int i, int numLinea){
-		this.erroresMaquina.add(new Mensaje("i",numLinea));
-		this.numErroresMaquina++;
-	}
-	
-
-	public ExcepcionMaquina(int i, String string, int numLinea) {
-		this.erroresMaquina.add(new Mensaje("i"+" "+string,numLinea));
+	/**
+	 * Constructor parametrizado que ejecuta el metodo de imprimirErro() del mensaje de
+	 * error.
+	 * @param i Tipo de excepcion producida
+	 */
+	public ExcepcionMaquina(int i){
+		this.erroresMaquina = new MensajeMaquina(i);
+		this.erroresMaquina.imprimirError();
 	}
 }
