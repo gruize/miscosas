@@ -244,7 +244,7 @@ public class AnalizadorSintactico {
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
 			tipo_companero.codigo = o.dameTipo(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo);
-			emit(new Operaciones(o.codigo));
+			emit(new Operaciones(o.getCodigoMaquinaDoble()));
 		}
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==3)
 
@@ -281,7 +281,7 @@ public class AnalizadorSintactico {
 		else{
 			
 			tipo.codigo = o.dameTipo(tipo_companero.codigo,tipo_de_TERMINO.codigo);
-			emit(new Operaciones(o.codigo));
+			emit(new Operaciones(o.getCodigoMaquinaDoble()));
 		}
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==2)
 			REXPSIMPLE1(tipo_de_TERMINO,tipo);
@@ -319,7 +319,7 @@ public class AnalizadorSintactico {
 		else{
 			
 			tipo.codigo = o.dameTipo(tipo_companero.codigo,tipo_de_FACTOR.codigo);
-			emit(new Operaciones(o.codigo));
+			emit(new Operaciones(o.getCodigoMaquinaDoble()));
 		}
 
 		if (Operacion.getPrioridad(this.tokenSiguiente(), 2) ==1)
@@ -348,7 +348,7 @@ public class AnalizadorSintactico {
 			if (!oper.compruebaTipos(tipo.codigo))
 				excepcion.addMensaje(Mensaje.ERROR_TIPOS,0,tipo);
 			else
-				emit(new Operaciones(oper.codigo));
+				emit(new Operaciones(oper.getCodigoMaquinaSimple()));
 		}
 		// NO TIENE ASOCIATIVIDAD, NO MAS ABAJO
 	}
