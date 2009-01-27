@@ -22,13 +22,13 @@ public class AnalizadorLexico {
 	public ExcepcionLexica excepcion = new ExcepcionLexica();
 	PalabrasReservadas palabrasR=new PalabrasReservadas();
 	
-	
+
 	public static final HashSet<Character> digitos = new HashSet<Character>(10);
     static
     {
         for(char d = '0'; d<='9';d++) digitos.add(new Character(d));
     }
-      
+   
     public static final char[] listLetras={'a','b', 'c', 'd' ,'e', 'f', 'g' ,'h' ,'i', 'j' ,'k', 'l', 'm','n', 'o', 'p', 'q', 'r', 's','t','u','v','w','x','y','z',
     'A','B','C','D','E','F','G','H','I','J','K','L', 'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
     public static final HashSet<Character> letras  = new HashSet<Character>(listLetras.length);
@@ -44,13 +44,21 @@ public class AnalizadorLexico {
         separadores.add(new Character('\r'));
     }
     
-	  
+    /**
+     * Constructora de la clase sin parametros  
+     */
 	public AnalizadorLexico(){
 		numLinea=1;
 		numColumna=0;
 		tokens= new Vector <Token> () ;	
 	}
 	
+
+	/**
+	 * Constructora de la clase
+	 * @param Fichero Fichero de entrada a analizar
+	 * @throws IOException si existe algun error con el fichero
+	 */
 	public AnalizadorLexico(String Fichero) throws IOException {
 		numLinea=1;
 		numColumna=0;
@@ -62,7 +70,11 @@ public class AnalizadorLexico {
 
 
 		 
-		 
+	/**
+	 * Procedimiento principal de la clase :
+	 * Ejecuta el bucle de reconocimiento de tokens y los almacena en un vector.
+	 * @throws IOException
+	 */
 		 public void run() throws IOException {
 		        //Obtengo los tokens
 		        Token t= null;
@@ -88,7 +100,11 @@ public class AnalizadorLexico {
 		 } 	 
 		  
 		
-
+		 /**
+		  * Reconoce caracter a caracter el fichero de entrada para realizar el reconocimiento
+		  * @return devuelve un objeto clase token
+		  * @throws IOException
+		  */
 		public Token nextToken() throws IOException{
 		        
 		        while(true){
@@ -110,7 +126,7 @@ public class AnalizadorLexico {
 		                //continue;
 		            }
 		            //RECONOCIMIENTO DE COMENTARIOS DEL ESTILO { ... }
-		            else if(ch.charValue() == '{'){
+		    /*        else if(ch.charValue() == '{'){
 		                do{
 		                    ch = leerCaracter();
 		                   
@@ -137,7 +153,7 @@ public class AnalizadorLexico {
 		                return caracter(c);
 		            } 
 		            
-		            //RECONOCIMIENTO DE CARACTERES SIMPLES
+		            //RECONOCIMIENTO DE CARACTERES SIMPLES */
 		            else if (ch.charValue()=='+') {
 		                //avanza al proximo carater antes de retornar
 		                leerCaracter();
@@ -161,7 +177,11 @@ public class AnalizadorLexico {
 		                
 		                return new Token(Token.OP_DIV,"", lastLine, numColumna);
 		            }
-		            //LEYO UN . PERO PUEDE TAMBIEN SER ..
+		            
+		            else if (ch.charValue()=='\'') {
+		            	ch=leerCaracter();
+		                return caracter(ch);
+		            }
 		            else if (ch.charValue()=='.') {
 		                return leerPunto();
 		            } else if (ch.charValue()==';') {
@@ -183,10 +203,10 @@ public class AnalizadorLexico {
 		                return  leerMenorIgualDist();
 		            } else if (ch.charValue()==':') {
 		                return  leerDosPuntosOAsignacion();
-		            } else if (ch.charValue()=='}') {
-		            	this.excepcion.addMensaje(" } no esperada ", numLinea, numColumna);
-		            	leerCaracter();
-		            }
+		            } //else if (ch.charValue()=='}') {
+		            	//this.excepcion.addMensaje(" } no esperada ", numLinea, numColumna);
+		            	//leerCaracter();
+		           // }
 		            //RECONOCIMIENTO DE IDENTIFICADORES Y PALABRAS RESERVADAS
 		            else  if (esLetra(ch)){
 		                return getTokenID();
@@ -196,7 +216,7 @@ public class AnalizadorLexico {
 		                return getTokenNumero();
 		            } else {
 		                //caracter no perteneciente al alfabeto
-		            	this.excepcion.addMensaje("caracter no perteneciente al alfabeto",numLinea,numColumna);
+		            	this.excepcion.addMensaje("caracter no perteneciente al alfabeto ",numLinea,numColumna);
 		            	leerCaracter();
 		            }
 		            }catch(ExcepcionLexica e){};
@@ -204,7 +224,12 @@ public class AnalizadorLexico {
 		    
 		}
 		
-		
+		/**
+		 * Funcion auxiliar para recorrer el fichero
+		 * actualiza las variables numLinea y numColumna
+		 * @return Devuelve un caracter
+		 * @throws IOException
+		 */
 	    private Character leerCaracter()throws IOException {
 	        if(reader==null) throw new IOException("Reader no inizializado");
 	        
@@ -217,19 +242,26 @@ public class AnalizadorLexico {
 	        return ultimoCharLeido;
 	    }
 		 
-		 
+	    /**
+	     * Funcion que reconoce un token del tipo CHAR 
+	     * @param c
+	     * @return	Devuelve u token
+	     * @throws IOException
+	     */
 		private Token caracter(Character c) throws IOException  {
 			Character ch=null;
 			if (esLetra(c))
 				try {
 					ch= leerCaracter();
 			} catch (IOException e) {
+				this.excepcion.addMensaje("simbolo no perteneciente al alfabeto ",numLinea,numColumna);
 				throw new IOException("Se esperaba un caracter");
+				
 			}
 			if (ch.charValue()=='\'') {	ultimoCharLeido=leerCaracter();
 			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
 			
-			else {this.excepcion.addMensaje("se esperaba ' ",numLinea,numColumna);
+			else {this.excepcion.addMensaje("error lexico ",numLinea,numColumna);
 			leerCaracter();}
 			
 			return null;
@@ -238,7 +270,10 @@ public class AnalizadorLexico {
 
 
 
-
+		/**
+		 * Funcion que devuelve un token de tipo ID
+		 * @return Devuelve un token 
+		 */
 	private Token getTokenID() {
 		Character c;
 		StringBuffer buff = new StringBuffer();
@@ -267,12 +302,17 @@ public class AnalizadorLexico {
 		}
 
 	
-	
+	/**
+	 * Devuelve un token de tipo NUM o NUMREAL
+	 * @return Devuelve un token
+	 * @throws ExcepcionLexica en caso de que sea erroneo
+	 */
 	private Token getTokenNumero() throws ExcepcionLexica {
 		Character c;
 		StringBuffer buff = new StringBuffer();
 		c = ultimoCharLeido; //asume que es un digito
 		int lineaUlt = numLinea;//salva la liena actual
+		int colAct= numColumna;
 		boolean esreal=false;
 		boolean error=false;
 		do {
@@ -316,7 +356,7 @@ public class AnalizadorLexico {
 
 			}
 			error=true;
-			this.excepcion.addMensaje("un Id no puede empezar por un numero ",numLinea,numColumna);
+			this.excepcion.addMensaje("un Id no puede empezar por un numero ",numLinea,colAct);
 			
 
 		}
@@ -324,9 +364,9 @@ public class AnalizadorLexico {
 		if (error)
 			return null; 
 		else 
-			if (esreal) return new Token(Token.NUMREAL,buff.toString(),lineaUlt, numColumna);
+			if (esreal) return new Token(Token.NUMREAL,buff.toString(),lineaUlt, colAct);
 			else
-				return new Token(Token.NUM,buff.toString(),lineaUlt, numColumna);
+				return new Token(Token.NUM,buff.toString(),lineaUlt, colAct);
 
 
 	}
@@ -334,7 +374,11 @@ public class AnalizadorLexico {
 
 
 
-
+	/**
+	 * 	Reconoce el token : || :=
+	 * @return Token
+	 * @throws IOException
+	 */
 	private Token leerDosPuntosOAsignacion() throws IOException {
 		   // asume que ultimoCharLeido :
         int lineaUlt = numLinea; //salva la linea actual
@@ -347,7 +391,11 @@ public class AnalizadorLexico {
         leerCaracter(); //avanza al proximo carater antes de retornar
         return new Token(Token.OP_ASIGNACION,"",lineaUlt,numColumna);
 		}
-
+	/**
+	 * 	Reconoce el token < || <= || <>
+	 * @return Token
+	 * @throws IOException
+	 */
 	private Token leerMenorIgualDist() throws IOException 
 	
 	{int lineaUlt = numLinea; //salva la linea actual
@@ -366,7 +414,11 @@ public class AnalizadorLexico {
 		
 		
 		}
-
+	/**
+	 * 	Reconoce el token > || >=
+	 * @return Token
+	 * @throws IOException
+	 */
 	private Token leerMayorIgual() throws IOException
 	{
 		int lineaUlt = numLinea; //salva la linea actual
@@ -380,7 +432,11 @@ public class AnalizadorLexico {
 	}
 	
 	
-
+	/**
+	 * 	Reconoce el token .
+	 * @return Token
+	 * @throws IOException
+	 */
 	private Token leerPunto() throws IOException 
 	
 	{
@@ -396,28 +452,50 @@ public class AnalizadorLexico {
 	        
 	}
 
-
+	/**
+	 * Indica si el caracter es letra
+	 * @param ch caracter a analizar
+	 * @return true si es letra false eoc
+	 */
 	private boolean esLetra(Character ch) {
 			return letras.contains(ch);
 		}
-
+	/**
+	 * Indica si el caracter es digito
+	 * @param ch caracter a analizar
+	 * @return true si es digito false eoc
+	 */
 	private boolean esDigito(Character ch) {
 			return digitos.contains(ch);
 		}
-
+	/**
+	 * Indica si el caracter es separador
+	 * @param ch caracter a analizar
+	 * @return true si es separador false eoc
+	 */
 	private boolean esSeparador(Character ch) {
 		return separadores.contains(ch);
 		}
-	
+	/**
+	 * Indica si el caracter es \n
+	 * @param ch caracter a analizar
+	 * @return true si es \n false eoc
+	 */
 	private  boolean esFinalDeLinea(Character ch){
         return ((ch!=null) && (ch.charValue()=='\n'));
     }
-	
+	/**
+	 * Es final de archivo
+	 * @return true si es final de archivo falso eoc
+	 */
 	public boolean esFin(){
 		return fin;	
 	}
 	
-
+	/**
+	 * Termina la ejecucion del traductor imrpimiendo los errores si existen
+	 * y cerrando el archivo
+	 */
 	public void finish() {
 		excepcion.printAll();
 		reader.close();
