@@ -256,15 +256,35 @@ public class Operacion {
 			
 	
 	}
+	
+	/**
+	 * Te modifica el codigo de la clase dado un token y su aridad
+	 * @param token el token dado 
+	 * @param aridad la aridad
+	 */
 	public void codigoFromToken(Token token, int aridad) {
 		codigoFromToken(token.codigo, aridad);
 	}
+	
+	/**
+	 * Procedimiento estatico que Dados dos operandos te dice si es correcta su asignacion
+	 * @param tipo1
+	 * @param tipo2
+	 * @return el booleano que lo indica
+	 */
 	public static boolean tiposAsignacion(int tipo1,int tipo2){
 		if ((tipo1==tipo2) || ((tipo1==Token.INTEGER && tipo2==Token.REAL) || (tipo2==Token.INTEGER && tipo1==Token.REAL)))
 			return true;
 		else return false;
 		
 	}
+	
+	/**
+	 * Te dice si la operacion esta soportada para los operadores pasados
+	 * @param tipo1 primer operador
+	 * @param tipo2 segundo operador
+	 * @return la comprobacion del tipo
+	 */
 	public boolean compruebaTipos(int tipo1,int tipo2){
 		if (codigo ==OP_COMPARACION)
 		{
@@ -340,6 +360,11 @@ public class Operacion {
 		}
 		return false;
 	}
+	/**
+	 * dado un operando te dice si es correcta para esa operacion
+	 * @param tipo1 el tipo
+	 * @return si es correcta o no
+	 */
 	public boolean compruebaTipos(int tipo1){
 		if(codigo ==NOT)
 		{
@@ -356,7 +381,26 @@ public class Operacion {
 		return false;
 	
 	}
+	/**
+	 * Devuelve un tipo de una operacion dada, con unos argumentos
+	 * @param tipo1 tipo primero
+	 * @param tipo2 segundo tipo
+	 * @return el tipo resultante
+	 */
 	public int dameTipo (int tipo1, int tipo2){
+		if (codigo == Operacion.OP_COMPARACION)
+			return Token.BOOLEAN;
+		else if(codigo==OP_DISTINTO)
+			return Token.BOOLEAN;
+		else if(codigo==OP_MAYOR_IGUAL)
+			return Token.BOOLEAN;
+		else if(codigo==OP_MAYOR_QUE)
+			return Token.BOOLEAN;
+		else if(codigo==OP_MENOR_IGUAL)
+			return Token.BOOLEAN;
+		else if(codigo==OP_MENOR_QUE)
+			return Token.BOOLEAN;
+
 		if (codigo == Operacion.DIV)
 			return Token.INTEGER;
 		if (tipo1 == tipo2)
@@ -367,6 +411,11 @@ public class Operacion {
 			return Token.REAL;
 		return -1;
 	}
+	/**
+	 * Devuelve el tipo de una operacion unaria
+	 * @param tipo el tipo
+	 * @return el tipo de la operacion resuelta
+	 */
 	public int dameTipo(int tipo){
 		return tipo;
 	}
