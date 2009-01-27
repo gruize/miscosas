@@ -249,16 +249,16 @@ public class MaquinaEjecucion implements Testeable{
 	    		case TokenMaquina.ESCRITURA:
 	    			temp1 = this.pila.pop();
 	    			if(temp1.dameTipo() == Operandos.NUM){
-	    				System.out.println(temp1.dameValor());
+	    				System.out.println((Integer)temp1.dameValor());
 	    			}
 	    			if(temp1.dameTipo() == Operandos.NUMREAL){
-	    				System.out.println(temp1.dameTipo());	    				
+	    				System.out.println(((Double)temp1.dameValor()).toString());	    				
 	    			}
 	    			if(temp1.dameTipo() == Operandos.VALORCHAR){
-	    				System.out.println(temp1.dameValor());
+	    				System.out.println((Character)temp1.dameValor());
 	    			}
 	    			if(temp1.dameTipo() == Operandos.VALORBOOLEAN){
-	    				System.out.println(temp1.dameValor());
+	    				System.out.println((Boolean)temp1.dameValor());
 	    			}	    				
 	    			break;
 	    		case TokenMaquina.STOP:
