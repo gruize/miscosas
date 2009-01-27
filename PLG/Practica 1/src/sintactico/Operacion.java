@@ -60,7 +60,7 @@ public class Operacion {
 	public int getCodigoMaquinaSimple() {
 		switch (this.codigo){
 			case NOT : return TokenMaquina.NOT;
-			case OP_RESTA: return TokenMaquina.RESTA;
+			case NEGACION: return TokenMaquina.NEGATIVO;
 		}
 		return 666;
 	}

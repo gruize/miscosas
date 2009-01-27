@@ -1,5 +1,7 @@
 package main;
 
+import interprete.MaquinaEjecucion;
+
 public class mp {
 
 	/**
@@ -27,6 +29,15 @@ public class mp {
 			return;
 			}
 		}
+		MaquinaEjecucion me;
+		try {
+			me = new MaquinaEjecucion(nombre);
+		    me.run();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                       
 
 
 	}
