@@ -110,7 +110,8 @@ public class MaquinaEjecucion implements Testeable{
 	    				for(int i = this.memoria.size(); i <= (Integer)direccion.dameValor(); i++)
 	    					this.memoria.add(null);
 	    			}
-	    			this.memoria.add((Integer)direccion.dameValor(),this.pila.pop());
+	    			this.memoria.removeElementAt((Integer)direccion.dameValor());
+	    			this.memoria.insertElementAt(this.pila.pop(), (Integer)direccion.dameValor());
 	    			break;
 	    		case TokenMaquina.NEGATIVO:
 	    			Operandos temp3 = this.pila.pop();
