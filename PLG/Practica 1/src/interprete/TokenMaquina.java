@@ -1,6 +1,7 @@
 package interprete;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 public class TokenMaquina extends Object{
 	
@@ -62,8 +63,39 @@ public class TokenMaquina extends Object{
 		LEXEMAS.put(OR, "||");
 		LEXEMAS.put(AND, "&&");
 		LEXEMAS.put(NOT,"!");
+		LEXEMAS.put(LECTURA, "read");
+		LEXEMAS.put(ESCRITURA, "write");
 
 	}
+	
+	public final static Vector<String> nombreOp = new Vector<String>();
+	
+	static
+	{
+		nombreOp.add("STOP");		
+		nombreOp.add("APILA");
+		nombreOp.add("APILA_DIR");
+		nombreOp.add("DESAPILA_DIR");
+		nombreOp.add("NEGATIVO");
+		nombreOp.add("SUMA");
+		nombreOp.add("RESTA");
+		nombreOp.add("MULTIPLICACION");
+		nombreOp.add("DIVISION");
+		nombreOp.add("DIV");
+		nombreOp.add("MOD");
+		nombreOp.add("MAYOR");
+		nombreOp.add("MENOR");
+		nombreOp.add("IGUAL");
+		nombreOp.add("MAYOR_IGUAL");
+		nombreOp.add("MENOR_IGUAL");
+		nombreOp.add("DISTINTO");
+		nombreOp.add("OR");
+		nombreOp.add("AND");
+		nombreOp.add("NOT");
+		nombreOp.add("LECTURA");
+		nombreOp.add("ESCRITURA");
+	}
+	
 	
 	public String lexema;
 	
