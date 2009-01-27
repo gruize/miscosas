@@ -24,6 +24,8 @@ public class Token extends Object{
 	public static final int DIV=-12;//
 	public static final int MOD=-13;
 	public static final int BEGIN= -16;
+	public static final int TRUE=-20;
+	public static final int FALSE=-21;
 	public static final int INTEGER=-1001;
 	public static final int BOOLEAN=-1002;
 	public static final int CHAR=-1003;
@@ -73,6 +75,9 @@ public class Token extends Object{
 		LEXICOS.put(BOOLEAN, "boolean");
 		LEXICOS.put(REAL, "real");
 		LEXICOS.put(CHAR, "char");
+		LEXICOS.put(FALSE, "false");
+		LEXICOS.put(TRUE, "true");
+		
 
 		
 		/* id's y variables*/
