@@ -10,29 +10,39 @@ public class mp {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String nombre= "a.mp";
+		boolean debug=false;
 		try {
-			for (int i = 0; args[i] != null;i++)
+			for (int i = 0; i<args.length;i++)
 			{
 				if (args[i].equals("-f"))
 				{
 					i++;
 					nombre = args[i];
+					debug = false;
 				}
-				if (nombre == null)
-					throw new Exception();
+				else if (args[i].equals("-g"))
+				{
+					i++;
+					nombre = args[i];
+					debug = true;
+				}
+				else if (nombre == null)
+						throw new Exception();
 			}
 		}
 		catch (Exception e){
 			if (nombre == null){
-			System.out.println("El formato de la maquina de Pacal : ");
+			System.out.println("El formato de la maquina de Pascal : ");
 			System.out.println("java mp -f [nombre_fichero] ");
+			System.out.println("java mp -g [nombre_fichero] ");
 			return;
 			}
 		}
 		MaquinaEjecucion me;
 		try {
 			me = new MaquinaEjecucion(nombre);
-		    me.run();
+		    if (debug) me.runDebug();
+		    	else me.run();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
