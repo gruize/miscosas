@@ -18,9 +18,7 @@ import sintactico.AnalizadorSintactico;
 
 public class traductor implements Serializable {
 	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -5687060520503269110L;
 	private FileOutputStream fileOut;
 	//Variable que determina si generará código intermedio o no, en éste caso xa Máquina A no.
@@ -31,14 +29,23 @@ public class traductor implements Serializable {
     private File fichero;
     private String nombreFichero;
     
-
+/**
+ * Constructor parametrizado 
+ * @param as Analizador sintactico que genera el array de instrucciones para traducir a un archivo *.mp
+ * @param name nombre archivo salida
+ */
 public traductor(AnalizadorSintactico as,String name) {
 	ArrayOperaciones=as.operaciones;
 	this.nombreFichero = name;
 	
 	}
 
-//para porbar el main
+
+/**
+ * Constructor parametrizado
+ * @param o vector de objetos (operaciones u operandos)
+ * @throws IOException
+ */
 public traductor(Vector<Object> o) throws IOException {
 	
 	//fichero=new File(nombreFichero);
@@ -55,9 +62,18 @@ public traductor(Vector<Object> o) throws IOException {
 	
 	//return nombreFichero;
 }
+/**
+ *  Devuelve el nombre del archivo
+ * @return nombre archivo
+ */
 public String dameNombre(){
 	return nombreFichero;
 }
+/**
+ * Genera escribe y cierra el archivo *.mp
+ * @return nombre Fichero salida
+ * @throws IOException
+ */
 public Object crearFileOut() throws IOException{
 	
 	fileOut = new FileOutputStream(nombreFichero);
