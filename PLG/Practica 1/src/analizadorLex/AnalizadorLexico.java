@@ -257,10 +257,11 @@ public class AnalizadorLexico {
 				this.excepcion.addMensaje("simbolo no perteneciente al alfabeto ",numLinea,numColumna);
 				throw new IOException("Se esperaba un caracter");
 				
-			}
+			}if (!(ch==null))
+			{
 			if (ch.charValue()=='\'') {	ultimoCharLeido=leerCaracter();
 			return new Token(Token.VALORCHAR,c.toString(),numLinea, numColumna);}
-			
+			}
 			else {this.excepcion.addMensaje("error lexico ",numLinea,numColumna);
 			leerCaracter();}
 			
