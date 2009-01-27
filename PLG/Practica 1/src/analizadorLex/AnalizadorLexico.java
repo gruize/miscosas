@@ -298,6 +298,9 @@ public class AnalizadorLexico {
 
 			return new Token(Token.ID, lex, ultimaLinea, numColumna);
 		} else
+			if ((cod==-20 )|| (cod==-21))
+				return new Token(Token.VALORBOOLEAN,lex,ultimaLinea, numColumna);
+				else
 			return new Token(cod.intValue(),lex,ultimaLinea, numColumna);
 
 		}
