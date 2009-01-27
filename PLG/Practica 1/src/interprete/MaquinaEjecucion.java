@@ -393,18 +393,20 @@ public class MaquinaEjecucion implements Testeable{
 		//Imprimir la memoria
 		System.out.println();	
 		System.out.println("MEMORIA: ");
-		System.out.println();		
+		System.out.println();
 		for(int i = 0; i < this.memoria.size(); i++){
 			aux = this.memoria.elementAt(i);
-			if(aux.dameTipo() == Operandos.NUM)				
-				System.out.println("Integer : "+aux.dameValor());
-			if(aux.dameTipo() == Operandos.NUMREAL)
-				System.out.println("Double : "+aux.dameValor());
-			if(aux.dameTipo() == Operandos.VALORCHAR)
-				System.out.println("Char : "+aux.dameValor());
-			if(aux.dameTipo() == Operandos.VALORBOOLEAN)
-				System.out.println("Boolean : "+aux.dameValor());			
-		}
+			if(aux != null){
+				if(aux.dameTipo() == Operandos.NUM)				
+					System.out.println("Integer : "+aux.dameValor());
+				if(aux.dameTipo() == Operandos.NUMREAL)
+					System.out.println("Double : "+aux.dameValor());
+				if(aux.dameTipo() == Operandos.VALORCHAR)
+					System.out.println("Char : "+aux.dameValor());
+				if(aux.dameTipo() == Operandos.VALORBOOLEAN)
+					System.out.println("Boolean : "+aux.dameValor());
+			}
+		}		
 		//Imprimir la instruccion y su parametro si corresponde
 		System.out.println();	
 		System.out.println("INSTRUCCION: ");
