@@ -470,7 +470,7 @@ public class AnalizadorSintactico {
 		Token tipo_de_EXPSIMPLE = new Token();
 		EXPSIMPLE(tipo_de_EXPSIMPLE);
 		
-		if (o.compruebaTipos(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo))
+		if (!o.compruebaTipos(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo))
 			excepcion.addMensaje(Mensaje.ERROR_TIPOS, t.codigo,tipo_companero);
 		else{
 			tipo_companero.codigo = o.dameTipo(tipo_companero.codigo, tipo_de_EXPSIMPLE.codigo);
@@ -683,6 +683,7 @@ public class AnalizadorSintactico {
 					emit(new Operaciones(TokenMaquina.APILA_DIR));
 					int dir = tablaDeSimbolos.dameDir(t.lexema);
 					emit(new OperandoNum(dir));
+					tipo.codigo = tablaDeSimbolos.dameTipo(t.lexema);
 				}
 			}
 		}

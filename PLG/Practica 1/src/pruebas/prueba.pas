@@ -13,8 +13,9 @@ CONST
 	c7 = 2.3;
 	c8 = 'f'
 BEGIN
-	h := -1;
-	write(c2);
+	r := c2 < c7;
+	write(r);
+	h:=2.3;
 	write(h);
 	write(c3);
 	write(c4);
