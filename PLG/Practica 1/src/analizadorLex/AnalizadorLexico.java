@@ -88,7 +88,7 @@ public class AnalizadorLexico {
 					if(!(t==null)){
 						// XXX Hay que borrarlo
 						tokens.add(t);
-						System.out.println(t.lexema);
+					//	System.out.println(t.lexema);
 					}
 					
 				}
@@ -96,7 +96,7 @@ public class AnalizadorLexico {
 		        
 		        
 		    }
-		        System.out.println("Fin  del Analizador Léxico");
+	//	        System.out.println("Fin  del Analizador Léxico");
 		 } 	 
 		  
 		

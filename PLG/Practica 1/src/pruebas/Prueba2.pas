@@ -3,6 +3,7 @@ VAR
 Entero : Integer
 CONST x = 'c'
 BEGIN 
-entero:=3/10;
+entero:=2;
+read(entero);
 write(entero)
 END. 
