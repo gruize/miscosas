@@ -123,6 +123,8 @@ public class AnalizadorSintactico {
 		if (t.codigo != Token.PUNTO) {
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.PUNTO,t);
 		}
+		if (this.pos_token != tokens.size())
+			excepcion.addMensaje(Mensaje.ERROR_FIN_PROGRAMA,0,this.tokenSiguiente());
 		
 		
 		
@@ -427,7 +429,7 @@ public class AnalizadorSintactico {
 			else if (!tablaDeSimbolos.dameModificable(lex_de_VARIABLE.lexema))
 				excepcion.addMensaje(Mensaje.ERROR_NO_MODIFICABLE,Token.ID,t);
 			emit(new Operaciones(TokenMaquina.LECTURA));
-			emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
+			//emit(new Operaciones(TokenMaquina.DESAPILA_DIR));
 			emit(new OperandoNum(tablaDeSimbolos.dameDir(lex_de_VARIABLE.lexema)));
 			t = rec();
 			if (t.codigo != Token.C_PARENTESIS)
@@ -597,7 +599,10 @@ public class AnalizadorSintactico {
 		if(tablaDeSimbolos.existeID(lex_de_DEC.lexema))
 			excepcion.addMensaje(Mensaje.ERROR_ID_DUPLICADO,Token.ID,lex_de_DEC);
 		else
-		tablaDeSimbolos.anadeID(lex_de_DEC.lexema, tipo_de_DEC.codigo, true);
+			tablaDeSimbolos.anadeID(lex_de_DEC.lexema, tipo_de_DEC.codigo, true);
+		if (tokenSiguiente().codigo == Token.PUNTO_Y_COMA)
+			RDECS1();
+
 	}
 	private void DEC(Token lex, Token tipo) throws ExcepcionSintactica {
 		
