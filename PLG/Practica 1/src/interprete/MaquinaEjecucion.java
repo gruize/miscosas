@@ -17,7 +17,7 @@ import main.Testeable;
 
 /**
  * @author GabiPC
- *
+ * 
  */
 public class MaquinaEjecucion implements Testeable{
                    
@@ -37,36 +37,60 @@ public class MaquinaEjecucion implements Testeable{
     private ObjectInputStream entrada;
     
     /** 
-     * Constructor
+     * Constructor parametrizado por el nombre del archivo de extension .mp desde donde
+     * debe leer las instrucciones a ejecutar por la maquina.
      */
 	public MaquinaEjecucion(String sourceFile)throws Exception{
-		this.memoria = new Vector<Operandos>();
-		this.pila = new Stack<Operandos>();
-		this.entrada = new ObjectInputStream(new FileInputStream(sourceFile));
+		try{
+			this.memoria = new Vector<Operandos>();
+			this.pila = new Stack<Operandos>();
+			this.entrada = new ObjectInputStream(new FileInputStream(sourceFile));
+		}catch(Exception e){
+			throw new ExcepcionMaquina(1);
+		}
 	}
 
 	@Override
-	public void run()throws Exception{
+	public void run()throws Exception{		
 		this.leerOperaciones();		
 	}
 
-	public void leerOperaciones() throws Exception{
+	/**
+	 * Metodo por el cual obtenemos el codigo de la operacion a ejecutar, y si es
+	 * necesario el objeto que determina la direccion de la memoria a usar o el valor
+	 * que debe introducirse en la pila
+	 * @throws Exception
+	 */
+	public void leerOperaciones() throws Exception{		
 		Operaciones instruccion = null;
-		
-		do{
-			instruccion = (Operaciones) this.entrada.readObject();
-			Operandos valor = null;
-			if((instruccion.codigoOperacion == TokenMaquina.APILA)
-			 ||(instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
-			 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)
-			 ||(instruccion.codigoOperacion == TokenMaquina.LECTURA)){
-				valor = (Operandos) this.entrada.readObject();
-			}			
-			this.ejecutar(instruccion,valor);
-			
-		}while(instruccion.codigoOperacion != TokenMaquina.STOP);
+		try{
+			do{
+				instruccion = (Operaciones) this.entrada.readObject();
+				Operandos valor = null;
+				if((instruccion.codigoOperacion == TokenMaquina.APILA)
+				 ||(instruccion.codigoOperacion == TokenMaquina.APILA_DIR)
+				 ||(instruccion.codigoOperacion == TokenMaquina.DESAPILA_DIR)
+				 ||(instruccion.codigoOperacion == TokenMaquina.LECTURA)){
+					valor = (Operandos) this.entrada.readObject();
+				}			
+				this.ejecutar(instruccion,valor);			
+			}while(instruccion.codigoOperacion != TokenMaquina.STOP);
+		}catch(Exception e){
+			throw new ExcepcionMaquina(3);
+		}
 	}
 	
+	/**
+	 * Ejecuta la operacion obtenida mediante leerOperaciones(), obteniendo los valores
+	 * desde la pila o pasandoselo por parametro, para las operaciones APILA (valores) o
+	 * APILA_DIR, DESAPILA_DIR Y LECTURA (direccion de memoria).
+	 * @param instruccion Objetos de tipo Operaciones, que contiene el codigo de operacion
+	 * a ejecutar
+	 * @param valor Objetos de tipo Operandos, que puede ser OperandoNum que contiene
+	 * valores enteros a apilar o la direccion de memoria que debe usarse para ejecutar
+	 * la operacion especificada en la instruccion.
+	 * @throws Exception
+	 */
 	public void ejecutar(Operaciones instruccion,Operandos valor) throws Exception{
 	    try{	    	
 	    	OperandoNum direccion;
@@ -265,7 +289,7 @@ public class MaquinaEjecucion implements Testeable{
 	    			System.out.println("FIN");
 	    	}
 		}catch (IndexOutOfBoundsException e){
-	        throw new ExcepcionMaquina(2,i);
+	        throw new ExcepcionMaquina(2);
 	    }		
 	}
 
