@@ -374,7 +374,7 @@ public class MaquinaEjecucion implements Testeable{
 		}
 	}	
 	
-	public void imprimir(Operaciones instruccion,Operandos valor){
+	public void imprimir(Operaciones instruccion,Operandos valor) throws IOException{
 		Operandos aux = null;
 		//Imprimir la pila
 		System.out.println("PILA: ");
@@ -407,11 +407,12 @@ public class MaquinaEjecucion implements Testeable{
 					System.out.println("Boolean : "+aux.dameValor());
 			}
 		}		
-		//Imprimir la instruccion y su parametro si corresponde
-		System.out.println();	
+		//Imprimir la instruccion y su parametro si corresponde	
 		System.out.println("INSTRUCCION: ");
 		System.out.println();
 		System.out.println(TokenMaquina.nombreOp.get(instruccion.codigoOperacion));
+		if(instruccion.codigoOperacion != TokenMaquina.LECTURA)
+			System.in.read();
 	}
 
 	public void runDebug() throws Exception {		
