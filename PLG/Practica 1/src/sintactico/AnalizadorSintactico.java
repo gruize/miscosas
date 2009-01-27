@@ -495,7 +495,7 @@ public class AnalizadorSintactico {
 		Token t = rec(); //:
 		if (t.codigo != Token.OP_COMPARACION)
 			excepcion.addMensaje(Mensaje.ERROR_TOKEN_INCORRECTO,Token.OP_COMPARACION,t);
-		VALOR(tipo);
+		FACTOR(tipo);
 	}
 	private void VALOR(Token tipo) throws ExcepcionSintactica {
 		Token t = rec();

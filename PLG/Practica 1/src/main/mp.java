@@ -7,8 +7,7 @@ public class mp {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String nombre= "src/pruebas/Prueba2.pas";
-		String salida= "src/interprete/instrucciones.mp";
+		String nombre= "a.mp";
 		try {
 			for (int i = 0; args[i] != null;i++)
 			{
